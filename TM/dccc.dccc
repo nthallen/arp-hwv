@@ -1,0 +1,77 @@
+0
+
+8
+  0x0808, 0
+  0x0810, 0
+  0x080A, 0
+  0x0812, 0
+  0x080C, 0
+  0x0814, 0
+  0x0828, 0
+  0x0830, 0
+
+64
+  STRB,    0, 0x0001; /* 0: Cmd_0_On */
+  STRB,    0, 0x0002; /* 1: Cmd_0_Off */
+  STRB,    0, 0x0004; /* 2: Cmd_1_On */
+  STRB,    0, 0x0008; /* 3: Cmd_1_Off */
+  STRB,    0, 0x0010; /* 4: Cmd_2_On */
+  STRB,    0, 0x0020; /* 5: Cmd_2_Off */
+  STRB,    0, 0x0040; /* 6: Cmd_3_On */
+  STRB,    0, 0x0080; /* 7: Cmd_3_Off */
+  STRB,    1, 0x0100; /* 8: Cmd_4_On */
+  STRB,    1, 0x0200; /* 9: Cmd_4_Off */
+  STRB,    1, 0x0400; /* 10: Cmd_5_On */
+  STRB,    1, 0x0800; /* 11: Cmd_5_Off */
+  STRB,    1, 0x1000; /* 12: Cmd_6_On */
+  STRB,    1, 0x2000; /* 13: Cmd_6_Off */
+  STRB,    1, 0x4000; /* 14: Cmd_7_On */
+  STRB,    1, 0x8000; /* 15: Cmd_7_Off */
+  STRB,    2, 0x0001; /* 16: Cmd_8_On */
+  STRB,    2, 0x0002; /* 17: Cmd_8_Off */
+  STRB,    2, 0x0004; /* 18: Cmd_9_On */
+  STRB,    2, 0x0008; /* 19: Cmd_9_Off */
+  STRB,    2, 0x0010; /* 20: Cmd_10_On */
+  STRB,    2, 0x0020; /* 21: Cmd_10_Off */
+  STRB,    2, 0x0040; /* 22: Cmd_11_On */
+  STRB,    2, 0x0080; /* 23: Cmd_11_Off */
+  SPARE,   3, 0x0100; /* 24: Cmd_12_On */
+  SPARE,   3, 0x0200; /* 25: Cmd_12_Off */
+  SPARE,   3, 0x0400; /* 26: Cmd_13_On */
+  SPARE,   3, 0x0800; /* 27: Cmd_13_Off */
+  SPARE,   3, 0x1000; /* 28: Cmd_14_On */
+  SPARE,   3, 0x2000; /* 29: Cmd_14_Off */
+  SPARE,   3, 0x4000; /* 30: Cmd_15_On */
+  SPARE,   3, 0x8000; /* 31: Cmd_15_Off */
+  SPARE,   4, 0x0001; /* 32: Cmd_16_On */
+  SPARE,   4, 0x0002; /* 33: Cmd_16_Off */
+  SPARE,   4, 0x0004; /* 34: Cmd_17_On */
+  SPARE,   4, 0x0008; /* 35: Cmd_17_Off */
+  SPARE,   4, 0x0010; /* 36: Cmd_18_On */
+  SPARE,   4, 0x0020; /* 37: Cmd_18_Off */
+  SPARE,   4, 0x0040; /* 38: Cmd_19_On */
+  SPARE,   4, 0x0080; /* 39: Cmd_19_Off */
+  SPARE,   5, 0x0100; /* 40: Cmd_20_On */
+  SPARE,   5, 0x0200; /* 41: Cmd_20_Off */
+  SPARE,   5, 0x0400; /* 42: Cmd_21_On */
+  SPARE,   5, 0x0800; /* 43: Cmd_21_Off */
+  SPARE,   5, 0x1000; /* 44: Cmd_22_On */
+  SPARE,   5, 0x2000; /* 45: Cmd_22_Off */
+  SPARE,   5, 0x4000; /* 46: Cmd_23_On */
+  SPARE,   5, 0x8000; /* 47: Cmd_23_Off */
+  STRB,    6, 0x0001; /* 48: Cmd_24_On */
+  STRB,    6, 0x0002; /* 49: Cmd_24_Off */
+  STRB,    6, 0x0004; /* 50: Cmd_25_On */
+  STRB,    6, 0x0008; /* 51: Cmd_25_Off */
+  STRB,    6, 0x0010; /* 52: Cmd_26_On */
+  STRB,    6, 0x0020; /* 53: Cmd_26_Off */
+  STRB,    6, 0x0040; /* 54: Cmd_27_On */
+  STRB,    6, 0x0080; /* 55: Cmd_27_Off */
+  SPARE,   7, 0x0100; /* 56: Cmd_28_On */
+  SPARE,   7, 0x0200; /* 57: Cmd_28_Off */
+  SPARE,   7, 0x0400; /* 58: Cmd_29_On */
+  SPARE,   7, 0x0800; /* 59: Cmd_29_Off */
+  SPARE,   7, 0x1000; /* 60: Cmd_30_On */
+  SPARE,   7, 0x2000; /* 61: Cmd_30_Off */
+  SPARE,   7, 0x4000; /* 62: Cmd_31_On */
+  SPARE,   7, 0x8000; /* 63: Cmd_31_Off */

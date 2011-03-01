@@ -1,0 +1,51 @@
+%{
+  #include "sspdrv.h"
+  const char * SSP_Status_Text(const unsigned char stat) {
+    switch (stat) {
+      case SSP_STATUS_GONE:    return "   Gone";
+      case SSP_STATUS_CONNECT: return "Connect";
+      case SSP_STATUS_READY:   return "  Ready";
+      case SSP_STATUS_ARMED:   return "  Armed";
+      case SSP_STATUS_TRIG:    return "Trigger";
+      default:                 return "*******";
+    }
+  }
+%}
+
+TM typedef unsigned char SSP_Status_t { text "%7d" SSP_Status_Text(); }
+TM typedef unsigned short XLONG { text "%5d"; }
+
+/* T_FPGA_t: MAX6628 output, resolution 1/16 degree
+ *   reported as 128 bits per degree celcius */
+TM typedef signed short T_FPGA_t { convert CELCIUS; text "%6.2lf"; }
+Calibration ( T_FPGA_t, CELCIUS ) { 0, 0, 128, 1 }
+
+/* T_HtSink_t: MAX6661 output. resolution 1/8 degree
+  *  reported as 256 bits per degree */
+TM typedef signed short T_HtSink_t { convert CELCIUS; text "%6.2lf"; }
+Calibration ( T_HtSink_t, CELCIUS ) { 0, 0, 256, 1 }
+
+TM "Receive" SSP 1;
+
+TM 1 Hz L20 SSP_Num;
+TM 1 Hz L20 SSP_SN;
+TM 1 Hz L20 SSP_TS;
+TM 1 Hz XLONG SSP_Flags;
+TM 1 Hz SSP_Status_t SSP_Status;
+TM 1 Hz UINT SSP_Stale;
+TM 1 Hz T_FPGA_t SSP_T_FPGA;
+TM 1 Hz T_HtSink_t SSP_T_HtSink;
+
+Group SSP_grp ( SSP_Num, SSP_SN, SSP_TS, SSP_Flags,
+		 SSP_T_FPGA, SSP_T_HtSink ) {
+  SSP_Num = SSP.index;
+  SSP_SN = SSP.ScanNum;
+  SSP_TS = SSP.Total_Skip;
+  SSP_Flags = SSP.Flags;
+  SSP_Status = SSP.Status;
+  SSP_T_FPGA = SSP.T_FPGA & 0xFFF8;
+  SSP_T_HtSink = SSP.T_HtSink & 0xFFE0;
+  SSP_Stale = SSP_obj->stale();
+  SSP_obj->synch();
+}
+

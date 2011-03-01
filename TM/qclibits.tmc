@@ -1,0 +1,57 @@
+%{
+  const char *ok_fail_text[] = { "  ok", "FAIL" };
+  const char *no_yes_text[]  = { " no", "yes" };
+  const char *off_on_text[] = { "off", " on" };
+  const char *qclimode_text[] = {
+	"   idle",
+	"program",
+	"psector",
+	"    run",
+	" select",
+	"-------",
+	"-------",
+	"======="
+  };
+%}
+TM typedef int ok_fail_t { text "%4d" ok_fail_text[]; }
+TM typedef int no_yes_t { text "%3d" no_yes_text[]; }
+TM typedef int onebit_t { text "%1d"; }
+TM typedef int twobits_t { text "%02b"; }
+TM typedef int off_on_t { text "%3d" off_on_text[]; }
+TM typedef int qclimode_t { text "%7d" qclimode_text[]; }
+
+no_yes_t QCLI_busy; invalidate QCLI_busy;
+ { QCLI_busy = (QCLI_s & 0x8000) ? 1 : 0;
+   validate QCLI_busy; }
+onebit_t QCLI_cksum; invalidate QCLI_cksum;
+ { QCLI_cksum = (QCLI_s & 0x4000) ? 1 : 0;
+   validate QCLI_cksum; }
+ok_fail_t QCLI_cmderr; invalidate QCLI_cmderr;
+ { QCLI_cmderr = (QCLI_s & 0x2000) ? 1 : 0;
+   validate QCLI_cmderr; }
+off_on_t QCLI_laser; invalidate QCLI_laser;
+ { QCLI_laser = (QCLI_s & 0x1000) ? 0 : 1;
+   validate QCLI_laser; }
+ok_fail_t QCLI_cordte; invalidate QCLI_cordte;
+ { QCLI_cordte = (QCLI_s & 0x0800) ? 1 : 0;
+   validate QCLI_cordte; }
+no_yes_t QCLI_ready; invalidate QCLI_ready;
+ { QCLI_ready = (QCLI_s & 0x0200) ? 1 : 0;
+   validate QCLI_ready; }
+ok_fail_t QCLI_waveerr; invalidate QCLI_waveerr;
+ { QCLI_waveerr = (QCLI_s & 0x0100) ? 1 : 0;
+   validate QCLI_waveerr; }
+twobits_t QCLI_flash; invalidate QCLI_flash;
+ { QCLI_flash = (QCLI_s & 0x00C0) >> 6;
+   validate QCLI_flash; }
+ok_fail_t QCLI_dot; invalidate QCLI_dot;
+ { QCLI_dot = (QCLI_s & 0x0020) ? 1 : 0;
+   validate QCLI_dot; }
+ok_fail_t QCLI_lot; invalidate QCLI_lot;
+ { QCLI_lot = (QCLI_s & 0x0010) ? 1 : 0;
+   validate QCLI_lot; }
+ok_fail_t QCLI_loc; invalidate QCLI_loc;
+ { QCLI_loc = (QCLI_s & 0x0008) ? 1 : 0;
+   validate QCLI_loc; }
+qclimode_t QCLI_mode; invalidate QCLI_mode;
+ { QCLI_mode = QCLI_s & 0x7; validate QCLI_mode; }

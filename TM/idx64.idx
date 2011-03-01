@@ -1,0 +1,19 @@
+Indexer Status 4 Hz IXStt
+
+Channel 0 Throttle Valve
+  Position 4 Hz TVStep
+  Status 4 Hz TVStat Diagram TVDgrm KillStat TVKill
+  Scan
+  # Chop
+  Scanstat TVScan
+  Speed 1067 Hz
+  Disable Zeroref
+  # Swap Limits
+  # Invert Step
+  # Invert Direction
+  # Invert Run
+  Invert In Limit
+  Invert Out Limit
+  Invert Zero Ref
+  Invert Kill A
+  Invert Kill B

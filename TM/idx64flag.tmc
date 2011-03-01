@@ -1,0 +1,62 @@
+%{
+  const char *IxDrive_text[] = {
+	"  <  ",
+	"| <  ",
+	"  < |",
+	"| < |",
+	"  >  ",
+	"| >  ",
+	"  > |",
+	"| > |",
+	"<----",  /* driving in */
+	"|<---",  /* driving in against in limit */
+	"<---|",  /* driving in from out limit */
+	"|<--|",  /* driving in both limits. Broke */
+	"---->",  /* driving out */
+	"|--->",  /* driving out from in limit */
+	"--->|",  /* driving out agains out limit */
+	"|-->|"   /* driving out both limits. Broke */
+  };
+%}
+TM typedef unsigned char IxDriveStat { text "%5d" IxDrive_text[]; }
+IxDriveStat TVDgrm; invalidate TVDgrm; { TVDgrm = TVStat & 0xF; Validate TVDgrm; }
+%{
+  const char *IxKillStat_text[] = {
+    "----",
+    "---A",
+    "--B-",
+    "--BA",
+    "-Z--",
+    "-Z-A",
+    "-ZB-",
+    "-ZBA",
+    "C---",
+    "C--A",
+    "C-B-",
+    "C-BA",
+    "CZ--",
+    "CZ-A",
+    "CZB-",
+    "CZBA"
+  };
+%}
+TM typedef unsigned char IxKillStat { text "%4d" IxKillStat_text[]; }
+IxKillStat TVKill; invalidate TVKill; { TVKill = (TVStat >> 4) & 0xF; Validate TVKill; }
+%{
+  const char *IdxFlgTxt[8] = {
+	"    ",
+	"Scan",
+	"On  ",
+	"S/On",
+	"Off ",
+	"S/Of",
+	"Alt ",
+	"S/Al"
+  };
+%}
+TM typedef unsigned short IndxrFlag {
+  text "%4d" IdxFlgTxt[];
+}
+
+IndxrFlag TVScan; invalidate TVScan;
+{ TVScan = ( IXStt ) & 1; validate TVScan; }

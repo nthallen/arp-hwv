@@ -1,0 +1,17 @@
+%{
+  #include "qclid.h"
+%}
+
+TM "Receive" QCLI 1;
+
+TM typedef unsigned short QCLI_Wave_t { text "%10d" QCLI_Wave_text(); }
+TM 1 Hz QCLI_Wave_t QCLI_Wave;
+TM 1 Hz UINT QCLI_s;
+TM 1 Hz UINT QCLI_Stale;
+
+Group QCLI_grp ( QCLI_Wave, QCLI_s ) {
+  QCLI_Wave = QCLI.qcli_wave;
+  QCLI_s = QCLI.status;
+  QCLI_Stale = QCLI_obj->stale();
+  QCLI_obj->synch();
+}

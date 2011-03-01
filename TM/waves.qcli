@@ -1,0 +1,59 @@
+# waves.qcli
+# HHH Waveforms
+QCLIConfig FastRampx25;
+#QCLIConfig Standard;
+Digitizer SSP;
+Prefix QCLI;
+
+ICOS Waveform HHH_slow {
+  SampleRate = 1 MHz;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 60 mA to 90 mA in 1 msec;
+}
+
+ICOS Waveform HHH {
+  # Nsample = 900;
+  Ncoadd = 900;
+  SampleRate = 50 MHz/50;
+  Tz = 5%;
+#  Ramp from 45 mA to 75 mA in 1 msec;
+  Ramp from 60 mA to 90 mA in 1 msec;
+}
+
+ICOS Waveform HHH_full {
+  # Nsample = 900;
+  Ncoadd = 450;
+  SampleRate = 50 MHz/50;
+  Tz = 5%;
+  Ramp from 10 mA to 90 mA in 2 msec;
+}
+
+ICOS Waveform HHH_10MHz {
+  # Nsample = 900;
+  Ncoadd = 450;
+  SampleRate = 10 MHz/10;
+  Tz = 5%;
+  Ramp from 10 mA to 90 mA in 2 msec;
+}
+
+ICOS Waveform HHH_ConstantI {
+  Tz = 10 msec;
+  Iz = 70 mA;
+  SampleRate = 10 MHz;
+  dI/dt = 0 A/sec;
+}
+
+#ICOS Waveform CO2_short {
+#  Ncoadd = 800;
+#  SampleRate = 50 MHz/25;
+#  Tz = 5%;
+#  Ramp from 765 mA to 825 mA in 10 msec;
+#}
+ 
+#ICOS Waveform CO2_long {
+#  Ncoadd = 800;
+#  SampleRate = 50 MHz/25;
+#  Tz = 5%;
+#  Ramp from 700 mA to 825 mA in 10 msec;
+#}

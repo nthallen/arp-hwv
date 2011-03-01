@@ -1,0 +1,106 @@
+QCLI {
+  HBox { +-; Title: "QCLI"; -+ };
+  Wave: (QCLI_Wave,10);
+  Mode: { (QCLI_mode,7) (QCLI_laser,3); };
+  Stale: (QCLI_Stale,5);
+  SSP { (SSP_Num,8) (SSP_Status,7); }
+}
+
+SSP {
+  HBox { +-; Title: "SSP"; -+ };
+  HBox {
+    { File: (SSP_Num,5);
+      Scan: (SSP_SN,8);
+      Skip: (SSP_TS,8);
+      Status: (SSP_Status,7);
+      Stale: (SSP_Stale,5);
+    }; +|; {
+      ""  >"1|2|3 ";
+      AD: (SSP_AD,5);
+      PA: (SSP_PA,5);
+      CA: (SSP_CA,5);
+    }
+  }
+}
+
+SSPT {
+  { HBox { +-; Title: "SSP Temps"; -+ };
+    { FPGA: (SSP_T_FPGA,6) C HtSink: (SSP_T_HtSink,6) C }
+  }
+}
+
+QCLIS {
+  HBox { +-; Title: "QCLI Status"; -+ };
+  HBox {
+    {
+      Ready:         (QCLI_ready,3);
+      Busy:          (QCLI_busy,3);
+      Select:        (QCLI_waveerr,4);
+      Flash:         (QCLI_flash,2);
+      Cksum:         (QCLI_cksum,1);
+    }; |; {
+      "QCLI T:"      (QCLI_dot,4);
+      "Laser T:"     (QCLI_lot,4);
+      "Laser I:"     (QCLI_loc,4);
+      "Inv Cmd:"     (QCLI_cordte,4);
+      "Cmd Err:"     (QCLI_cmderr,4);
+    }
+  }
+}
+
+PV {
+  HBox {
+    { HBox { +-; Title: HPV; -+ };
+      "1T:" (HPV1T,6) C;
+      "2T:" (HPV2T,6) C;
+      P: (HPV_P,7) V;
+      RH: (HPV_RH,7) V;
+    }; |; {
+      HBox { +-; Title: SPV; -+ };
+      "1T:" (SPV1T,6) C;
+      "2T:" (SPV2T,6) C;
+      PT:   PTRH;
+      RHT:  PTRH;
+      P:    PTRH;
+      RH:   PTRH;
+    }
+  }
+}
+
+Cell {
+  HBox { +-; Title: "Cell"; -+ };
+  HHH1T: (HHH1T,6) C;
+  HHH2T: (HHH2T,6) C;
+  HHHPT: (HHHPT,6) C;
+  HHH1P: (HHH1P,6) V;
+  HHH2P: (HHH2P,6) V;
+  HHHDP: (HHHDP,6) V;
+}
+
+Laser {
+  HBox { +-; Title: Laser; -+ };
+  LTE1R4T: (LTE1R4T,7) V;
+  Las_I:   (Las_I,7) V;
+}
+
+SW {
+  Time: (flttime,8);
+  MFCtr: (MFCtr,5);
+}
+
+{
+  HBox {
+    { [QCLI];
+      [QCLIS];
+      [SSPT];
+    }; |; {
+      [SSP];
+      [PV]
+    }; |; {
+      [Cell];
+      [Laser];
+      +-;
+      [SW]
+    }
+  }
+}

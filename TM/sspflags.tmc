@@ -1,0 +1,19 @@
+%{
+  const char *ovf_text[] = {
+    " | | ",
+    "*| | ",
+    " |*| ",
+    "*|*| ",
+    " | |*",
+    "*| |*",
+    " |*|*",
+    "*|*|*" };
+%}
+
+TM typedef int SSP_OVF { text "%5d" ovf_text[]; }
+SSP_OVF SSP_CA; Invalidate SSP_CA;
+SSP_OVF SSP_PA; Invalidate SSP_PA;
+SSP_OVF SSP_AD; Invalidate SSP_AD;
+{ SSP_CA = SSP_CAOVF(SSP_Flags); Validate SSP_CA; }
+{ SSP_PA = SSP_PAOVF(SSP_Flags); Validate SSP_PA; }
+{ SSP_AD = SSP_ADOOR(SSP_Flags); Validate SSP_AD; }
