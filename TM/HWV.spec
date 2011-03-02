@@ -34,6 +34,7 @@ TGTDIR = $(TGTNODE)/home/HWV
 HWVcol : ai_init.tmc cnt_init.tmc idx64col.tmc sspcol.tmc -lsubbus
 HWVsrvr : -lsubbus
 HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
+HWValgo : HWV.tma
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc lyalpha.tbl
 doit : HWV.doit
 lydoit : ly.doit

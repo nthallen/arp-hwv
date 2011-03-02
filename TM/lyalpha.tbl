@@ -16,7 +16,7 @@ Det {
       ChpAT:  (ChpAT,6) C;
       ADetT:  (ADetT,6) C;
       A_LMT:  (A_LMT,6) C;
-      AModP:  (AModP)  V;
+      AModP:  (AModP,7)  V;
     }
   }
 }

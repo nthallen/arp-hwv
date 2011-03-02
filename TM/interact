@@ -20,5 +20,5 @@
   Launch - soldrv $TMBINDIR/A.sft
   Launch - sspdrv -b1 -hSSP -N `mlf_find SSP`
 # Launch - qclisd -h QCLI -d /dev/ser2
-# Launch - HWValgo -v
+  Launch - HWValgo -v
 
