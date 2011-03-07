@@ -32,10 +32,10 @@ SD {
 MZ {
   HBox { +-; Title: "Mirror Heating Zones"; -+ };
   MZ  T "" CT "" SP "" I "" DS S;
-  "1:" (MM_1T,6) C (MZ1CT,7) V (MZ1St,6) V (Cmd_5_I,7) V (MZ1DS,3) (MZ1S,3);
-  "2:" (MM_2T,6) C (MZ2CT,7) V (MZ2St,6) V (Cmd_6_I,7) V (MZ2DS,3) (MZ2S,3);
-  "3:" (MM_3T,6) C(MZ3CT,7) V (MZ3St,6) V (Cmd_7_I,7) V (MZ3DS,3) (MZ3S,3);
-  "4:" (MM_4T,6) C(MZ4CT,7) V (MZ4St,6) V (Cmd_8_I,7) V (MZ4DS,3) (MZ4S,3);
+  "1:" (MM_1T,6) C (MZ1CT,7) V (MZ1St,6) V (Cmd_6_I,7) V (MZ1DS,3) (MZ1S,3);
+  "2:" (MM_2T,6) C (MZ2CT,7) V (MZ2St,6) V (Cmd_8_I,7) V (MZ2DS,3) (MZ2S,3);
+  "3:" (MM_3T,6) C(MZ3CT,7) V (MZ3St,6) V (Cmd_10_I,7) V (MZ3DS,3) (MZ3S,3);
+  "4:" (MM_4T,6) C(MZ4CT,7) V (MZ4St,6) V (Cmd_11_I,7) V (MZ4DS,3) (MZ4S,3);
 }
 D1 {
   HBox { +-; Title: HPV; -+ };
