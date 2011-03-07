@@ -1,3 +1,4 @@
 display HWVdisp
 client HWVclt
 memo
+batchfile interact
