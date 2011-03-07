@@ -1,13 +1,13 @@
-# Makefile Generated Wed Mar 02 09:30:38 EST 2011
+# Makefile Generated Mon Mar 07 12:28:15 EST 2011
 MNC=HWV
-HOMEDIR=/home/HWV/src/TM
+HOMEDIR=/net/qnxt43.arp.harvard.edu/home/HWV/src/TM
 SPECFILE=HWV.spec
 SRC=base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
 SRC+=T30K75KU.tmc T10K75KU.tmc ai_init.tmc cnt_init.tmc idx64col.tmc
 SRC+=sspcol.tmc idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ao.cmd
 SRC+=soldrv.cmd swstat.cmd waves.cmd qclibits.tmc sspflags.tmc
 SRC+=idx64flag.tmc digio.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
-SRC+=HWV.tma HWV.doit ly.doit A.sol
+SRC+=HWV.tma HWV.doit ly.doit A.sol hwveng.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -19,10 +19,12 @@ OBJ+=lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc HWVdispnc.cc
 OBJ+=HWVdispncoui.c HWVdispncoui.o HWVdispnc.o HWValgoa.tmc
 OBJ+=HWValgo.cc HWValgooui.c HWValgooui.o HWValgo.o lydisp.cc
 OBJ+=lydispoui.c lydispoui.o lydisp.o lydispnc.cc lydispncoui.c
-OBJ+=lydispncoui.o lydispnc.o doit.dep lydoit.dep HWVclt.o
-OBJ+=HWVcltoui.c HWVcltoui.o HWVcltnc.o HWVcltncoui.c HWVcltncoui.o
+OBJ+=lydispncoui.o lydispnc.o doit.dep lydoit.dep hwvengextedf.oui
+OBJ+=hwvengext.tmc hwvengext.cc hwvengextoui.c hwvengextoui.o
+OBJ+=hwvengext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
+OBJ+=HWVcltncoui.c HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc HWValgo lydisp lydispnc doit
-TGT+=lydoit A.sft HWVclt HWVcltnc
+TGT+=lydoit A.sft hwvengext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
@@ -84,6 +86,9 @@ lydoit : ly.doit
 	mkdoit3 -o lydoit  ly.doit
 A.sft : A.sol
 	solfmt -oA.sft  A.sol
+hwvengext : hwvengext.o hwvengextoui.o
+	$(LINK.normCXX) hwvengext.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(OUIUSE) hwvengextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcltoui.c
@@ -158,6 +163,16 @@ doit.dep : HWV.doit
 lydoit.dep : ly.doit
 	mkdoit3 -M -o lydoit  ly.doit
 -include lydoit.dep
+hwvengextedf.oui : hwveng.edf
+	$(EDF2OUI) hwveng.edf
+hwvengext.tmc : hwveng.edf
+	$(EDF2EXT) hwveng.edf
+hwvengext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvengext.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvengext.tmc
+hwvengextoui.c : hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hwvengextoui.o : hwvengextoui.c
+hwvengext.o : hwvengext.cc
 HWVclt.o : HWVcmd.cc
 	$(COMPILE.clt) HWVcmd.cc
 HWVcltoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui

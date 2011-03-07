@@ -46,6 +46,12 @@ lydispncoui.o
 lydispnc.o
 doit.dep
 lydoit.dep
+hwvengextedf.oui
+hwvengext.tmc
+hwvengext.cc
+hwvengextoui.c
+hwvengextoui.o
+hwvengext.o
 HWVclt.o
 HWVcltoui.c
 HWVcltoui.o
@@ -63,5 +69,6 @@ lydispnc
 doit
 lydoit
 A.sft
+hwvengext
 HWVclt
 HWVcltnc

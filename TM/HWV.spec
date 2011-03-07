@@ -39,6 +39,8 @@ lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc lyalpha.tbl
 doit : HWV.doit
 lydoit : ly.doit
 A.sft : A.sol
+
+hwvengext : hwveng.edf
 %%
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g
