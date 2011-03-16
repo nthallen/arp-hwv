@@ -7,6 +7,7 @@ tmcbase = qcli.tmc
 tmcbase = waves.tmc
 tmcbase = T30K75KU.tmc
 tmcbase = T10K75KU.tmc
+tmcbase = ptrh.cc
 
 cmdbase = /usr/local/share/huarp/root.cmd
 cmdbase = /usr/local/share/huarp/getcon.cmd
@@ -25,15 +26,16 @@ SCRIPT = dccc.dccc
 SCRIPT = idx64.idx64
 SRCDIST = waves.qcli waves.m
 DISTRIB = waves.out A.sft
+SRC = ptrh.h
 
 OBJ = waves.cmd waves.out waves.tmc waves.m waves.log
 OBJ = address.h
 
 TGTDIR = $(TGTNODE)/home/HWV
 
-HWVcol : ai_init.tmc cnt_init.tmc idx64col.tmc sspcol.tmc -lsubbus
+HWVcol : ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc -lsubbus
 HWVsrvr : -lsubbus
-HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
+HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
 HWValgo : HWV.tma
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc lyalpha.tbl
 doit : HWV.doit

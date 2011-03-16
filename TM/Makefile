@@ -1,20 +1,21 @@
-# Makefile Generated Mon Mar 07 12:28:15 EST 2011
+# Makefile Generated Tue Mar 15 23:17:49 EDT 2011
 MNC=HWV
-HOMEDIR=/net/qnxt43.arp.harvard.edu/home/HWV/src/TM
+HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
-SRC=base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
-SRC+=T30K75KU.tmc T10K75KU.tmc ai_init.tmc cnt_init.tmc idx64col.tmc
-SRC+=sspcol.tmc idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ao.cmd
-SRC+=soldrv.cmd swstat.cmd waves.cmd qclibits.tmc sspflags.tmc
-SRC+=idx64flag.tmc digio.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
-SRC+=HWV.tma HWV.doit ly.doit A.sol hwveng.edf
+SRC=ptrh.h base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
+SRC+=T30K75KU.tmc T10K75KU.tmc ptrh.cc ai_init.tmc ptrh_chk.tmc
+SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc idx64drv.cmd
+SRC+=dccc.cmd qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
+SRC+=qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc
+SRC+=HWV.tbl lyalpha.tbl hk.tbl lab.tbl HWV.tma HWV.doit ly.doit
+SRC+=A.sol hwveng.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
-OBJ+=HWVcol.cc HWV.pcm tm.dac HWVcoloui.c HWVcoloui.o HWVcol.o
-OBJ+=HWVcmd.cc HWVcmd.dat HWVsrvr.o HWVsrvroui.c HWVsrvroui.o
-OBJ+=HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc HWVdisp.cc
-OBJ+=HWVdispoui.c HWVdispoui.o HWVdisp.o HWVtblnc.tmc
+OBJ+=HWVcol.cc HWV.pcm tm.dac HWVcoloui.c HWVcoloui.o HWVcol.o ptrh.o
+OBJ+=ptrh_col.o HWVcmd.cc HWVcmd.dat HWVsrvr.o HWVsrvroui.c
+OBJ+=HWVsrvroui.o HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
+OBJ+=HWVdisp.cc HWVdispoui.c HWVdispoui.o HWVdisp.o HWVtblnc.tmc
 OBJ+=lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc HWVdispnc.cc
 OBJ+=HWVdispncoui.c HWVdispncoui.o HWVdispnc.o HWValgoa.tmc
 OBJ+=HWValgo.cc HWValgooui.c HWValgooui.o HWValgo.o lydisp.cc
@@ -29,10 +30,10 @@ DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
 SRCDIST+=HWV.tma A.sol base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc
-SRCDIST+=waves.tmc T30K75KU.tmc T10K75KU.tmc
+SRCDIST+=waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh.cc
 NONRCS=
 TMCBASE=base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
-TMCBASE+=T30K75KU.tmc T10K75KU.tmc
+TMCBASE+=T30K75KU.tmc T10K75KU.tmc ptrh.cc
 CMDBASE=/usr/local/share/huarp/root.cmd
 CMDBASE+=/usr/local/share/huarp/getcon.cmd
 CMDBASE+=/usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd
@@ -57,28 +58,28 @@ extdistribution : $(DSTRB) $(SRCDIST)
 	@distribute $(FORCE) $(TGTDIR)/bin/$(VERSION)/Base $(SRCDIST)
 distribution : extdistribution
 	@distribute $(FORCE) $(TGTDIR) $(IDISTRIB)
-HWVcol : HWVcol.o HWVcoloui.o
-	$(LINK.privCXX) HWVcol.o HWVcoloui.o -lsubbus -ltmpp -ltm -lnort
+HWVcol : HWVcol.o ptrh.o ptrh_col.o HWVcoloui.o
+	$(LINK.privCXX) HWVcol.o ptrh.o ptrh_col.o HWVcoloui.o -lsubbus -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcoloui.c
 	$(PROMOTE) HWVcol
 HWVsrvr : HWVsrvr.o HWVsrvroui.o
 	$(LINK.privCXX) HWVsrvr.o HWVsrvroui.o -lsubbus -ltmpp -ltm -lnort
 	$(OUIUSE) HWVsrvroui.c
 	$(PROMOTE) HWVsrvr
-HWVdisp : HWVdisp.o HWVdispoui.o
-	$(LINK.normCXX) HWVdisp.o HWVdispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
+HWVdisp : HWVdisp.o ptrh.o HWVdispoui.o
+	$(LINK.normCXX) HWVdisp.o ptrh.o HWVdispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HWVdispoui.c
-HWVdispnc : HWVdispnc.o HWVdispncoui.o
-	$(LINK.normCXX) HWVdispnc.o HWVdispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
+HWVdispnc : HWVdispnc.o ptrh.o HWVdispncoui.o
+	$(LINK.normCXX) HWVdispnc.o ptrh.o HWVdispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) HWVdispncoui.c
-HWValgo : HWValgo.o HWValgooui.o
-	$(LINK.normCXX) HWValgo.o HWValgooui.o -ltmpp -ltm -lnort
+HWValgo : HWValgo.o ptrh.o HWValgooui.o
+	$(LINK.normCXX) HWValgo.o ptrh.o HWValgooui.o -ltmpp -ltm -lnort
 	$(OUIUSE) HWValgooui.c
-lydisp : lydisp.o lydispoui.o
-	$(LINK.normCXX) lydisp.o lydispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
+lydisp : lydisp.o ptrh.o lydispoui.o
+	$(LINK.normCXX) lydisp.o ptrh.o lydispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) lydispoui.c
-lydispnc : lydispnc.o lydispncoui.o
-	$(LINK.normCXX) lydispnc.o lydispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
+lydispnc : lydispnc.o ptrh.o lydispncoui.o
+	$(LINK.normCXX) lydispnc.o ptrh.o lydispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) lydispncoui.c
 doit : HWV.doit
 	mkdoit3 -o doit  HWV.doit
@@ -86,8 +87,8 @@ lydoit : ly.doit
 	mkdoit3 -o lydoit  ly.doit
 A.sft : A.sol
 	solfmt -oA.sft  A.sol
-hwvengext : hwvengext.o hwvengextoui.o
-	$(LINK.normCXX) hwvengext.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+hwvengext : hwvengext.o ptrh.o hwvengextoui.o
+	$(LINK.normCXX) hwvengext.o ptrh.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvengextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
@@ -95,12 +96,14 @@ HWVclt : HWVclt.o HWVcltoui.o
 HWVcltnc : HWVcltnc.o HWVcltncoui.o
 	$(LINK.normCXX) HWVcltnc.o HWVcltncoui.o -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcltncoui.c
-HWVcol.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ai_init.tmc cnt_init.tmc idx64col.tmc sspcol.tmc
-	$(TMC.col) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ai_init.tmc cnt_init.tmc idx64col.tmc sspcol.tmc
+HWVcol.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc
+	$(TMC.col) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc
 HWVcoloui.c : $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 HWVcoloui.o : HWVcoloui.c
 HWVcol.o : HWVcol.cc
+ptrh.o : ptrh.cc
+ptrh_col.o : ptrh_col.cc
 HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
 	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
 HWVsrvr.o : HWVcmd.cc
@@ -116,8 +119,8 @@ hktbl.tmc : hk.tbl
 	$(TABLE) hk.tbl
 labtbl.tmc : lab.tbl
 	$(TABLE) lab.tbl
-HWVdisp.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
-	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
+HWVdisp.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
 HWVdispoui.c : $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispoui.o : HWVdispoui.c
@@ -130,8 +133,8 @@ hktblnc.tmc : hk.tbl
 	$(NCTABLE) hk.tbl
 labtblnc.tmc : lab.tbl
 	$(NCTABLE) lab.tbl
-HWVdispnc.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
-	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
+HWVdispnc.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
 HWVdispncoui.c : $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispncoui.o : HWVdispncoui.c

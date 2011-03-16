@@ -1,0 +1,12 @@
+TM typedef double PTRHT_t { text "%5.1lf"; }
+TM typedef double SHT21RH_t { text "%4.1lf"; }
+TM typedef double PTRHP_t { text "%7.2lf"; }
+
+PTRHT_t DACS_T1C; invalidate DACS_T1C;
+{ DACS_T1C = DACS_ptrh.SHT21T(DACS_T1); Validate DACS_T1C; }
+PTRHT_t DACS_T2C; invalidate DACS_T2C;
+{ DACS_T2C = DACS_ptrh.MS5607T(DACS_T2a, DACS_T2b); Validate DACS_T2C; }
+SHT21RH_t DACS_RHC; invalidate DACS_RHC;
+{ DACS_RHC = DACS_ptrh.SHT21RH(DACS_RH); Validate DACS_RHC; }
+PTRHP_t DACS_P; invalidate DACS_P;
+{ DACS_P = DACS_ptrh.MS5607P(DACS_Pa, DACS_Pb); Validate DACS_P; }
