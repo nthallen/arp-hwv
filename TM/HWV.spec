@@ -31,7 +31,7 @@ SRC = ptrh.h
 OBJ = waves.cmd waves.out waves.tmc waves.m waves.log
 OBJ = address.h
 
-TGTDIR = $(TGTNODE)/home/HWV
+TGTDIR = $(TGTNODE)/home/hwv
 
 HWVcol : ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc -lsubbus
 HWVsrvr : -lsubbus

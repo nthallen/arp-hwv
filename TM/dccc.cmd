@@ -27,6 +27,7 @@
   : Chopper A { $0 = 25; }
   : Chopper B { $0 = 26; }
   : Chopper C { $0 = 27; }
+  : Analog Input Engine Inhibit { $0 = 31; }
   ;
 
 &cmd_on_off <int>

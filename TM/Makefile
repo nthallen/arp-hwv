@@ -1,4 +1,4 @@
-# Makefile Generated Tue Mar 15 23:17:49 EDT 2011
+# Makefile Generated Tue Mar 15 23:41:30 EDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -43,7 +43,7 @@ SOURCE=$(RCS) $(NONRCS)
 OBJECT=$(OBJ) *.err
 TARGET=$(TGT)
 DSTRB=$(TGT) $(DISTRIB) $(SCRIPT)
-TGTDIR= $(TGTNODE)/home/HWV
+TGTDIR= $(TGTNODE)/home/hwv
 include /usr/local/share/huarp/appgen.mk
 
 all : Makefile $(TGT)

@@ -73,5 +73,5 @@
   SPARE,   7, 0x0800; /* 59: Cmd_29_Off */
   SPARE,   7, 0x1000; /* 60: Cmd_30_On */
   SPARE,   7, 0x2000; /* 61: Cmd_30_Off */
-  SPARE,   7, 0x4000; /* 62: Cmd_31_On */
-  SPARE,   7, 0x8000; /* 63: Cmd_31_Off */
+  STRB,    7, 0x4000; /* 62: Cmd_31_On */
+  STRB,    7, 0x8000; /* 63: Cmd_31_Off */
