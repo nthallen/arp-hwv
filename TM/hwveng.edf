@@ -37,9 +37,9 @@ spreadsheet hwveng_1 55
   36 HtCSt %5.1lf
   37 LCmd1_I %5.1lf
   38 LCmd2_I %5.1lf
-  39 LampA_I %5.1lf
-  40 LampB_I %5.1lf
-  41 LampC_I %5.1lf
+  39 LMA_I %5.1lf
+  40 LMB_I %5.1lf
+  41 LMC_I %5.1lf
   42 MZ1_I %5.1lf
   43 MZ2_I %5.1lf
   44 MZ3_I %5.1lf
