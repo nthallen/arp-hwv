@@ -60,7 +60,7 @@ TM 8 Hz UINT MFCtr, Synch;
 TM 1 Hz AI_XP384 A_IRV; Address A_IRV 0xCB6; /* Axis A IR Voltage 0xC0E */
 TM 1 Hz AI_T30K A_LMT; Address A_LMT 0xCA4; /* Lamp Module A Temp */
 TM 1 Hz AI_T30K A_RgT; Address A_RgT 0xCC2; /* Air Regulator Temp */
-TM 1 Hz AI_T30K ADetT; Address ADetT 0xC44; /* Axis A PMT Temp */
+/* TM 1 Hz AI_T30K ADetT; Address ADetT 0xC44; */ /* Axis A PMT Temp */
 TM 1 Hz AI_XP384 AirHP; Address AirHP 0xCE2; /* Air High Prs */
 TM 1 Hz AI_XP384 AirLP; Address AirLP 0xC58; /* Air Low Prs 0xC04 */
 TM 1 Hz AI_XP384 AModP; Address AModP 0xC26; /* Axis A Lamp Module Pressure */
@@ -69,32 +69,32 @@ TM 1 Hz AI_X1    ARFFW; Address ARFFW 0xCE4; /* Axis A RF Forward Pwr */
 TM 1 Hz AI_XP384 B_IRV; Address B_IRV 0xC2E; /* Axis B IR Voltage */
 TM 1 Hz AI_T30K B_LMT; Address B_LMT 0xCA6; /* Lamp Module B Temp */
 TM 1 Hz AI_T30K B_RFT; Address B_RFT 0xCC6; /* Axis B RF Amplifier Temp */
-TM 1 Hz AI_T30K BDetT; Address BDetT 0xC46; /* Axis B PMT Temp */
+/* TM 1 Hz AI_T30K BDetT; Address BDetT 0xC46; */ /* Axis B PMT Temp */
 TM 1 Hz AI_XP384 BModP; Address BModP 0xC28; /* Axis B Lamp Module Pressure */
 TM 1 Hz AI_XP384 BRFBW; Address BRFBW 0xCD8; /* Axis B RF Backward Pwr 0xC08 */
 TM 1 Hz AI_XP384 BRFFW; Address BRFFW 0xCE6; /* Axis B RF Forward Pwr */
 TM 1 Hz AI_XP384 C_IRV; Address C_IRV 0xC4E; /* Axis C IR Voltage */
 TM 1 Hz AI_T30K C_LMT; Address C_LMT 0xCA8; /* Lamp Module C Temp */
 TM 1 Hz AI_T30K C_RFT; Address C_RFT 0xCC8; /* Axis C RF Amplifier Temp */
-TM 1 Hz AI_T30K CDetT; Address CDetT 0xC48; /* Axis C PMT Temp */
+/* TM 1 Hz AI_T30K CDetT; Address CDetT 0xC48; */ /* Axis C PMT Temp */
 TM 1 Hz AI_T30K ChpAT; Address ChpAT 0xC84; /* Axis A Chopper Temp */
 TM 1 Hz AI_T30K ChpBT; Address ChpBT 0xC86; /* Axis B Chopper Temp */
 TM 1 Hz AI_T30K ChpCT; Address ChpCT 0xC88; /* Axis C Chopper Temp */
-TM 1 Hz AI_X1 Cmd_0_I; Address Cmd_0_I 0xD10; /* Command Current 0 */
+TM 1 Hz AI_X1 LMB_I; Address LMB_I 0xD10; /* Command Current 0 */
 /* TM 1 Hz AI_X1 Cmd_1_I; Address Cmd_1_I 0xD12; */ /* Command Current 1 */
-TM 1 Hz AI_X1 Cmd_2_I; Address Cmd_2_I 0xD14; /* Command Current 2 */
-TM 1 Hz AI_X1 Cmd_3_I; Address Cmd_3_I 0xD16; /* Command Current 3 */
-TM 1 Hz AI_X1 Cmd_4_I; Address Cmd_4_I 0xD18; /* Command Current 4 */
+TM 1 Hz AI_X1 LMC_I; Address LMC_I 0xD14; /* Command Current 2 */
+TM 1 Hz AI_X1 LCmd1_I; Address LCmd1_I 0xD16; /* Command Current 3 */
+TM 1 Hz AI_X1 LCmd2_I; Address LCmd2_I 0xD18; /* Command Current 4 */
 /* TM 1 Hz AI_X1 Cmd_5_I; Address Cmd_5_I 0xD1A; */ /* Command Current 5 */
-TM 1 Hz AI_X1 Cmd_6_I; Address Cmd_6_I 0xD1C; /* Command Current 6 */
-TM 1 Hz AI_X1 Cmd_7_I; Address Cmd_7_I 0xD1E; /* Command Current 7 */
-TM 1 Hz AI_X1 Cmd_8_I; Address Cmd_8_I 0xD30; /* Command Current 8 */
+TM 1 Hz AI_X1 MZ1_I; Address MZ1_I 0xD1C; /* Command Current 6 */
+TM 1 Hz AI_X1 LMA_I; Address LMA_I 0xD1E; /* Command Current 7 */
+TM 1 Hz AI_X1 MZ2_I; Address MZ2_I 0xD30; /* Command Current 8 */
 /* TM 1 Hz AI_X1 Cmd_9_I; Address Cmd_9_I 0xD32; */ /* Command Current 9 */
-TM 1 Hz AI_X1 Cmd_10_I; Address Cmd_10_I 0xD34; /* Command Current 10 */
-TM 1 Hz AI_X1 Cmd_11_I; Address Cmd_11_I 0xD36; /* Command Current 11 */
-TM 1 Hz AI_X1 Cmd_12_I; Address Cmd_12_I 0xD38; /* Command Current 12 */
+TM 1 Hz AI_X1 MZ3_I; Address MZ3_I 0xD34; /* Command Current 10 */
+TM 1 Hz AI_X1 MZ4_I; Address MZ4_I 0xD36; /* Command Current 11 */
+TM 1 Hz AI_X1 AirA_I; Address AirA_I 0xD38; /* Command Current 12 */
 /* TM 1 Hz AI_X1 Cmd_13_I; Address Cmd_13_I 0xD3A; */ /* Command Current 13 */
-TM 1 Hz AI_X1 Cmd_14_I; Address Cmd_14_I 0xD3C; /* Command Current 14 */
+TM 1 Hz AI_X1 AirB_I; Address AirB_I 0xD3C; /* Command Current 14 */
 TM 1 Hz AI_X1 Cmd_15_I; Address Cmd_15_I 0xD3E; /* Command Current 15 */
 TM 1 Hz AI_XP384 CModP; Address CModP 0xC2A; /* Axis C Lamp Module Pressure */
 TM 1 Hz AI_XP384 CRFBW; Address CRFBW 0xC98; /* Axis C RF Backward Pwr 0xC0A */
@@ -159,10 +159,10 @@ TM 1 Hz AI_XP768 SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
 TM 1 Hz AI_T10K SFB1T; Address SFB1T 0xC4A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB2T; Address SFB2T 0xC6A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB3T; Address SFB3T 0xC8A; /* Secondary Inlet Therm Ring */
-TM 1 Hz AI_T10K SFB4T; Address SFB4T 0xCAA; /* Secondary Inlet Therm Ring */
-TM 1 Hz AI_T10K SFB5T; Address SFB5T 0xCCA; /* Secondary Inlet Therm Ring */
-TM 1 Hz AI_T10K SFB6T; Address SFB6T 0xCEA; /* Secondary Inlet Therm Ring */
-TM 1 Hz AI_T10K SFB7T; Address SFB7T 0xCDA; /* Secondary Inlet Therm Ring 0xC0C */
+/* TM 1 Hz AI_T10K SFB4T; Address SFB4T 0xCAA; */ /* Secondary Inlet Therm Ring */
+/* TM 1 Hz AI_T10K SFB5T; Address SFB5T 0xCCA; */ /* Secondary Inlet Therm Ring */
+/* TM 1 Hz AI_T10K SFB6T; Address SFB6T 0xCEA; */ /* Secondary Inlet Therm Ring */
+/* TM 1 Hz AI_T10K SFB7T; Address SFB7T 0xCDA; */ /* Secondary Inlet Therm Ring 0xC0C */
 TM 1 Hz AI_T30K SPV1T; Address SPV1T 0xC76; /* Signal Prs Vessel T #1 */
 TM 1 Hz AI_T30K SPV2T; Address SPV2T 0xC96; /* Signal Prs Vessel T #2 */
 TM 1 Hz AI_X1 TVPos; Address TVPos 0xCAC; /* Throttle Valve Position */

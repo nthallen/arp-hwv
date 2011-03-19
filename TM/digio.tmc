@@ -7,30 +7,30 @@
 %}
 TM typedef unsigned char on_off_status { text "%3d" on_off_status_text[]; }
 
-on_off_status Cmd0DS; invalidate Cmd0DS;
-{ Cmd0DS = (DS822 & 0x1) ? 1 : 0; validate Cmd0DS; }
+on_off_status LampBDS; invalidate LampBDS;
+{ LampBDS = (DS822 & 0x1) ? 1 : 0; validate LampBDS; }
 on_off_status Cmd1DS; invalidate Cmd1DS;
 { Cmd1DS = (DS822 & 0x2) ? 1 : 0; validate Cmd1DS; }
-on_off_status Cmd2DS; invalidate Cmd2DS;
-{ Cmd2DS = (DS822 & 0x4) ? 1 : 0; validate Cmd2DS; }
+on_off_status LampCDS; invalidate LampCDS;
+{ LampCDS = (DS822 & 0x4) ? 1 : 0; validate LampCDS; }
 on_off_status Cmd3DS; invalidate Cmd3DS;
 { Cmd3DS = (DS822 & 0x8) ? 1 : 0; validate Cmd3DS; }
 on_off_status Cmd4DS; invalidate Cmd4DS;
 { Cmd4DS = (DS822 & 0x10) ? 1 : 0; validate Cmd4DS; }
+on_off_status Cmd5DS; invalidate Cmd5DS;
+{ Cmd5DS = (DS822 & 0x20) ? 1 : 0; validate Cmd5DS; }
 on_off_status MZ1DS; invalidate MZ1DS;
-{ MZ1DS = (DS822 & 0x20) ? 1 : 0; validate MZ1DS; }
+{ MZ1DS = (DS822 & 0x40) ? 1 : 0; validate MZ1DS; }
+on_off_status LampADS; invalidate LampADS;
+{ LampADS = (DS822 & 0x80) ? 1 : 0; validate LampADS; }
 on_off_status MZ2DS; invalidate MZ2DS;
-{ MZ2DS = (DS822 & 0x40) ? 1 : 0; validate MZ2DS; }
-on_off_status MZ3DS; invalidate MZ3DS;
-{ MZ3DS = (DS822 & 0x80) ? 1 : 0; validate MZ3DS; }
-on_off_status MZ4DS; invalidate MZ4DS;
-{ MZ4DS = (DS822 & 0x100) ? 1 : 0; validate MZ4DS; }
+{ MZ2DS = (DS822 & 0x100) ? 1 : 0; validate MZ2DS; }
 on_off_status Cmd9DS; invalidate Cmd9DS;
 { Cmd9DS = (DS822 & 0x200) ? 1 : 0; validate Cmd9DS; }
-on_off_status Cmd10DS; invalidate Cmd10DS;
-{ Cmd10DS = (DS822 & 0x400) ? 1 : 0; validate Cmd10DS; }
-on_off_status Cmd11DS; invalidate Cmd11DS;
-{ Cmd11DS = (DS822 & 0x800) ? 1 : 0; validate Cmd11DS; }
+on_off_status MZ3DS; invalidate MZ3DS;
+{ MZ3DS = (DS822 & 0x400) ? 1 : 0; validate MZ3DS; }
+on_off_status MZ4DS; invalidate MZ4DS;
+{ MZ4DS = (DS822 & 0x800) ? 1 : 0; validate MZ4DS; }
 on_off_status Cmd12DS; invalidate Cmd12DS;
 { Cmd12DS = (DS822 & 0x1000) ? 1 : 0; validate Cmd12DS; }
 on_off_status Cmd13DS; invalidate Cmd13DS;
@@ -71,30 +71,30 @@ on_off_status Cmd30DS; invalidate Cmd30DS;
 { Cmd30DS = (DS824 & 0x4000) ? 1 : 0; validate Cmd30DS; }
 on_off_status Cmd31DS; invalidate Cmd31DS;
 { Cmd31DS = (DS824 & 0x8000) ? 1 : 0; validate Cmd31DS; }
-on_off_status Cmd0S; invalidate Cmd0S;
-{ Cmd0S = (DS844 & 0x1) ? 1 : 0; validate Cmd0S; }
+on_off_status LampBS; invalidate LampBS;
+{ LampBS = (DS844 & 0x1) ? 1 : 0; validate LampBS; }
 on_off_status Cmd1S; invalidate Cmd1S;
 { Cmd1S = (DS844 & 0x2) ? 1 : 0; validate Cmd1S; }
-on_off_status Cmd2S; invalidate Cmd2S;
-{ Cmd2S = (DS844 & 0x4) ? 1 : 0; validate Cmd2S; }
+on_off_status LampCS; invalidate LampCS;
+{ LampCS = (DS844 & 0x4) ? 1 : 0; validate LampCS; }
 on_off_status Cmd3S; invalidate Cmd3S;
 { Cmd3S = (DS844 & 0x8) ? 1 : 0; validate Cmd3S; }
 on_off_status Cmd4S; invalidate Cmd4S;
 { Cmd4S = (DS844 & 0x10) ? 1 : 0; validate Cmd4S; }
+on_off_status Cmd5S; invalidate Cmd5S;
+{ Cmd5S = (DS844 & 0x20) ? 1 : 0; validate Cmd5S; }
 on_off_status MZ1S; invalidate MZ1S;
-{ MZ1S = (DS844 & 0x20) ? 1 : 0; validate MZ1S; }
+{ MZ1S = (DS844 & 0x40) ? 1 : 0; validate MZ1S; }
+on_off_status LampAS; invalidate LampAS;
+{ LampAS = (DS844 & 0x80) ? 1 : 0; validate LampAS; }
 on_off_status MZ2S; invalidate MZ2S;
-{ MZ2S = (DS844 & 0x40) ? 1 : 0; validate MZ2S; }
-on_off_status MZ3S; invalidate MZ3S;
-{ MZ3S = (DS844 & 0x80) ? 1 : 0; validate MZ3S; }
-on_off_status MZ4S; invalidate MZ4S;
-{ MZ4S = (DS844 & 0x100) ? 1 : 0; validate MZ4S; }
+{ MZ2S = (DS844 & 0x100) ? 1 : 0; validate MZ2S; }
 on_off_status Cmd9S; invalidate Cmd9S;
 { Cmd9S = (DS844 & 0x200) ? 1 : 0; validate Cmd9S; }
-on_off_status Cmd10S; invalidate Cmd10S;
-{ Cmd10S = (DS844 & 0x400) ? 1 : 0; validate Cmd10S; }
-on_off_status Cmd11S; invalidate Cmd11S;
-{ Cmd11S = (DS844 & 0x800) ? 1 : 0; validate Cmd11S; }
+on_off_status MZ3S; invalidate MZ3S;
+{ MZ3S = (DS844 & 0x400) ? 1 : 0; validate MZ3S; }
+on_off_status MZ4S; invalidate MZ4S;
+{ MZ4S = (DS844 & 0x800) ? 1 : 0; validate MZ4S; }
 on_off_status Cmd12S; invalidate Cmd12S;
 { Cmd12S = (DS844 & 0x1000) ? 1 : 0; validate Cmd12S; }
 on_off_status Cmd13S; invalidate Cmd13S;

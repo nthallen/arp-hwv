@@ -5,16 +5,18 @@ Det {
       PMTA_Counts: (PMTA_Counts,8);
       UVA1_Counts: (UVA1_Counts,8);
       UVA2_Counts: (UVA2_Counts,8);
+      Pwr: { (LampADS,3) (LampAS,3) };
+      Crnt:    (LMA_I,7) V;
       A_IRV:   (A_IRV,7) V;
       HtASt:   (HtASt,6) V;
       RFASt:   (RFASt,6) V;
       ARFFW:   (ARFFW,7) V;
+      ARFBW:   (ARFBW,7) V;
     }; |; {
       "Chop A:" (ChopADS,3);
       "";
       FAA_T:  (FAA_T,6) C;
       ChpAT:  (ChpAT,6) C;
-      ADetT:  (ADetT,6) C;
       A_LMT:  (A_LMT,6) C;
       AModP:  (AModP,7)  V;
     }
@@ -28,10 +30,6 @@ SD {
       SFB1T: (SFB1T,6) C;
       SFB2T: (SFB2T,6) C;
       SFB3T: (SFB3T,6) C;
-      SFB4T: (SFB4T,6) C;
-      SFB5T: (SFB5T,6) C;
-      SFB6T: (SFB6T,6) C;
-      SFB7T: (SFB7T,6) C;
     }; |; {
       SDPDP: (SDPDP,7) V;
       SD_LP: (SD_LP,5) Torr;

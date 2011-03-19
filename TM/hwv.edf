@@ -7,7 +7,6 @@ spreadsheet hwv_1 19
  6   AModP %5.1lf
  7   A_LMT %5.1lf
  8   ChpAT %5.1lf
- 9   ADetT %5.1lf
  10 FAA_T %5.1lf
  11 TVPos %5.1lf
  12 SDP_T %5.1f

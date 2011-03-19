@@ -4,6 +4,10 @@ Lamps {
   PMT:  (PMTA_Counts,8) (PMTB_Counts,8) (PMTC_Counts,8);
   UV1:  (UVA1_Counts,8) (UVB1_Counts,8) (UVC1_Counts,8);
   UV2:  (UVA2_Counts,8) (UVB2_Counts,8) (UVC2_Counts,8);
+  Pwr:  { (LampADS,3) (LampAS,3) }
+		  { (LampBDS,3) (LampBS,3) }
+			      { (LampCDS,3) (LampCS,3) };
+  I:    (LMA_I,7)       (LMB_I,7)       (LMC_I,7) V;
   IRV:  (A_IRV,7)       (B_IRV,7)       (C_IRV,7) V;
   HtSt: (HtASt,6)       (HtBSt,6)       (HtCSt,6) V;
   RFSt: (RFASt,6)       (RFBSt,6)       (RFCSt,6) V;
@@ -15,7 +19,6 @@ Lamps {
   VGlue 1+0;
   FA_T: (FAA_T,6)       (FAB_T,6)       (FAC_T,6) C;
   Chp_T: (ChpAT,6)      (ChpBT,6)       (ChpCT,6) C;
-  DetT:  (ADetT,6)      (BDetT,6)       (CDetT,6) C;
   LMT:   (A_LMT,6)      (B_LMT,6)       (C_LMT,6) C;
   ModP:  (AModP,7)      (BModP,7)       (CModP,7) V;
 }
