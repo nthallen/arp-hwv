@@ -24,12 +24,12 @@
 TM INITFUNC ai_cfg_init();
 
 /* Now the custom configurations for this experiment: */
-TM INITFUNC sbwr(SDPDP.address, AI_CFG_X2);
-TM INITFUNC sbwr(ARFFW.address, AI_CFG_XP384);
-TM INITFUNC sbwr(ARFBW.address, AI_CFG_XP384);
+TM INITFUNC sbwr(SDPDP.address, AI_CFG_XP768);
+TM INITFUNC sbwr(ARFFW.address, AI_CFG_X1);
+TM INITFUNC sbwr(ARFBW.address, AI_CFG_X1);
 TM INITFUNC sbwr(AModP.address, AI_CFG_XP384);
-TM INITFUNC sbwr(SD_LP.address, AI_CFG_XP384);
-TM INITFUNC sbwr(SD_HP.address, AI_CFG_XP384);
+TM INITFUNC sbwr(SD_LP.address, AI_CFG_XP768);
+TM INITFUNC sbwr(SD_HP.address, AI_CFG_XP768);
 TM INITFUNC sbwr(A_IRV.address, AI_CFG_XP384);
 TM INITFUNC sbwr(BRFFW.address, AI_CFG_XP384);
 TM INITFUNC sbwr(BRFBW.address, AI_CFG_XP384);

@@ -16,7 +16,7 @@ cmdbase = idx64drv.cmd
 cmdbase = dccc.cmd
 cmdbase = qcli.cmd
 cmdbase = ssp.cmd
-cmdbase = ao.cmd
+cmdbase = ai.cmd ao.cmd
 cmdbase = soldrv.cmd
 cmdbase = swstat.cmd
 cmdbase = waves.cmd
@@ -43,6 +43,7 @@ lydoit : ly.doit
 A.sft : A.sol
 
 hwvengext : hwveng.edf
+hwvext : hwv.edf
 %%
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g

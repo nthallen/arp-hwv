@@ -1,14 +1,14 @@
-# Makefile Generated Tue Mar 15 23:41:30 EDT 2011
+# Makefile Generated Thu Mar 17 12:07:12 EDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
 SRC=ptrh.h base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
 SRC+=T30K75KU.tmc T10K75KU.tmc ptrh.cc ai_init.tmc ptrh_chk.tmc
 SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc idx64drv.cmd
-SRC+=dccc.cmd qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
-SRC+=qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc
-SRC+=HWV.tbl lyalpha.tbl hk.tbl lab.tbl HWV.tma HWV.doit ly.doit
-SRC+=A.sol hwveng.edf
+SRC+=dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
+SRC+=waves.cmd qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc
+SRC+=ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl HWV.tma
+SRC+=HWV.doit ly.doit A.sol hwveng.edf hwv.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -22,10 +22,11 @@ OBJ+=HWValgo.cc HWValgooui.c HWValgooui.o HWValgo.o lydisp.cc
 OBJ+=lydispoui.c lydispoui.o lydisp.o lydispnc.cc lydispncoui.c
 OBJ+=lydispncoui.o lydispnc.o doit.dep lydoit.dep hwvengextedf.oui
 OBJ+=hwvengext.tmc hwvengext.cc hwvengextoui.c hwvengextoui.o
-OBJ+=hwvengext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
+OBJ+=hwvengext.o hwvextedf.oui hwvext.tmc hwvext.cc hwvextoui.c
+OBJ+=hwvextoui.o hwvext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
 OBJ+=HWVcltncoui.c HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc HWValgo lydisp lydispnc doit
-TGT+=lydoit A.sft hwvengext HWVclt HWVcltnc
+TGT+=lydoit A.sft hwvengext hwvext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
@@ -37,7 +38,8 @@ TMCBASE+=T30K75KU.tmc T10K75KU.tmc ptrh.cc
 CMDBASE=/usr/local/share/huarp/root.cmd
 CMDBASE+=/usr/local/share/huarp/getcon.cmd
 CMDBASE+=/usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd
-CMDBASE+=qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
+CMDBASE+=qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
+CMDBASE+=waves.cmd
 RCS=$(SRC) $(TOOL) $(SCRIPT)
 SOURCE=$(RCS) $(NONRCS)
 OBJECT=$(OBJ) *.err
@@ -90,6 +92,9 @@ A.sft : A.sol
 hwvengext : hwvengext.o ptrh.o hwvengextoui.o
 	$(LINK.normCXX) hwvengext.o ptrh.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvengextoui.c
+hwvext : hwvext.o ptrh.o hwvextoui.o
+	$(LINK.normCXX) hwvext.o ptrh.o hwvextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(OUIUSE) hwvextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcltoui.c
@@ -104,8 +109,8 @@ HWVcoloui.o : HWVcoloui.c
 HWVcol.o : HWVcol.cc
 ptrh.o : ptrh.cc
 ptrh_col.o : ptrh_col.cc
-HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
-	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
+HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
+	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
 HWVsrvr.o : HWVcmd.cc
 	$(COMPILE.srvr) HWVcmd.cc
 HWVsrvroui.c : $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
@@ -176,6 +181,16 @@ hwvengextoui.c : hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvengextoui.o : hwvengextoui.c
 hwvengext.o : hwvengext.cc
+hwvextedf.oui : hwv.edf
+	$(EDF2OUI) hwv.edf
+hwvext.tmc : hwv.edf
+	$(EDF2EXT) hwv.edf
+hwvext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvext.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvext.tmc
+hwvextoui.c : hwvextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hwvextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hwvextoui.o : hwvextoui.c
+hwvext.o : hwvext.cc
 HWVclt.o : HWVcmd.cc
 	$(COMPILE.clt) HWVcmd.cc
 HWVcltoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui

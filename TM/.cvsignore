@@ -10,6 +10,8 @@ tm.dac
 HWVcoloui.c
 HWVcoloui.o
 HWVcol.o
+ptrh.o
+ptrh_col.o
 HWVcmd.cc
 HWVcmd.dat
 HWVsrvr.o
@@ -52,6 +54,12 @@ hwvengext.cc
 hwvengextoui.c
 hwvengextoui.o
 hwvengext.o
+hwvextedf.oui
+hwvext.tmc
+hwvext.cc
+hwvextoui.c
+hwvextoui.o
+hwvext.o
 HWVclt.o
 HWVcltoui.c
 HWVcltoui.o
@@ -70,5 +78,6 @@ doit
 lydoit
 A.sft
 hwvengext
+hwvext
 HWVclt
 HWVcltnc
