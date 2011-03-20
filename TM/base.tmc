@@ -299,6 +299,8 @@ TM 1 Hz DSByte DS853; Address DS853 0x853; /* I/O Switches, etc. */
   #include "ptrh.h"
   ptrh DACS_ptrh =
     ptrh("DACS",0x300,0xB28E,0x9548,0x6EE9,0x610A,0x812C,0x6C80);
+  ptrh SPV_ptrh =
+    ptrh("SPV", 0x320,0xB28E,0x9548,0x6EE9,0x610A,0x812C,0x6C80);
 %}
 TM typedef unsigned char MS5607Db { text "%3d"; }
 
@@ -308,3 +310,10 @@ TM 1 Hz UINT DACS_T2a; collect DACS_T2a = DACS_ptrh.MS5607Ta();
 TM 1 Hz MS5607Db DACS_T2b; collect DACS_T2b = DACS_ptrh.MS5607Tb(); 
 TM 1 Hz UINT DACS_Pa; collect DACS_Pa = DACS_ptrh.MS5607Pa();
 TM 1 Hz MS5607Db DACS_Pb; collect DACS_Pb = DACS_ptrh.MS5607Pb(); 
+
+TM 1 Hz UINT SPV_T1; collect SPV_T1 = SPV_ptrh.SHT21T();
+TM 1 Hz UINT SPV_RH; collect SPV_RH = SPV_ptrh.SHT21RH();
+TM 1 Hz UINT SPV_T2a; collect SPV_T2a = SPV_ptrh.MS5607Ta();
+TM 1 Hz MS5607Db SPV_T2b; collect SPV_T2b = SPV_ptrh.MS5607Tb(); 
+TM 1 Hz UINT SPV_Pa; collect SPV_Pa = SPV_ptrh.MS5607Pa();
+TM 1 Hz MS5607Db SPV_Pb; collect SPV_Pb = SPV_ptrh.MS5607Pb(); 
