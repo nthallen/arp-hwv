@@ -1,7 +1,7 @@
-; B.sol
+; C.sol
 ;   Mode 0  Everything Off
 
-solenoid Chop 52 53 0 ; Chopper B
+solenoid Chop 54 55 0 ; Chopper C
 
 ; This setup uses a decimal encoding to indicate both the mode
 ; number (in the tens column) and the status of the chopper
@@ -11,7 +11,7 @@ dtoa S2 0x00 { Z:0 _:20 O:21 }
 dtoa S3 0x00 { Z:0 _:30 O:31 }
 dtoa S4 0x00 { Z:0 _:40 O:41 }
 dtoa S5 0x00 { Z:0 _:50 O:51 }
-Command_Set = 'B';
+Command_Set = 'C';
 
 resolution = 1/1
 

@@ -16,6 +16,7 @@ Lamps {
   RFT:  ""              (B_RFT,6)       (C_RFT,6) C;
   VGlue 1+0;
   Chop: (ChopADS,3)     (ChopBDS,3)     (ChopCDS,3);
+  Sol:  (SolStA,3)      (SolStB,3)      (SolStC,3);
   VGlue 1+0;
   FA_T: (FAA_T,6)       (FAB_T,6)       (FAC_T,6) C;
   Chp_T: (ChpAT,6)      (ChpBT,6)       (ChpCT,6) C;

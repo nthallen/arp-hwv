@@ -303,6 +303,7 @@ TM 1 Hz DSByte DS853; Address DS853 0x853; /* I/O Switches, etc. */
     ptrh("SPV", 0x320,0xB28E,0x9548,0x6EE9,0x610A,0x812C,0x6C80);
 %}
 TM typedef unsigned char MS5607Db { text "%3d"; }
+TM typedef UINT PTRH_S { text "%4x"; }
 
 TM 1 Hz UINT DACS_T1; collect DACS_T1 = DACS_ptrh.SHT21T();
 TM 1 Hz UINT DACS_RH; collect DACS_RH = DACS_ptrh.SHT21RH();
@@ -310,6 +311,7 @@ TM 1 Hz UINT DACS_T2a; collect DACS_T2a = DACS_ptrh.MS5607Ta();
 TM 1 Hz MS5607Db DACS_T2b; collect DACS_T2b = DACS_ptrh.MS5607Tb(); 
 TM 1 Hz UINT DACS_Pa; collect DACS_Pa = DACS_ptrh.MS5607Pa();
 TM 1 Hz MS5607Db DACS_Pb; collect DACS_Pb = DACS_ptrh.MS5607Pb(); 
+TM 1 Hz PTRH_S DACS_PTRHS; collect DACS_PTRHS = DACS_ptrh.Status();
 
 TM 1 Hz UINT SPV_T1; collect SPV_T1 = SPV_ptrh.SHT21T();
 TM 1 Hz UINT SPV_RH; collect SPV_RH = SPV_ptrh.SHT21RH();
@@ -317,3 +319,15 @@ TM 1 Hz UINT SPV_T2a; collect SPV_T2a = SPV_ptrh.MS5607Ta();
 TM 1 Hz MS5607Db SPV_T2b; collect SPV_T2b = SPV_ptrh.MS5607Tb(); 
 TM 1 Hz UINT SPV_Pa; collect SPV_Pa = SPV_ptrh.MS5607Pa();
 TM 1 Hz MS5607Db SPV_Pb; collect SPV_Pb = SPV_ptrh.MS5607Pb(); 
+TM 1 Hz PTRH_S SPV_PTRHS; collect SPV_PTRHS = SPV_ptrh.Status();
+
+TM typedef unsigned char SolStat_t { text "%3d"; }
+%{
+  SolStat_t SolStatA, SolStatB, SolStatC;
+%}
+TM "Receive" SolStatA 0;
+TM 1 Hz SolStat_t SolStA; SolStA = SolStatA;
+TM "Receive" SolStatB 0;
+TM 1 Hz SolStat_t SolStB; SolStB = SolStatB;
+TM "Receive" SolStatC 0;
+TM 1 Hz SolStat_t SolStC; SolStC = SolStatC;

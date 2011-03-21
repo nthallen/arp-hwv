@@ -14,6 +14,7 @@ Det {
       ARFBW:   (ARFBW,7) V;
     }; |; {
       "Chop A:" (ChopADS,3);
+      SolA:   (SolStA,3);
       "";
       FAA_T:  (FAA_T,6) C;
       ChpAT:  (ChpAT,6) C;
