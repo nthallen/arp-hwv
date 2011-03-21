@@ -66,7 +66,7 @@ HHH_Cell {
   "2T:" (HHH2T,6) C;
   PT: (HHHPT,6) C;
   "1P:" (HHH1P,7) V;
-  "2P:" (HHH1P,7) V;
+  "2P:" (HHH2P,7) V;
   DP: (HHHDP,7) V;
 }
 
