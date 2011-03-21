@@ -59,10 +59,10 @@ PV {
       HBox { +-; Title: SPV; -+ };
       "1T:" (SPV1T,6) C;
       "2T:" (SPV2T,6) C;
-      PT:   (DACS_T2C,5) C;
-      RHT:  (DACS_T1C,5) C;
-      P:    (DACS_P,7) mbar;
-      RH:   (DACS_RHC,4) %;
+      PT:   (SPV_T2C,5) C;
+      RHT:  (SPV_T1C,5) C;
+      P:    (SPV_P,7) mbar;
+      RH:   (SPV_RHC,4) %;
     }
   }
 }
