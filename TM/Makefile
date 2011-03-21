@@ -1,4 +1,4 @@
-# Makefile Generated Thu Mar 17 12:07:12 EDT 2011
+# Makefile Generated Mon Mar 21 18:39:04 EDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -8,7 +8,7 @@ SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc idx64drv.cmd
 SRC+=dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 SRC+=waves.cmd qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc
 SRC+=ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl HWV.tma
-SRC+=HWV.doit ly.doit A.sol hwveng.edf hwv.edf
+SRC+=HWV.doit ly.doit A.sol B.sol C.sol hwveng.edf hwv.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -26,12 +26,12 @@ OBJ+=hwvengext.o hwvextedf.oui hwvext.tmc hwvext.cc hwvextoui.c
 OBJ+=hwvextoui.o hwvext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
 OBJ+=HWVcltncoui.c HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc HWValgo lydisp lydispnc doit
-TGT+=lydoit A.sft hwvengext hwvext HWVclt HWVcltnc
+TGT+=lydoit A.sft B.sft C.sft hwvengext hwvext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
-SRCDIST+=HWV.tma A.sol base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc
-SRCDIST+=waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh.cc
+SRCDIST+=HWV.tma A.sol B.sol C.sol base.tmc idx64.tmc swstat.tmc
+SRCDIST+=ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh.cc
 NONRCS=
 TMCBASE=base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
 TMCBASE+=T30K75KU.tmc T10K75KU.tmc ptrh.cc
@@ -89,6 +89,10 @@ lydoit : ly.doit
 	mkdoit3 -o lydoit  ly.doit
 A.sft : A.sol
 	solfmt -oA.sft  A.sol
+B.sft : B.sol
+	solfmt -oB.sft  B.sol
+C.sft : C.sol
+	solfmt -oC.sft  C.sol
 hwvengext : hwvengext.o ptrh.o hwvengextoui.o
 	$(LINK.normCXX) hwvengext.o ptrh.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvengextoui.c

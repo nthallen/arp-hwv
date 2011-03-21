@@ -323,7 +323,7 @@ TM 1 Hz PTRH_S SPV_PTRHS; collect SPV_PTRHS = SPV_ptrh.Status();
 
 TM typedef unsigned char SolStat_t { text "%3d"; }
 %{
-  SolStat_t SolStatA, SolStatB, SolStatC;
+  unsigned int SolStatA, SolStatB, SolStatC;
 %}
 TM "Receive" SolStatA 0;
 TM 1 Hz SolStat_t SolStA; SolStA = SolStatA;
