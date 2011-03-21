@@ -12,6 +12,7 @@ tmcbase = ptrh.cc
 cmdbase = /usr/local/share/huarp/root.cmd
 cmdbase = /usr/local/share/huarp/getcon.cmd
 cmdbase = /usr/local/share/huarp/idx64.cmd
+cmdbase = /usr/local/share/huarp/phrtg.cmd
 cmdbase = idx64drv.cmd 
 cmdbase = dccc.cmd
 cmdbase = qcli.cmd

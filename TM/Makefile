@@ -1,4 +1,4 @@
-# Makefile Generated Mon Mar 21 18:39:04 EDT 2011
+# Makefile Generated Mon Mar 21 19:07:02 EDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -37,7 +37,8 @@ TMCBASE=base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
 TMCBASE+=T30K75KU.tmc T10K75KU.tmc ptrh.cc
 CMDBASE=/usr/local/share/huarp/root.cmd
 CMDBASE+=/usr/local/share/huarp/getcon.cmd
-CMDBASE+=/usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd
+CMDBASE+=/usr/local/share/huarp/idx64.cmd
+CMDBASE+=/usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd
 CMDBASE+=qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 CMDBASE+=waves.cmd
 RCS=$(SRC) $(TOOL) $(SCRIPT)
@@ -113,8 +114,8 @@ HWVcoloui.o : HWVcoloui.c
 HWVcol.o : HWVcol.cc
 ptrh.o : ptrh.cc
 ptrh_col.o : ptrh_col.cc
-HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
-	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
+HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd /usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
+	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd /usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
 HWVsrvr.o : HWVcmd.cc
 	$(COMPILE.srvr) HWVcmd.cc
 HWVsrvroui.c : $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
