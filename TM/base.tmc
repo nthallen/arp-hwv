@@ -326,8 +326,8 @@ TM typedef unsigned char SolStat_t { text "%3d"; }
   unsigned int SolStatA, SolStatB, SolStatC;
 %}
 TM "Receive" SolStatA 0;
-TM 1 Hz SolStat_t SolStA; SolStA = SolStatA;
+TM 1 Hz SolStat_t SolStA; Collect SolStA = SolStatA;
 TM "Receive" SolStatB 0;
-TM 1 Hz SolStat_t SolStB; SolStB = SolStatB;
+TM 1 Hz SolStat_t SolStB; Collect SolStB = SolStatB;
 TM "Receive" SolStatC 0;
-TM 1 Hz SolStat_t SolStC; SolStC = SolStatC;
+TM 1 Hz SolStat_t SolStC; Collect SolStC = SolStatC;
