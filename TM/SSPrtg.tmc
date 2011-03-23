@@ -1,0 +1,8 @@
+%{
+  UINT last_SSP = 0;
+%}
+
+if (last_SSP != SSP_Num) {
+  ci_sendfcmd(2, "PhRTG File SSP %u\n", SSP_Num );
+  last_SSP = SSP_Num;
+}
