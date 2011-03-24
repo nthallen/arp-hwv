@@ -30,7 +30,7 @@
 # INITIALIZE
 State Init {
        > Telemetry Start
-  +1   > Fail lamp 0 off
+  +1   > Fail Light Off
   +1   > Soldrv A select mode 2
   +5   > Soldrv A select mode 0
   +4   Validate Standby;
@@ -38,8 +38,8 @@ State Init {
 
 # WAIT 
 State Standby {
-        depending on (BELOW_CLOUDS) { Validate Record; }
-        depending on (ABOVE_CLOUDS) { Validate Record; }
+        depending on (OFF_GROUND) { Validate Record; }
+        depending on (IN_AIR) { Validate Record; }
 }
 
 # RECORD  
@@ -51,7 +51,7 @@ State Record {
 # SHUTDOWN
 State Shutdown {
   +1   > Soldrv A select mode 0
-  +55  > Fail Light on
+  +55  > Fail Light On
   +1   > quit
 }
 
@@ -115,7 +115,7 @@ State SW_Stat_Reset NoLog {
 Partition
 
 # This partition converts pressure (altitude) into states 
-# (ON_GROUND, BELOW_CLOUDS, ABOVE_CLOUDS). \
+# (ON_GROUND, OFF_GROUND, IN_AIR). \
 # The threshold pressures each have two values - one for 
 # the flight up and the other for the flight down.
 # This provides hysteresis and prevents bouncing.  
@@ -134,22 +134,22 @@ Partition
 State ON_GROUND {
   { using_swp = 0; }
   { if (using_swp || (convert(SD_HP) < P_ground_up))
-      Validate BELOW_CLOUDS;
+      Validate OFF_GROUND;
   }
 }
 
-State BELOW_CLOUDS {
+State OFF_GROUND {
   { if ((using_swp == 2) || (!using_swp && convert(SD_HP) < P_clouds_up)) {
-      Validate ABOVE_CLOUDS;
+      Validate IN_AIR;
     } else if ((using_swp == 4) || (!using_swp && convert(SD_HP) > P_ground_dn)) {
       Validate ON_GROUND;
     }
   }
 }
 
-State ABOVE_CLOUDS {
+State IN_AIR {
   { if ( (using_swp == 3) || (!using_swp && convert(SD_HP) > P_clouds_dn))
-      Validate BELOW_CLOUDS;
+      Validate OFF_GROUND;
   }
 }
 
@@ -161,8 +161,8 @@ State ABOVE_CLOUDS {
 Partition
 
 State Throttle_Standby {
-  depending on (BELOW_CLOUDS) { Validate Throttle_init; }
-  depending on (ABOVE_CLOUDS) { Validate Throttle_init; }
+  depending on (OFF_GROUND) { Validate Throttle_init; }
+  depending on (IN_AIR) { Validate Throttle_init; }
 }
 
 # INITIALIZE
@@ -201,8 +201,8 @@ Partition
 State h2o2initA {
   +4  > Set Axis A Heat Set Pt 0
   +1  > Command Lamp Module A on
-      depending on (BELOW_CLOUDS) { Validate h2o2turnOnA; }
-      depending on (ABOVE_CLOUDS) { Validate h2o2turnOnA; }
+      depending on (OFF_GROUND) { Validate h2o2turnOnA; }
+      depending on (IN_AIR) { Validate h2o2turnOnA; }
 }
 
 # TURNS ON LAMP
@@ -289,8 +289,8 @@ Partition
 State HHH_Init {
      Depending on (Shutdown) { Validate HHH_Shutdown; }
      Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
-     Depending on (OFF_GROUND) { Validate HHH_Startup; }
      Depending on (IN_AIR) { Validate HHH_Startup; }
+     Depending on (OFF_GROUND) { Validate HHH_Startup; }
 }
 
 State HHH_Startup {
@@ -385,7 +385,7 @@ State DFB_SSP_Recover NoLog {
 
 State DFB_SSP_Not_Talking {
     Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
-    > SSP1 Stop
+    > SSP Stop
     { if ( ++num_DFB_recovers > 20 ) Validate DFB_Fail; }
     Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
     else Validate DFB_SSP_Not_Talking;
@@ -410,11 +410,11 @@ State DFB_Out_Spec {
 
 State DFB_QCLI_Recover {
     Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
-   { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI1_s ); }
+   { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s ); }
    > QCLI Clear Errors
    Hold until ( (QCLI_s & 0x2938) == 0 ) or 5
    else {
-     nl_error( 2, "QCLI error did not clear: 0x%04X: Resetting", QCLI1_s );
+     nl_error( 2, "QCLI error did not clear: 0x%04X: Resetting", QCLI_s );
      Validate DFB_QCLI_Reset;
    }
    Validate DFB_Start;
@@ -427,13 +427,13 @@ State DFB_QCLI_Reset {
         Validate DFB_Fail;
       }
     }
- +1 > DFB QCLI Reset On
-    > DFB QCLI Reset Off
+ +1 > Command QCLI Reset On
+    > Command QCLI Reset Off
     Hold until ( (QCLI_s & 0x2938) == 0 ) or 2
     else > QCLI clear errors
     Hold until ( (QCLI_s & 0x2938) == 0 ) or 2
     else Validate DFB_QCLI_Reset;
-    { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI1_Wave ); }
+    { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave ); }
  +1 Validate DFB_Start;
 }
 

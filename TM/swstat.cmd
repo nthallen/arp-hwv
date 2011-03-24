@@ -32,9 +32,11 @@
   : Altitude Climb { $0 = SWS_CLIMB; }
   : Altitude Descend { $0 = SWS_DESCEND; }
   : Altitude Land { $0 = SWS_LAND; }
-  : Laser Start { $0 = SWS_LASER_START; }
-  : Laser Stop { $0 = SWS_LASER_STOP; }
-  : Laser Select HHH and Start { $0 = SWS_LASER_HHH; }
+  : Lamp Enable { $0 = SWS_H2O_ENABLE; }
+  : Lamp Disable { $0 = SWS_H2O_DISABLE; }
+  : Laser Start { $0 = SWS_DFB_START; }
+  : Laser Stop { $0 = SWS_DFB_STOP; }
+  : Laser Select HHH and Start { $0 = SWS_DFB_HHH; }
 # : Bench Gas Close { $0 = SWS_BENCH_CLOSE; }
 # : Bench Gas Pump/Purge { $0 = SWS_BENCH_PUMP_PURGE; }
 # : Bench Gas PI { $0 = SWS_BENCH_PI; }
