@@ -224,11 +224,11 @@ State h2o2recordA {
         depending on (1 Hz) {
           if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
         }
-        # Hold until (convert(BVisV) < 0.2);			%% AVisV < ??
-        # Hold until (convert(BVisV) > 0.2) or 5 else {		%% AVisV > ??
-        #   msg(2,"**Lamp turned off!!**");  
-        #   Validate h2o2resetA; } 
-        # Validate h2o2recordA;
+        Hold until (convert(A_IRV) < 0.2);
+        Hold until (convert(A_IRV) > 0.2) or 5 else {
+          msg(2,"**Lamp turned off!!**");  
+          Validate h2o2resetA; } 
+        Validate h2o2recordA;
 }
 
 State h2o2resetA {
@@ -263,12 +263,12 @@ State h2o2heatOnA {
   +1    > Set Axis A RF Set Pt 5
   +8    > Set Axis A Heat Set Pt 1.5
   +1    > Soldrv A select mode 3
-#       Hold until (convert(AVisV) > 3.0);
-#       { msg(2,"**Too much heat on A - running deep!**"); }
-#       > Set Axis A Heat Set Pt 0
-#       Hold until (convert(AVisV) < 1.0);   	%% AVisV < ???
-#       > Set Axis A Heat Set Pt 1.5
-#       Validate h2o2heatOnA;       
+        Hold until (convert(A_IRV) > 3.0);
+        { msg(2,"**Too much heat on A - running deep!**"); }
+        > Set Axis A Heat Set Pt 0
+        Hold until (convert(A_IRV) < 1.0);
+        > Set Axis A Heat Set Pt 1.5
+        Validate h2o2heatOnA;       
 }
 
 State h2o2heatOffA {
