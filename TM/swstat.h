@@ -13,9 +13,12 @@ extern swstat_t SWData;
 #define SWS_DESCEND 3
 #define SWS_LAND 4
 
-#define SWS_LASER_START 10
-#define SWS_LASER_STOP 11
-#define SWS_LASER_HHH 12
+#define SWS_DFB_START 10
+#define SWS_DFB_STOP 11
+#define SWS_DFB_HHH 12
+
+#define SWS_H2O_ENABLE 20
+#define SWS_H2O_DISABLE 21
 
 #define SWS_TIME_WARP 253
 #define SWS_READFILE 254
