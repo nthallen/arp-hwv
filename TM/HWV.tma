@@ -23,6 +23,7 @@
 #}
 
 %{
+  #include "msg.h"
   #include "swstat.h"
   int H2O2_Lamp_Enable = 1;
 %}
