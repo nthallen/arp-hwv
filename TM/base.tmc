@@ -34,17 +34,23 @@ TM typedef AI_X1 AI_XP768 { text "%7.4lf"; }
     0, 0,
     32768, 5.3333
   }
-/* ### fix gain and conversion */
-TM typedef AI_XP768 AI_P100Torr { text "%5.2lf"; convert TORR; }
+/* fix gain and conversion
+ * 0-10V = 0-100Torr
+ * Then divide by 2.5 to get 0-4V
+ */
+TM typedef AI_X1 AI_P100Torr { text "%5.2lf"; convert TORR; }
   Calibration ( AI_P100Torr, TORR ) {
     0, 0,
-    30720, 100
+    32000, 100
   }
-/* ### fix gain and conversion */
-TM typedef AI_XP768 AI_P1000Torr { text "%5.1lf"; convert TORR; }
+/* fix gain and conversion
+   0-10V = 0-1000Torr
+   Then divide by 2.5 to give 0-4V = 0-1000Torr
+ */
+TM typedef AI_X1 AI_P1000Torr { text "%5.1lf"; convert TORR; }
   Calibration ( AI_P1000Torr, TORR ) {
     0, 0,
-    30720, 1000
+    32000, 1000
   }
 
 TM typedef unsigned short AO
@@ -155,7 +161,7 @@ TM 1 Hz AI_T10K PIF7T; Address PIF7T 0xCC0; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_P1000Torr SD_HP; Address SD_HP 0xC6C; /* Secondary Duct High Prs (1000 torr) */
 TM 1 Hz AI_P100Torr SD_LP; Address SD_LP 0xC4C; /* Secondary Duct Low Prs (100 torr) */
 TM 1 Hz AI_T30K SDP_T; Address SDP_T 0xC8C; /* Secondary Duct Prs Guage Temp */
-TM 1 Hz AI_XP768 SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
+TM 1 Hz AI_X1 SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
 TM 1 Hz AI_T10K SFB1T; Address SFB1T 0xC4A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB2T; Address SFB2T 0xC6A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB3T; Address SFB3T 0xC8A; /* Secondary Inlet Therm Ring */

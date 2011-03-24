@@ -1,4 +1,4 @@
-# Makefile Generated Thu Mar 24 14:00:48 EDT 2011
+# Makefile Generated Thu Mar 24 18:47:57 CDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
