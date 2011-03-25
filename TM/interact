@@ -7,8 +7,9 @@
 
   opts="baud=115200 -ihflow -echoe -onlcr -ohflow -echoke -echoctl -imaxbel"
   stty $opts </dev/ser2
+
+  echo "Not Programming QCLI Waveforms" >$memo
 # rm -f qclisprog.log
-# echo "Programming QCLI Waveforms" >$memo
 # { qclisprog -wd /dev/ser2 $TMBINDIR/waves.out 2>&1
 # } >qclisprog.log
 
@@ -18,9 +19,9 @@
   Launch - lgr -N `mlf_find LOG`
   Launch - idx64 `cat $TMBINDIR/idx64.idx64`
   Launch - soldrv $TMBINDIR/A.sft
-  Launch - soldrv $TMBINDIR/B.sft
-  Launch - soldrv $TMBINDIR/C.sft
+# Launch - soldrv $TMBINDIR/B.sft
+# Launch - soldrv $TMBINDIR/C.sft
   Launch - sspdrv -b1 -hSSP -N `mlf_find SSP`
   Launch - qclisd -h QCLI -d /dev/ser2
-  Launch - HWValgo -v
+# Launch - HWValgo -v
 

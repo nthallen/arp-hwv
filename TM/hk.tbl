@@ -94,6 +94,7 @@ Gas_Deck {
 Software {
   HBox { +-; Title: Software; -+ };
   SWStat: (SWStat,5);
+  IOSwS:  (IOSwS,3);
   MFCtr:  (MFCtr,5);
 }
 
