@@ -1,5 +1,5 @@
-display HWVdisp
+display HWVdisp -C $FlightNode
 client HWVclt
 memo
 batchfile interact
-phrtg -P /net/hwv/home/hwv
+phrtg

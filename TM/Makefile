@@ -1,4 +1,4 @@
-# Makefile Generated Thu Mar 24 18:47:57 CDT 2011
+# Makefile Generated Thu Mar 24 23:44:53 EDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -131,8 +131,8 @@ labtbl.tmc : lab.tbl
 	$(TABLE) lab.tbl
 HWVdisp.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
-HWVdispoui.c : $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+HWVdispoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispoui.o : HWVdispoui.c
 HWVdisp.o : HWVdisp.cc
 HWVtblnc.tmc : HWV.tbl
@@ -145,8 +145,8 @@ labtblnc.tmc : lab.tbl
 	$(NCTABLE) lab.tbl
 HWVdispnc.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
-HWVdispncoui.c : $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+HWVdispncoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispncoui.o : HWVdispncoui.c
 HWVdispnc.o : HWVdispnc.cc
 HWValgoa.tmc : HWV.tma HWVsrvr
