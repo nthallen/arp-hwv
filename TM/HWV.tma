@@ -188,6 +188,7 @@ State Throttle_scan {
 
 State Throttle_shut {
   > drive Throttle Valve in 48000
+  > drive Throttle Valve out 20
 }
 
 
