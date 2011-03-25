@@ -201,7 +201,7 @@ Partition
 # INITIALIZE HEATER & LAMP
 State h2o2initA {
   +4  > Set Axis A Heat Set Pt 0
-  +1  > Command Lamp Module A on
+  +1  > Command Lamp Module A off
       depending on (OFF_GROUND) { Validate h2o2turnOnA; }
       depending on (IN_AIR) { Validate h2o2turnOnA; }
 }
