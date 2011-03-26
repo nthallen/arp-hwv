@@ -46,6 +46,7 @@ State Standby {
 # RECORD  
 State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
+        depending on (h2o2failA) { Validate Shutdown; }
         "In Record";
 }
 
@@ -198,6 +199,10 @@ State Throttle_shut {
 
 Partition
 
+%{
+  int h2o2Anresets = 0;
+%}
+
 # WAIT UNTIL WB-57 TAKES OFF
 # INITIALIZE HEATER & LAMP
 State h2o2initA {
@@ -237,6 +242,11 @@ State h2o2resetA {
         depending on (Shutdown) { Validate h2o2shutOffA; }
         > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
+        { if ( ++h2o2Anresets >= 10 ) {
+            msg(2,"Lamp A Max Reset Count Reached");
+            Validate h2o2failA;
+          }
+        }
   +4    Validate h2o2turnOnA;
 }
 
@@ -244,6 +254,8 @@ State h2o2shutOffA {
   +10   > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
 }
+
+State h2o2failA {}
 
 
 # -----------------------------------------------------------------------------
