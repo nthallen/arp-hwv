@@ -17,7 +17,8 @@ PIF  {
 
 Throttle {
   HBox { +-; Title: "Throttle Valve"; -+ };
-  Step: (TVStep,5) (TVDgrm,5) (TVScan,4) (TVKill,5);
+  Step: (TVStep,5) (TVDgrm,5) (TVScan,4);
+  Pot:  (TVPos,7)  (TVKill,5);
 }
 
 SD {
