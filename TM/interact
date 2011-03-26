@@ -9,9 +9,9 @@
   stty $opts </dev/ser2
 
   echo "Not Programming QCLI Waveforms" >$memo
-# rm -f qclisprog.log
-# { qclisprog -wd /dev/ser2 $TMBINDIR/waves.out 2>&1
-# } >qclisprog.log
+ rm -f qclisprog.log
+ { qclisprog -wd /dev/ser2 $TMBINDIR/waves.out 2>&1
+ } >qclisprog.log
 
   Launch dccc dccc -f $TMBINDIR/dccc.dccc
   Launch DG/cmd HWVcol
