@@ -1,4 +1,4 @@
-spreadsheet hwveng_1 55
+spreadsheet hwveng_1 91
   1 AModP %5.1lf
   2 ARFBW %5.1lf
   3 ARFFW %5.1lf
@@ -32,41 +32,82 @@ spreadsheet hwveng_1 55
   31 FAA_T %5.1lf
   32 FAB_T %5.1lf
   33 FAC_T %5.1lf
-  34 HtASt %5.1lf
-  35 HtBSt %5.1lf
-  36 HtCSt %5.1lf
-  37 LCmd1_I %5.1lf
-  38 LCmd2_I %5.1lf
-  39 LMA_I %5.1lf
-  40 LMB_I %5.1lf
-  41 LMC_I %5.1lf
-  42 MZ1_I %5.1lf
-  43 MZ2_I %5.1lf
-  44 MZ3_I %5.1lf
-  45 MZ4_I %5.1lf
-  46 PDACS_1T %5.1lf
-  47 PDACS_2T %5.1lf
-  48 PDACS_3T %5.1lf
-  49 PDACS_4T %5.1lf
-  50 PDACS_5T %5.1lf
-  51 RFASt %5.1lf
-  52 RFBSt %5.1lf
-  53 RFCSt %5.1lf
-  54 TVPos %5.1lf
+  34 HHHPT %5.1lf
+  35 HPV1T %5.1lf
+  36 HPV2T %5.1lf
+  37 HPV_P %5.1lf
+  38 HPV_RH %5.1lf
+  39 HtASt %5.1lf
+  40 HtBSt %5.1lf
+  41 HtCSt %5.1lf
+  42 IWH1T %5.1lf
+  43 IWH2T %5.1lf
+  44 LCmd1_I %5.1lf
+  45 LCmd2_I %5.1lf
+  46 LMA_I %5.1lf
+  47 LMB_I %5.1lf
+  48 LMC_I %5.1lf
+  49 MZ1_I %5.1lf
+  50 MZ2_I %5.1lf
+  51 MZ3_I %5.1lf
+  52 MZ4_I %5.1lf
+  53 PDACS_1T %5.1lf
+  54 PDACS_2T %5.1lf
+  55 PDACS_3T %5.1lf
+  56 PDACS_4T %5.1lf
+  57 PDACS_5T %5.1lf
+  58 PIB1T %5.1lf
+  59 PIB2T %5.1lf
+  60 PIB3T %5.1lf
+  61 PIB4T %5.1lf
+  62 PIB5T %5.1lf
+  63 PIB6T %5.1lf
+  64 PIB7T %5.1lf
+  65 PIF1T %5.1lf
+  66 PIF2T %5.1lf
+  67 PIF3T %5.1lf
+  68 PIF4T %5.1lf
+  69 PIF5T %5.1lf
+  70 PIF6T %5.1lf
+  71 PIF7T %5.1lf
+  72 PampT %5.1lf
+  73 QCLI_Stale %5.1lf
+  74 QCLI_Wave %5.1lf
+  75 QCLI_s %5.1lf
+  76 RFASt %5.1lf
+  77 RFBSt %5.1lf
+  78 RFCSt %5.1lf
+  79 SPV1T %5.1lf
+  80 SPV2T %5.1lf
+  81 SSP_Flags %5.1lf
+  82 SSP_Num %5.1lf
+  83 SSP_SN %5.1lf
+  84 SSP_Stale %5.1lf
+  85 SSP_Status %5.1lf
+  86 SSP_TS %5.1lf
+  87 SSP_T_FPGA %5.1lf
+  88 SSP_T_HtSink %5.1lf
+  89 SWStat %5.1lf
+  90 TVPos %5.1lf
 spreadsheet hwveng_4 4
   1 IXStt %5.1lf
   2 TVStat %5.1lf
   3 TVStep %5.1lf
-spreadsheet hwveng_8 13
+spreadsheet hwveng_8 18
   1 Ct0Stat %5.1lf
   2 Ct1Stat %5.1lf
   3 Ct2Stat %5.1lf
-  4 PMTA_Counts %5.1lf
-  5 PMTB_Counts %5.1lf
-  6 PMTC_Counts %5.1lf
-  7 UVA1_Counts %5.1lf
-  8 UVA2_Counts %5.1lf
-  9 UVB1_Counts %5.1lf
-  10 UVB2_Counts %5.1lf
-  11 UVC1_Counts %5.1lf
-  12 UVC2_Counts %5.1lf
+  4 HHH1P %5.1lf
+  5 HHH1T %5.1lf
+  6 HHH2P %5.1lf
+  7 HHH2T %5.1lf
+  8 HHHDP %5.1lf
+  9 PMTA_Counts %5.1lf
+  10 PMTB_Counts %5.1lf
+  11 PMTC_Counts %5.1lf
+  12 UVA1_Counts %5.1lf
+  13 UVA2_Counts %5.1lf
+  14 UVB1_Counts %5.1lf
+  15 UVB2_Counts %5.1lf
+  16 UVC1_Counts %5.1lf
+  17 UVC2_Counts %5.1lf
