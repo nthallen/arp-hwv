@@ -9,7 +9,7 @@ QCLI {
 SSP {
   HBox { +-; Title: "SSP"; -+ };
   HBox {
-    { File: (SSP_Num,5);
+    { File: (SSP_Num,8);
       Scan: (SSP_SN,8);
       Skip: (SSP_TS,8);
       Status: (SSP_Status,7);
