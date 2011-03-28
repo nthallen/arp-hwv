@@ -1,4 +1,4 @@
-spreadsheet hwveng_1 96
+spreadsheet hwveng_1 117
   1 AModP %5.1lf
   2 ARFBW %5.1lf
   3 ARFFW %5.1lf
@@ -52,48 +52,69 @@ spreadsheet hwveng_1 96
   51 LMA_I %5.1lf
   52 LMB_I %5.1lf
   53 LMC_I %5.1lf
-  54 MZ1_I %5.1lf
-  55 MZ2_I %5.1lf
-  56 MZ3_I %5.1lf
-  57 MZ4_I %5.1lf
-  58 PDACS_1T %5.1lf
-  59 PDACS_2T %5.1lf
-  60 PDACS_3T %5.1lf
-  61 PDACS_4T %5.1lf
-  62 PDACS_5T %5.1lf
-  63 PIB1T %5.1lf
-  64 PIB2T %5.1lf
-  65 PIB3T %5.1lf
-  66 PIB4T %5.1lf
-  67 PIB5T %5.1lf
-  68 PIB6T %5.1lf
-  69 PIB7T %5.1lf
-  70 PIF1T %5.1lf
-  71 PIF2T %5.1lf
-  72 PIF3T %5.1lf
-  73 PIF4T %5.1lf
-  74 PIF5T %5.1lf
-  75 PIF6T %5.1lf
-  76 PIF7T %5.1lf
-  77 PampT %5.1lf
-  78 QCLI_Stale %5.1lf
-  79 QCLI_Wave %5.1lf
-  80 QCLI_s %5.1lf
-  81 RFASt %5.1lf
-  82 RFBSt %5.1lf
-  83 RFCSt %5.1lf
-  84 SPV1T %5.1lf
-  85 SPV2T %5.1lf
-  86 SSP_Flags %5.1lf
-  87 SSP_Num %5.1lf
-  88 SSP_SN %5.1lf
-  89 SSP_Stale %5.1lf
-  90 SSP_Status %5.1lf
-  91 SSP_TS %5.1lf
-  92 SSP_T_FPGA %5.1lf
-  93 SSP_T_HtSink %5.1lf
-  94 SWStat %5.1lf
-  95 TVPos %5.1lf
+  54 LTE1R4T %5.1lf
+  55 Las_I %5.1lf
+  56 MM_1T %5.1lf
+  57 MM_2T %5.1lf
+  58 MM_3T %5.1lf
+  59 MM_4T %5.1lf
+  60 MZ1CT %5.1lf
+  61 MZ1St %5.1lf
+  62 MZ1_I %5.1lf
+  63 MZ2CT %5.1lf
+  64 MZ2St %5.1lf
+  65 MZ2_I %5.1lf
+  66 MZ3CT %5.1lf
+  67 MZ3St %5.1lf
+  68 MZ3_I %5.1lf
+  69 MZ4CT %5.1lf
+  70 MZ4St %5.1lf
+  71 MZ4_I %5.1lf
+  72 PDACS_1T %5.1lf
+  73 PDACS_2T %5.1lf
+  74 PDACS_3T %5.1lf
+  75 PDACS_4T %5.1lf
+  76 PDACS_5T %5.1lf
+  77 PIB1T %5.1lf
+  78 PIB2T %5.1lf
+  79 PIB3T %5.1lf
+  80 PIB4T %5.1lf
+  81 PIB5T %5.1lf
+  82 PIB6T %5.1lf
+  83 PIB7T %5.1lf
+  84 PIF1T %5.1lf
+  85 PIF2T %5.1lf
+  86 PIF3T %5.1lf
+  87 PIF4T %5.1lf
+  88 PIF5T %5.1lf
+  89 PIF6T %5.1lf
+  90 PIF7T %5.1lf
+  91 PampT %5.1lf
+  92 QCLI_Stale %5.1lf
+  93 QCLI_Wave %5.1lf
+  94 QCLI_s %5.1lf
+  95 RFASt %5.1lf
+  96 RFBSt %5.1lf
+  97 RFCSt %5.1lf
+  98 SDPDP %5.1lf
+  99 SDP_T %5.1lf
+  100 SD_HP %5.1lf
+  101 SD_LP %5.1lf
+  102 SFB1T %5.1lf
+  103 SFB2T %5.1lf
+  104 SFB3T %5.1lf
+  105 SPV1T %5.1lf
+  106 SPV2T %5.1lf
+  107 SSP_Flags %5.1lf
+  108 SSP_Num %5.1lf
+  109 SSP_SN %5.1lf
+  110 SSP_Stale %5.1lf
+  111 SSP_Status %5.1lf
+  112 SSP_TS %5.1lf
+  113 SSP_T_FPGA %5.1lf
+  114 SSP_T_HtSink %5.1lf
+  115 SWStat %5.1lf
+  116 TVPos %5.1lf
 spreadsheet hwveng_4 4
   1 IXStt %5.1lf
   2 TVStat %5.1lf
