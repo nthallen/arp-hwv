@@ -60,6 +60,12 @@ hwvext.cc
 hwvextoui.c
 hwvextoui.o
 hwvext.o
+hhhextedf.oui
+hhhext.tmc
+hhhext.cc
+hhhextoui.c
+hhhextoui.o
+hhhext.o
 HWVclt.o
 HWVcltoui.c
 HWVcltoui.o
@@ -81,5 +87,6 @@ B.sft
 C.sft
 hwvengext
 hwvext
+hhhext
 HWVclt
 HWVcltnc

@@ -303,8 +303,8 @@ Partition
 State HHH_Init {
      Depending on (Shutdown) { Validate HHH_Shutdown; }
      Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
-     # Depending on (IN_AIR) { Validate HHH_Startup; }
-     # Depending on (OFF_GROUND) { Validate HHH_Startup; }
+     Depending on (IN_AIR) { Validate HHH_Startup; }
+     Depending on (OFF_GROUND) { Validate HHH_Startup; }
 }
 
 State HHH_Startup {

@@ -1,4 +1,4 @@
-# Makefile Generated Sun Mar 27 20:58:33 EDT 2011
+# Makefile Generated Mon Mar 28 09:19:41 CDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -9,6 +9,7 @@ SRC+=dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 SRC+=waves.cmd qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc
 SRC+=digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
 SRC+=HWV.tma HWV.doit ly.doit A.sol B.sol C.sol hwveng.edf hwv.edf
+SRC+=hhh.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -23,10 +24,11 @@ OBJ+=lydispoui.c lydispoui.o lydisp.o lydispnc.cc lydispncoui.c
 OBJ+=lydispncoui.o lydispnc.o doit.dep lydoit.dep hwvengextedf.oui
 OBJ+=hwvengext.tmc hwvengext.cc hwvengextoui.c hwvengextoui.o
 OBJ+=hwvengext.o hwvextedf.oui hwvext.tmc hwvext.cc hwvextoui.c
-OBJ+=hwvextoui.o hwvext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
-OBJ+=HWVcltncoui.c HWVcltncoui.o
+OBJ+=hwvextoui.o hwvext.o hhhextedf.oui hhhext.tmc hhhext.cc
+OBJ+=hhhextoui.c hhhextoui.o hhhext.o HWVclt.o HWVcltoui.c
+OBJ+=HWVcltoui.o HWVcltnc.o HWVcltncoui.c HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc HWValgo lydisp lydispnc doit
-TGT+=lydoit A.sft B.sft C.sft hwvengext hwvext HWVclt HWVcltnc
+TGT+=lydoit A.sft B.sft C.sft hwvengext hwvext hhhext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
@@ -100,6 +102,9 @@ hwvengext : hwvengext.o ptrh.o hwvengextoui.o
 hwvext : hwvext.o ptrh.o hwvextoui.o
 	$(LINK.normCXX) hwvext.o ptrh.o hwvextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvextoui.c
+hhhext : hhhext.o ptrh.o hhhextoui.o
+	$(LINK.normCXX) hhhext.o ptrh.o hhhextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(OUIUSE) hhhextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcltoui.c
@@ -196,6 +201,16 @@ hwvextoui.c : hwvextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvextoui.o : hwvextoui.c
 hwvext.o : hwvext.cc
+hhhextedf.oui : hhh.edf
+	$(EDF2OUI) hhh.edf
+hhhext.tmc : hhh.edf
+	$(EDF2EXT) hhh.edf
+hhhext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hhhext.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hhhext.tmc
+hhhextoui.c : hhhextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hhhextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hhhextoui.o : hhhextoui.c
+hhhext.o : hhhext.cc
 HWVclt.o : HWVcmd.cc
 	$(COMPILE.clt) HWVcmd.cc
 HWVcltoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui

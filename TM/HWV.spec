@@ -47,6 +47,7 @@ C.sft : C.sol
 
 hwvengext : ptrh_conv.tmc hwveng.edf
 hwvext : hwv.edf
+hhhext : hhh.edf
 %%
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g

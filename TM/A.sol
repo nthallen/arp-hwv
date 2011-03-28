@@ -1,7 +1,7 @@
 ; A.sol
 ;   Mode 0  Everything Off
 
-solenoid Chop 50 51 0 ; Chopper A
+solenoid Chop 51 50 0 ; Chopper A
 
 ; This setup uses a decimal encoding to indicate both the mode
 ; number (in the tens column) and the status of the chopper
