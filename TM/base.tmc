@@ -338,3 +338,10 @@ TM "Receive" SolStatB 0;
 TM 1 Hz SolStat_t SolStB; Collect SolStB = SolStatB;
 TM "Receive" SolStatC 0;
 TM 1 Hz SolStat_t SolStC; Collect SolStC = SolStatC;
+
+TM typedef unsigned char AIStat_i {
+  text "%04b";
+  Collect x = sbrb(x.address);
+}
+
+TM 1 Hz AIStat_i AIStat; Address AIStat 0xE00;

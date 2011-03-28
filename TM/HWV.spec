@@ -45,7 +45,7 @@ A.sft : A.sol
 B.sft : B.sol
 C.sft : C.sol
 
-hwvengext : hwveng.edf
+hwvengext : ptrh_conv.tmc hwveng.edf
 hwvext : hwv.edf
 %%
 COLFLAGS=-Haddress.h

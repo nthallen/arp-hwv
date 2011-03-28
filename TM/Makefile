@@ -1,4 +1,4 @@
-# Makefile Generated Thu Mar 24 22:50:45 CDT 2011
+# Makefile Generated Sun Mar 27 20:58:33 EDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -180,8 +180,8 @@ hwvengextedf.oui : hwveng.edf
 	$(EDF2OUI) hwveng.edf
 hwvengext.tmc : hwveng.edf
 	$(EDF2EXT) hwveng.edf
-hwvengext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvengext.tmc
-	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvengext.tmc
+hwvengext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc hwvengext.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc hwvengext.tmc
 hwvengextoui.c : hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvengextoui.o : hwvengextoui.c

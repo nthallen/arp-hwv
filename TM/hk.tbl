@@ -96,6 +96,7 @@ Software {
   HBox { +-; Title: Software; -+ };
   SWStat: (SWStat,5);
   IOSwS:  (IOSwS,3);
+  AIStat: (AIStat,4);
   MFCtr:  (MFCtr,5);
 }
 
