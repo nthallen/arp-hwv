@@ -41,20 +41,25 @@ State Init {
 State Standby {
         depending on (OFF_GROUND) { Validate Record; }
         depending on (IN_AIR) { Validate Record; }
+        depending on (AI_Fail)   { Validate Shutdown; }
+        depending on (AI2_Fail)  { Validate Shutdown; }
 }
 
 # RECORD  
 State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
         depending on (h2o2failA) { Validate Shutdown; }
+        depending on (AI_Fail)   { Validate Shutdown; }
+        depending on (AI2_Fail)  { Validate Shutdown; }
         "In Record";
 }
 
 # SHUTDOWN
 State Shutdown {
-  +1   > Soldrv A select mode 0
-  +55  > Fail Light On
-  +1   > quit
+  +1  > Soldrv A select mode 0
+      Hold until valid (h2o2shutOffA,h2o2heatOffA) or 55;
+  +5  > Fail Light On
+      > quit
 }
 
 
@@ -500,3 +505,38 @@ State RFCond_TimeWarp {
   Validate RFCond_Idle;
 }
 
+Partition
+#---------------------------------------------------------------
+# Partition 11: Analog Input Monitoring
+#---------------------------------------------------------------
+State AI_Watch NoLog {
+     Hold until (AIStat & 3);
+     { msg(2,"Observed AI Lockup: %X", AIStat); }
+  +1 Hold until ((AIStat & 3) == 0) or 1:00
+     else Validate AI_Fail;
+     { msg(0, "AI Recovered"); }
+  +1 Validate AI_Watch;
+}
+
+State AI_Fail {}
+
+Partition
+#---------------------------------------------------------------
+# Partition 12: Analog Input Monitoring
+#---------------------------------------------------------------
+%{
+  AI_T30K Last_HPV1T = 0;
+  static int HPV1T_count = 0;
+%}
+State AI2_Watch NoLog {
+    { if ( HPV1T == Last_HPV1T && ++HPV1T_count >= 60 ) {
+	msg(2, "HPV1T has not changed in 60 seconds");
+	Validate AI2_Fail;
+      } else {
+	Last_HPV1T = HPV1T;
+	HPV1T_count = 0;
+      }
+    }
+}
+
+State AI2_Fail {}
