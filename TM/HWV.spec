@@ -23,6 +23,7 @@ cmdbase = swstat.cmd
 cmdbase = waves.cmd
 
 SCRIPT = interact
+SCRIPT = runfile.FF
 SCRIPT = dccc.dccc
 SCRIPT = idx64.idx64
 SRCDIST = waves.qcli waves.m

@@ -1,4 +1,4 @@
-# Makefile Generated Tue Mar 29 13:32:28 CDT 2011
+# Makefile Generated Tue Mar 29 13:39:05 CDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -11,7 +11,7 @@ SRC+=digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
 SRC+=HWV.tma HWV.doit ly.doit A.sol B.sol C.sol hwveng.edf hwv.edf
 SRC+=hhh.edf
 TOOL=HWV.spec Makefile
-SCRIPT=interact dccc.dccc idx64.idx64
+SCRIPT=interact runfile.FF dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
 OBJ+=HWVcol.cc HWV.pcm tm.dac HWVcoloui.c HWVcoloui.o HWVcol.o ptrh.o
 OBJ+=ptrh_col.o HWVcmd.cc HWVcmd.dat HWVsrvr.o HWVsrvroui.c
