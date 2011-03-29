@@ -1,4 +1,4 @@
-# Makefile Generated Mon Mar 28 09:19:41 CDT 2011
+# Makefile Generated Tue Mar 29 13:32:28 CDT 2011
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -18,16 +18,16 @@ OBJ+=ptrh_col.o HWVcmd.cc HWVcmd.dat HWVsrvr.o HWVsrvroui.c
 OBJ+=HWVsrvroui.o HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
 OBJ+=HWVdisp.cc HWVdispoui.c HWVdispoui.o HWVdisp.o HWVtblnc.tmc
 OBJ+=lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc HWVdispnc.cc
-OBJ+=HWVdispncoui.c HWVdispncoui.o HWVdispnc.o HWValgoa.tmc
-OBJ+=HWValgo.cc HWValgooui.c HWValgooui.o HWValgo.o lydisp.cc
-OBJ+=lydispoui.c lydispoui.o lydisp.o lydispnc.cc lydispncoui.c
-OBJ+=lydispncoui.o lydispnc.o doit.dep lydoit.dep hwvengextedf.oui
-OBJ+=hwvengext.tmc hwvengext.cc hwvengextoui.c hwvengextoui.o
-OBJ+=hwvengext.o hwvextedf.oui hwvext.tmc hwvext.cc hwvextoui.c
-OBJ+=hwvextoui.o hwvext.o hhhextedf.oui hhhext.tmc hhhext.cc
-OBJ+=hhhextoui.c hhhextoui.o hhhext.o HWVclt.o HWVcltoui.c
-OBJ+=HWVcltoui.o HWVcltnc.o HWVcltncoui.c HWVcltncoui.o
-TGT=HWVcol HWVsrvr HWVdisp HWVdispnc HWValgo lydisp lydispnc doit
+OBJ+=HWVdispncoui.c HWVdispncoui.o HWVdispnc.o lydisp.cc lydispoui.c
+OBJ+=lydispoui.o lydisp.o lydispnc.cc lydispncoui.c lydispncoui.o
+OBJ+=lydispnc.o HWValgoa.tmc HWValgo.cc HWValgooui.c HWValgooui.o
+OBJ+=HWValgo.o doit.dep lydoit.dep hwvengextedf.oui hwvengext.tmc
+OBJ+=hwvengext.cc hwvengextoui.c hwvengextoui.o hwvengext.o
+OBJ+=hwvextedf.oui hwvext.tmc hwvext.cc hwvextoui.c hwvextoui.o
+OBJ+=hwvext.o hhhextedf.oui hhhext.tmc hhhext.cc hhhextoui.c
+OBJ+=hhhextoui.o hhhext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
+OBJ+=HWVcltncoui.c HWVcltncoui.o
+TGT=HWVcol HWVsrvr HWVdisp HWVdispnc lydisp lydispnc HWValgo doit
 TGT+=lydoit A.sft B.sft C.sft hwvengext hwvext hhhext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
@@ -77,15 +77,15 @@ HWVdisp : HWVdisp.o ptrh.o HWVdispoui.o
 HWVdispnc : HWVdispnc.o ptrh.o HWVdispncoui.o
 	$(LINK.normCXX) HWVdispnc.o ptrh.o HWVdispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) HWVdispncoui.c
-HWValgo : HWValgo.o ptrh.o HWValgooui.o
-	$(LINK.normCXX) HWValgo.o ptrh.o HWValgooui.o -ltmpp -ltm -lnort
-	$(OUIUSE) HWValgooui.c
 lydisp : lydisp.o ptrh.o lydispoui.o
 	$(LINK.normCXX) lydisp.o ptrh.o lydispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) lydispoui.c
 lydispnc : lydispnc.o ptrh.o lydispncoui.o
 	$(LINK.normCXX) lydispnc.o ptrh.o lydispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) lydispncoui.c
+HWValgo : HWValgo.o ptrh.o HWValgooui.o
+	$(LINK.normCXX) HWValgo.o ptrh.o HWValgooui.o -ltmpp -ltm -lnort
+	$(OUIUSE) HWValgooui.c
 doit : HWV.doit
 	mkdoit3 -o doit  HWV.doit
 lydoit : ly.doit
@@ -154,15 +154,6 @@ HWVdispncoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc
 	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispncoui.o : HWVdispncoui.c
 HWVdispnc.o : HWVdispnc.cc
-HWValgoa.tmc : HWV.tma HWVsrvr
-	$(SERVER) ./HWVsrvr
-	$(TMCALGO) -V "`./HWVsrvr -R`" HWV.tma
-HWValgo.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc HWValgoa.tmc
-	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc HWValgoa.tmc
-HWValgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-HWValgooui.o : HWValgooui.c
-HWValgo.o : HWValgo.cc
 lydisp.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc digio.tmc lyalphatbl.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc /usr/local/share/huarp/flttime.tmc digio.tmc lyalphatbl.tmc
 lydispoui.c : $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -175,6 +166,15 @@ lydispncoui.c : $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 lydispncoui.o : lydispncoui.c
 lydispnc.o : lydispnc.cc
+HWValgoa.tmc : HWV.tma HWVsrvr
+	$(SERVER) ./HWVsrvr
+	$(TMCALGO) -V "`./HWVsrvr -R`" HWV.tma
+HWValgo.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc HWValgoa.tmc
+	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc HWValgoa.tmc
+HWValgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+HWValgooui.o : HWValgooui.c
+HWValgo.o : HWValgo.cc
 doit.dep : HWV.doit
 	mkdoit3 -M -o doit  HWV.doit
 -include doit.dep
