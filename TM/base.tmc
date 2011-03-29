@@ -299,7 +299,9 @@ TM 1 Hz DSWord DS844; Address DS844 0x844; /* S for commands 0-15 */
 /* TM 0 Hz DSByte DS860; Address DS860 0x860; */ /* S for commands 16-23 */
 /*  collect DS860 = sbrba(DS860.address) ^ 0xFF; */
 TM 1 Hz DSByte DS853; Address DS853 0x853; /* I/O Switches, etc. */
-TM 1 Hz DSByte IOSwS; Collect IOSwS = read_switches();
+
+TM typedef unsigned char IOSwS_t { text "%02X"; }
+TM 1 Hz IOSwS_t IOSwS; Collect IOSwS = read_switches();
 
 /* DACS PTRH */
 %{
@@ -310,7 +312,7 @@ TM 1 Hz DSByte IOSwS; Collect IOSwS = read_switches();
     ptrh("SPV", 0x320,0xB28E,0x9548,0x6EE9,0x610A,0x812C,0x6C80);
 %}
 TM typedef unsigned char MS5607Db { text "%3d"; }
-TM typedef UINT PTRH_S { text "%4x"; }
+TM typedef UINT PTRH_S { text " %03x"; }
 
 TM 1 Hz UINT DACS_T1; collect DACS_T1 = DACS_ptrh.SHT21T();
 TM 1 Hz UINT DACS_RH; collect DACS_RH = DACS_ptrh.SHT21RH();
