@@ -140,22 +140,22 @@ Partition
 
 State ON_GROUND {
   { using_swp = 0; }
-  { if (using_swp || (convert(SD_HP) < P_ground_up))
+  { if (using_swp || (DACS_P > 0 && DACS_P < P_ground_up))
       Validate OFF_GROUND;
   }
 }
 
 State OFF_GROUND {
-  { if ((using_swp == 2) || (!using_swp && convert(SD_HP) < P_clouds_up)) {
+  { if ((using_swp == 2) || (!using_swp && DACS_P > 0 && DACS_P < P_clouds_up)) {
       Validate IN_AIR;
-    } else if ((using_swp == 4) || (!using_swp && convert(SD_HP) > P_ground_dn)) {
+    } else if ((using_swp == 4) || (!using_swp && DACS_P > P_ground_dn)) {
       Validate ON_GROUND;
     }
   }
 }
 
 State IN_AIR {
-  { if ( (using_swp == 3) || (!using_swp && convert(SD_HP) > P_clouds_dn))
+  { if ( (using_swp == 3) || (!using_swp && DACS_P > P_clouds_dn))
       Validate OFF_GROUND;
   }
 }
