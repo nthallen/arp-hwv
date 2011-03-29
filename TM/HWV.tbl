@@ -61,7 +61,7 @@ PV {
       "2T:" (SPV2T,6) C;
       PT:   (SPV_T2C,5) C;
       RHT:  (SPV_T1C,5) C;
-      P:    (SPV_P,7) mbar;
+      P:    (SPV_P,7) Torr;
       RH:   (SPV_RHC,4) %;
     }
   }

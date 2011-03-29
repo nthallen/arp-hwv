@@ -9,7 +9,7 @@ PTRHT_t DACS_T2C; invalidate DACS_T2C;
 SHT21RH_t DACS_RHC; invalidate DACS_RHC;
 { DACS_RHC = DACS_ptrh.SHT21RH(DACS_RH); Validate DACS_RHC; }
 PTRHP_t DACS_P; invalidate DACS_P;
-{ DACS_P = DACS_ptrh.MS5607P(DACS_Pa, DACS_Pb); Validate DACS_P; }
+{ DACS_P = DACS_ptrh.MS5607P(DACS_Pa, DACS_Pb) * 760./1013.; Validate DACS_P; }
 
 PTRHT_t SPV_T1C; invalidate SPV_T1C;
 { SPV_T1C = SPV_ptrh.SHT21T(SPV_T1); Validate SPV_T1C; }
@@ -18,4 +18,4 @@ PTRHT_t SPV_T2C; invalidate SPV_T2C;
 SHT21RH_t SPV_RHC; invalidate SPV_RHC;
 { SPV_RHC = SPV_ptrh.SHT21RH(SPV_RH); Validate SPV_RHC; }
 PTRHP_t SPV_P; invalidate SPV_P;
-{ SPV_P = SPV_ptrh.MS5607P(SPV_Pa, SPV_Pb); Validate SPV_P; }
+{ SPV_P = SPV_ptrh.MS5607P(SPV_Pa, SPV_Pb) * 760./1013.; Validate SPV_P; }

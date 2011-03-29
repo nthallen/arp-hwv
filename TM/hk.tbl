@@ -49,7 +49,7 @@ D2 {
   HBox { +-; Title: SPV; -+ };
   "1T:"  (SPV1T,6) C;
   "2T:"  (SPV2T,6) C;
-  P:  (SPV_P,7) mbar;
+  P:  (SPV_P,7) Torr;
   PT: (SPV_T2C,5) C;
   RH: (SPV_RH,4) %;
   RHT: (SPV_T1C,5) C;
@@ -73,7 +73,7 @@ HHH_Cell {
 
 PDACS {
   HBox { +-; Title: PDACS; -+ };
-  P: (DACS_P,7) mbar;
+  P: (DACS_P,7) Torr;
   PT: (DACS_T2C,5) C;
   RH: (DACS_RHC,4) %;
   RHT: (DACS_T1C,5) C;
