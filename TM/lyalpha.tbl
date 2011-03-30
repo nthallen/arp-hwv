@@ -32,7 +32,7 @@ SD {
       SFB2T: (SFB2T,6) C;
       SFB3T: (SFB3T,6) C;
     }; |; {
-      SDPDP: (SDPDP,7) V;
+      SDPDP: (SDPDP,5) V;
       SD_LP: (SD_LP,5) Torr;
       SD_HP: (SD_HP,5) Torr;
       SDP_T: (SDP_T,6) C;

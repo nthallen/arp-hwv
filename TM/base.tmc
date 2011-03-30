@@ -53,6 +53,12 @@ TM typedef AI_X1 AI_P1000Torr { text "%5.1lf"; convert TORR; }
     32000, 1000
   }
 
+TM typedef AI_X1 AI_SDPDP { text "%5.2lf"; convert VOLTS; }
+  Calibration (AI_SDPDP, VOLTS) {
+    0, 0,
+    32768, 13.803311
+  }
+
 TM typedef unsigned short AO
   { text "%6.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
   Calibration ( AO, VOLTS ) {
@@ -161,7 +167,7 @@ TM 1 Hz AI_T10K PIF7T; Address PIF7T 0xCC0; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_P1000Torr SD_HP; Address SD_HP 0xC6C; /* Secondary Duct High Prs (1000 torr) */
 TM 1 Hz AI_P100Torr SD_LP; Address SD_LP 0xC4C; /* Secondary Duct Low Prs (100 torr) */
 TM 1 Hz AI_T30K SDP_T; Address SDP_T 0xC8C; /* Secondary Duct Prs Guage Temp */
-TM 1 Hz AI_X1 SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
+TM 1 Hz AI_SDPDP SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
 TM 1 Hz AI_T10K SFB1T; Address SFB1T 0xC4A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB2T; Address SFB2T 0xC6A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB3T; Address SFB3T 0xC8A; /* Secondary Inlet Therm Ring */

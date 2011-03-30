@@ -23,7 +23,7 @@ Throttle {
 
 SD {
   HBox { +-; Title: "Secondary Duct"; -+ };
-  SDPDP: (SDPDP,7) V;
+  SDPDP: (SDPDP,5) V;
   SD_LP: (SD_LP,5) Torr;
   SD_HP: (SD_HP,5) Torr;
   SDP_T: (SDP_T,6) C;
