@@ -34,6 +34,7 @@ State Init {
   +1   > Fail Light Off
   +1   > Soldrv A select mode 2
   +5   > Soldrv A select mode 0
+  +2   > AI Increment Row by 0x3F
   +4   Validate Standby;
 }
 
