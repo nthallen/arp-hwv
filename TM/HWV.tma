@@ -529,10 +529,12 @@ Partition
   AI_T30K Last_HPV1T = 0;
   static int HPV1T_count = 0;
 %}
-State AI2_Watch NoLog {
-    { if ( HPV1T == Last_HPV1T && ++HPV1T_count >= 60 ) {
-	msg(2, "HPV1T has not changed in 60 seconds");
-	Validate AI2_Fail;
+State AI2_Watch {
+    { if ( HPV1T == Last_HPV1T ) {
+	if ( ++HPV1T_count >= 60 ) {
+	  msg(2, "HPV1T has not changed in 60 seconds");
+	  Validate AI2_Fail;
+	}
       } else {
 	Last_HPV1T = HPV1T;
 	HPV1T_count = 0;
