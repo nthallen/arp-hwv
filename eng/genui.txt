@@ -7,6 +7,7 @@ ROWS 18
   1 ARFBW LampA RF BW
   1 ARFFW LampA RF FW
   1 A_IRV LampA IRV
+  1 LMA_I LampA Current
   1 A_RgT GasDeck Temp
   1 AirHP GasDeck Pres
   1 AirLP GasDeck Pres
@@ -15,7 +16,7 @@ ROWS 18
   1 BRFBW LampB RF BW
   1 BRFFW LampB RF FW
   1 B_IRV LampB IRV
-  1 B_RFT LambB Temp
+  1 B_RFT LampB Temp
   1 CModP LampC Pres
   1 CRFBW LampC RF BW
   1 CRFFW LampC RF FW
@@ -25,18 +26,18 @@ ROWS 18
   1 ChpAT LampA Temp
   1 ChpBT LampB Temp
   1 ChpCT LampC Temp
-  1 LMA_I Commands Current LampA
-  1 LMB_I Commands Current LampB
-  1 LMC_I Commands Current LampC
-  1 LCmd1_I Commands Current Lab1
-  1 LCmd2_I Commands Current Lab2
-  1 MZ1_I Commands Current MHZ1
-  1 MZ2_I Commands Current MHZ2
-  1 MZ3_I Commands Current MHZ3
-  1 MZ4_I Commands Current MHZ4
-  1 AirA_I Commands Current AirA
-  1 AirB_I Commands Current AirB
-  1 Cmd_15_I Commands Current Cmd_11
+  1 LMA_I Current Lamps LampA
+  1 LMB_I Current Lamps LampB
+  1 LMC_I Current Lamps LampC
+  1 LCmd1_I Current Lab Lab1
+  1 LCmd2_I Current Lab Lab2
+  1 MZ1_I Current MZ MHZ1
+  1 MZ2_I Current MZ MHZ2
+  1 MZ3_I Current MZ MHZ3
+  1 MZ4_I Current MZ MHZ4
+  1 AirA_I Current Air AirA
+  1 AirB_I Current Air AirB
+  1 Cmd_15_I Current Spare Cmd_11
   1 Cmd_0_DS:DS822:0 Commands DS
   1 Cmd_1_DS:DS822:1 Commands DS
   1 Cmd_2_DS:DS822:2 Commands DS
@@ -99,20 +100,20 @@ ROWS 18
 # 1 LFB2P
 # 1 LFB_T
 # 1 LFT_P
-# 1 LTE1R4T
-# 1 Las_I
-# 1 MM_1T
-# 1 MM_2T
-# 1 MM_3T
-# 1 MM_4T
-# 1 MZ1CT
-# 1 MZ1St
-# 1 MZ2CT
-# 1 MZ2St
-# 1 MZ3CT
-# 1 MZ3St
-# 1 MZ4CT
-# 1 MZ4St
+  1 LTE1R4T HHHhk LTE
+  1 Las_I   HHHhk I
+  1 MM_1T   MZ T 1T
+  1 MM_2T   MZ T 2T
+  1 MM_3T   MZ T 3T
+  1 MM_4T   MZ T 4T
+  1 MZ1CT   MZ CT 1T
+  1 MZ1St   MZ Set 1
+  1 MZ2CT   MZ CT 2T
+  1 MZ2St   MZ Set 2
+  1 MZ3CT   MZ CT 3T
+  1 MZ3St   MZ Set 3
+  1 MZ4CT   MZ CT 4T
+  1 MZ4St   MZ Set 4
   1 PDACS_1T Power Temp
   1 PDACS_2T Power Temp
   1 PDACS_3T Power Temp
@@ -145,16 +146,16 @@ ROWS 18
   1 dot:QCLI_s:5 QCLI QCLI_s
   1 lot:QCLI_s:4 QCLI QCLI_s
   1 loc:QCLI_s:3 QCLI QCLI_s
-    1 RFASt LampA SetPt
+  1 RFASt LampA SetPt
   1 RFBSt LampB SetPt
   1 RFCSt LampB SetPt
-# 1 SDPDP
-# 1 SDP_T
-# 1 SD_HP
-# 1 SD_LP
-# 1 SFB1T
-# 1 SFB2T
-# 1 SFB3T
+  1 SDPDP SDP DP
+  1 SDP_T SDP T
+  1 SD_HP SDP P
+  1 SD_LP SDP P
+  1 SFB1T Flow SFB 1T
+  1 SFB2T Flow SFB 2T
+  1 SFB3T Flow SFB 3T
   1 SPV1T SPV T
   1 SPV2T SPV T
   1 CAOVF1:SSP_Flags:0 SSP OVF
@@ -174,6 +175,19 @@ ROWS 18
   1 SSP_T_FPGA SSP T
   1 SSP_T_HtSink SSP T
   1 SWStat General SWStat
+  1 IOSwS  General IOSwS
+  1 N0:AIStat:0 General AIStat
+  1 N1:AIStat:1 General AIStat
+  1 N0S:AIStat:2 General AIStat
+  1 N1S:AIStat:3 General AIStat
+  1 B4:AIStat:4 General AIStat
+  1 B5:AIStat:5 General AIStat
+  1 B6:AIStat:6 General AIStat
+  1 B7:AIStat:7 General AIStat
+  1 B8:AIStat:8 General AIStat
+  1 B9:AIStat:9 General AIStat
+  1 B10:AIStat:10 General AIStat
+  1 B11:AIStat:11 General AIStat
 
   1 TVPos Throttle Pot
   4 C:TVStat:7 Throttle Bits
@@ -226,3 +240,8 @@ ROWS 18
   8 UVB2_Counts Counts B
   8 UVC1_Counts Counts C
   8 UVC2_Counts Counts C
+  1 DACS_T1C DACS T
+  1 DACS_T2C DACS T
+  1 DACS_RHC DACS RH
+  1 DACS_P   DACS P
+  1 DACS_PTRHS DACS Status
