@@ -42,7 +42,6 @@ State Standby {
         depending on (OFF_GROUND) { Validate Record; }
         depending on (IN_AIR) { Validate Record; }
         depending on (AI_Fail)   { Validate Shutdown; }
-        depending on (AI2_Fail)  { Validate Shutdown; }
 }
 
 # RECORD  
@@ -50,15 +49,14 @@ State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
         depending on (h2o2failA) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
-        depending on (AI2_Fail)  { Validate Shutdown; }
         "In Record";
 }
 
 # SHUTDOWN
 State Shutdown {
   +1  > Soldrv A select mode 0
-      Hold until valid (h2o2shutOffA,h2o2heatOffA) or 55;
-  +5  > Fail Light On
+      Hold until valid (h2o2shutOffA,h2o2heatOffA,DFB_Shutdown) or 55;
+ +10  > Fail Light On
       > quit
 }
 
@@ -509,30 +507,15 @@ Partition
 #---------------------------------------------------------------
 # Partition 11: Analog Input Monitoring
 #---------------------------------------------------------------
-State AI_Watch NoLog {
-     Hold until (AIStat & 3);
-     { msg(2,"Observed AI Lockup: %X", AIStat); }
-  +1 Hold until ((AIStat & 3) == 0) or 1:00
-     else Validate AI_Fail;
-     { msg(0, "AI Recovered"); }
-  +1 Validate AI_Watch;
-}
-
-State AI_Fail {}
-
-Partition
-#---------------------------------------------------------------
-# Partition 12: Analog Input Monitoring
-#---------------------------------------------------------------
 %{
   AI_T30K Last_HPV1T = 0;
   static int HPV1T_count = 0;
 %}
-State AI2_Watch {
+State AI_Watch {
     { if ( HPV1T == Last_HPV1T ) {
-	if ( ++HPV1T_count >= 60 ) {
-	  msg(2, "HPV1T has not changed in 60 seconds");
-	  Validate AI2_Fail;
+	if ( ++HPV1T_count >= 15 ) {
+	  msg(2, "HPV1T has not changed in 15 seconds");
+	  Validate AI_Reset;
 	}
       } else {
 	Last_HPV1T = HPV1T;
@@ -541,4 +524,20 @@ State AI2_Watch {
     }
 }
 
-State AI2_Fail {}
+State AI_Reset {
+      > AI Reset
+  +1  > AI Cycle Engine
+      Hold until ( HPV1T != Last_HPV1T ) OR 15
+      else Validate AI_Reset2;
+      Validate AI_Watch;
+}
+
+State AI_Reset2 {
+      > AI Reset
+  +1  > AI Cycle Engine
+      Hold until ( HPV1T != Last_HPV1T ) OR 15
+      else Validate AI_Fail;
+      Validate AI_Watch;
+}
+
+State AI_Fail {}

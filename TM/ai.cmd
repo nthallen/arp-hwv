@@ -6,6 +6,7 @@
     }
   : AI Stop Engine * { sbwr( 0xC01, 0x80 ); }
   : AI Cycle Engine * { sbwr( 0xC01, 0 ); }
+  : AI Reset * { sbwr( 0xC01, 0x400 ); }
   : AI Extra Settling * { sbwr( 0xC01, 0x200 ); }
   : AI Increment Row by %d(Enter Row Increment) * {
       if ( $5 < 0 || $5 > 0x3F )
