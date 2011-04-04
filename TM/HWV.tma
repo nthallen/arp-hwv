@@ -166,6 +166,7 @@ State IN_AIR {
 Partition
 
 State Throttle_Standby {
+  +5
   depending on (OFF_GROUND) { Validate Throttle_init; }
   depending on (IN_AIR) { Validate Throttle_init; }
 }
@@ -254,7 +255,7 @@ State h2o2resetA {
 }
 
 State h2o2shutOffA {
-  +10   > Command Lamp Module A off
+  +1    > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
 }
 
@@ -350,7 +351,7 @@ State DFB_Start {
       Validate DFB_SSP_Recover;
     }
     Hold until ( DFB_TEMP_OK(convert(LTE1R4T)) );
-    Hold until ( (QCLI_s & 0x2938) == 0 ) or 5
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 5
     else Validate DFB_QCLI_Recover;
  +1 > SSP Start
     Hold until ( SSP_Status == SSP_STATUS_ARMED )
@@ -397,7 +398,8 @@ State DFB_SSP_Recover NoLog {
     Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
     else Validate DFB_SSP_Not_Talking;
  +2 > QCLI Stop
-    Validate DFB_Start;
+    Validate DFB_QCLI_Reset; # For now
+    #Validate DFB_Start;
 }
 
 State DFB_SSP_Not_Talking {
@@ -429,7 +431,7 @@ State DFB_QCLI_Recover {
     Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
    { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s ); }
    > QCLI Clear Errors
-   Hold until ( (QCLI_s & 0x2938) == 0 ) or 5
+   Hold until ( (QCLI_s & 0x3938) == 0 ) or 5
    else {
      nl_error( 2, "QCLI error did not clear: 0x%04X: Resetting", QCLI_s );
      Validate DFB_QCLI_Reset;
@@ -446,9 +448,9 @@ State DFB_QCLI_Reset {
     }
  +1 > Command QCLI Reset On
     > Command QCLI Reset Off
-    Hold until ( (QCLI_s & 0x2938) == 0 ) or 2
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
     else > QCLI clear errors
-    Hold until ( (QCLI_s & 0x2938) == 0 ) or 2
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
     else Validate DFB_QCLI_Reset;
     { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave ); }
  +1 Validate DFB_Start;
@@ -517,14 +519,14 @@ State AI_Watch {
     { if ( HPV1T == Last_HPV1T ) {
 	if ( ++HPV1T_static_count >= 15 ) {
 	  msg(2, "HPV1T has not changed in 15 seconds");
-	  HPV_delta_count = 0;
+	  HPV1T_delta_count = 0;
 	  Validate AI_Reset;
 	}
       } else {
 	Last_HPV1T = HPV1T;
 	HPV1T_static_count = 0;
 	if ( ++HPV1T_delta_count > 5 ) {
-	  HPV_delta_count = 0;
+	  HPV1T_delta_count = 0;
 	  AI_Reset_count = 0;
 	}
       }
