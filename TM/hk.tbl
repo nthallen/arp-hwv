@@ -51,7 +51,7 @@ D2 {
   "2T:"  (SPV2T,6) C;
   P:  (SPV_P,7) Torr;
   PT: (SPV_T2C,5) C;
-  RH: (SPV_RH,4) %;
+  RH: (SPV_RHC,4) %;
   RHT: (SPV_T1C,5) C;
   PTRHS: (SPV_PTRHS,4);
 }
