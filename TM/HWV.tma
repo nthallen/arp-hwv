@@ -379,7 +379,7 @@ State DFB_Watch NoLog {
          !DFB_TEMP_OK(convert(LTE1R4T)) );
     # hold until ( DFB_TEMP_OK(convert(LTE1R4T)) && 
     #     convert(HDFB_I) >= LOW_CURRENT) or 1
-    hold until ( DFB_TEMP_OK(convert(LTE1R4T)) ) or 1
+    hold until ( DFB_TEMP_OK(convert(LTE1R4T)) ) or 2
     else Validate DFB_Out_Spec;
     hold until ( SSP_Status == SSP_STATUS_TRIG ) or 5
     else Validate DFB_SSP_Recover;
@@ -427,15 +427,17 @@ State DFB_Out_Spec {
 }
 
 State DFB_QCLI_Recover {
-    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
-   { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s ); }
-   > QCLI Clear Errors
-   Hold until ( ((QCLI_s & 0x3938) ^0x1000) == 0 ) or 5
-   else {
-     nl_error( 2, "QCLI error did not clear: 0x%04X: Resetting", QCLI_s );
-     Validate DFB_QCLI_Reset;
+   Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+   Depending on (QCLI_s once) {
+     nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s );
    }
-   Validate DFB_Start;
+ +2  > QCLI Clear Errors
+     Hold until ( ((QCLI_s & 0x3938) ^0x1000) == 0 ) or 5
+     else {
+       nl_error( 2, "QCLI error did not clear: Resetting" );
+       Validate DFB_QCLI_Reset;
+     }
+     Validate DFB_Start;
 }
 
 State DFB_QCLI_Reset {
@@ -451,8 +453,9 @@ State DFB_QCLI_Reset {
     else > QCLI clear errors
     Hold until ( ((QCLI_s & 0x3938) ^ 0x1000) == 0 ) or 2
     else Validate DFB_QCLI_Reset;
-    { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave ); }
- +1 Validate DFB_Start;
+    { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave );
+      Validate DFB_Start;
+    }
 }
 
 State DFB_Stop {
