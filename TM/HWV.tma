@@ -186,8 +186,8 @@ State Throttle_scan {
         > drive Throttle Valve to 47000
         Hold until (SWStat == SWS_TIME_WARP) or 34:00;
         > drive Throttle Valve to 40000
-  +2:00 > drive Throttle Valve to 35000
-  +2:00 > drive Throttle Valve to 30000
+  +2:00 > drive Throttle Valve to 32500
+  +2:00 > drive Throttle Valve to 25000
   +2:00 Validate Throttle_scan;
 }
 
@@ -222,7 +222,7 @@ State h2o2turnOnA {
          if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
        }
        depending on (Shutdown) { Validate h2o2shutOffA; }
-  +2   > Set Axis A RF Set Pt 5
+  +2   > Set Axis A RF Set Pt 6.5
   +2   > Command Lamp Module A on
   +10  Validate h2o2recordA;     
 }
@@ -278,14 +278,14 @@ State h2o2heatOnA {
         depending on (Shutdown) { Validate h2o2heatOffA; }
         depending on (h2o2shutOffA) { Validate h2o2heatOffA; }
         depending on (h2o2resetA) { Validate h2o2heatOffA; }
-  +1    > Set Axis A RF Set Pt 5
-  +8    > Set Axis A Heat Set Pt 1.65
+  +1    > Set Axis A RF Set Pt 6.5
+  +8    > Set Axis A Heat Set Pt 3.0
   +1    > Soldrv A select mode 3
-        Hold until (convert(A_IRV) > 3.0);
+        Hold until (convert(A_IRV) > 4.0);
         { msg(2,"**Too much heat on A - running deep!**"); }
         > Set Axis A Heat Set Pt 0
         Hold until (convert(A_IRV) < 1.0);
-        > Set Axis A Heat Set Pt 1.65
+        > Set Axis A Heat Set Pt 3.0
         Validate h2o2heatOnA;       
 }
 
@@ -351,7 +351,7 @@ State DFB_Start {
       Validate DFB_SSP_Recover;
     }
     Hold until ( DFB_TEMP_OK(convert(LTE1R4T)) );
-    Hold until ( (QCLI_s & 0x3938) == 0 ) or 5
+    Hold until ( ((QCLI_s & 0x3938)^0x1000) == 0 ) or 5
     else Validate DFB_QCLI_Recover;
  +1 > SSP Start
     Hold until ( SSP_Status == SSP_STATUS_ARMED )
@@ -398,8 +398,7 @@ State DFB_SSP_Recover NoLog {
     Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
     else Validate DFB_SSP_Not_Talking;
  +2 > QCLI Stop
-    Validate DFB_QCLI_Reset; # For now
-    #Validate DFB_Start;
+    Validate DFB_Start;
 }
 
 State DFB_SSP_Not_Talking {
@@ -431,7 +430,7 @@ State DFB_QCLI_Recover {
     Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
    { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s ); }
    > QCLI Clear Errors
-   Hold until ( (QCLI_s & 0x3938) == 0 ) or 5
+   Hold until ( ((QCLI_s & 0x3938) ^0x1000) == 0 ) or 5
    else {
      nl_error( 2, "QCLI error did not clear: 0x%04X: Resetting", QCLI_s );
      Validate DFB_QCLI_Reset;
@@ -448,9 +447,9 @@ State DFB_QCLI_Reset {
     }
  +1 > Command QCLI Reset On
     > Command QCLI Reset Off
-    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    Hold until ( ((QCLI_s & 0x3938) ^ 0x1000) == 0 ) or 2
     else > QCLI clear errors
-    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    Hold until ( ((QCLI_s & 0x3938) ^ 0x1000) == 0 ) or 2
     else Validate DFB_QCLI_Reset;
     { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave ); }
  +1 Validate DFB_Start;
