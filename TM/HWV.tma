@@ -175,7 +175,8 @@ State Throttle_Standby {
 State Throttle_init     {
        > drive Throttle Valve in 48000
   +2   > drive Throttle Valve out 10000
-  +5   > drive Throttle Valve to 15000
+# +5   > drive Throttle Valve to 15000
+  +5   > drive Throttle Valve out 15000
   +5   Validate Throttle_scan;
 }
 
@@ -183,11 +184,15 @@ State Throttle_init     {
 State Throttle_scan {
         depending on (ON_GROUND) { Validate Throttle_shut; }
         depending on (Shutdown) { Validate Throttle_shut; }
-        > drive Throttle Valve to 47000
+#       > drive Throttle Valve to 47000
+        > drive Throttle Valve out 22000
         Hold until (SWStat == SWS_TIME_WARP) or 34:00;
-        > drive Throttle Valve to 40000
-  +2:00 > drive Throttle Valve to 32500
-  +2:00 > drive Throttle Valve to 25000
+        > drive Throttle Valve in 7000
+  +2:00 > drive Throttle Valve in 7500
+  +2:00 > drive Throttle Valve in 7500
+#       > drive Throttle Valve to 40000
+# +2:00 > drive Throttle Valve to 32500
+# +2:00 > drive Throttle Valve to 25000
   +2:00 Validate Throttle_scan;
 }
 
