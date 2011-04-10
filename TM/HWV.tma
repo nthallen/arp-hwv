@@ -543,7 +543,7 @@ State AI_Watch {
 
 State AI_Reset {
       > AI Reset
-  +1  > AI Cycle Engine
+  +1  > AI Double Convert Row Zero
       { if ( ++AI_Reset_count >= 10 ) {
 	  msg(2,"AI Max Reset Count Reached");
 	  Validate AI_Fail;
