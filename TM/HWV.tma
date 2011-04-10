@@ -333,7 +333,7 @@ Partition
 %{
  int num_DFB_recovers=0;
  #define LOW_CURRENT 0.02
- #define DFB_TEMP_LIMIT 2.3
+ #define DFB_TEMP_LIMIT 3.0
  #define DFB_TEMP_OK(x) (x < DFB_TEMP_LIMIT)
 %}
 # DFB1 Starting and Stopping
