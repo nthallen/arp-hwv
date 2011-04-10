@@ -32,6 +32,7 @@
 State Init {
        > Telemetry Start
   +1   > Fail Light Off
+  +1   > AI Double Convert Row Zero
   +1   > Soldrv A select mode 2
   +5   > Soldrv A select mode 0
   +4   Validate Standby;
