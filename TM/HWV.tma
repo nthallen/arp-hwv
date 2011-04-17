@@ -370,7 +370,7 @@ State DFB_Start {
     Hold until ( SSP_Status == SSP_STATUS_TRIG ) or 20
     else Validate DFB_SSP_Recover;
     { num_DFB_recovers = 0; }
-    Validate DFB_Watch;
+ +1 Validate DFB_Watch;
 }
 
 State DFB_Watch NoLog {
@@ -434,10 +434,9 @@ State DFB_Out_Spec {
 
 State DFB_QCLI_Recover {
    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
-   Depending on (QCLI_s once) {
-     nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s );
-   }
- +2  > QCLI Clear Errors
+
+ +1  { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s ); }
+ +1  > QCLI Clear Errors
      Hold until ( ((QCLI_s & 0x3938) ^0x1000) == 0 ) or 5
      else {
        nl_error( 2, "QCLI error did not clear: Resetting" );
