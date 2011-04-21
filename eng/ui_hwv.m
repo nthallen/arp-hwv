@@ -97,6 +97,6 @@ f = ne_dialg(f, 'add', 1, 0, 'phwvdacst', 'T' );
 f = ne_dialg(f, 'add', 1, 0, 'phwvdacsrh', 'RH' );
 f = ne_dialg(f, 'add', 1, 0, 'phwvdacsp', 'P' );
 f = ne_dialg(f, 'add', 1, 0, 'phwvdacss', 'Status' );
-f = ne_listdirs(f, 'HWV_Data_Dir', 8 );
+f = ne_listdirs(f, 'HWV_Data_Dir', 15 );
 f = ne_dialg(f, 'newcol');
 f = ne_dialg(f, 'resize');
