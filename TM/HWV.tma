@@ -167,9 +167,9 @@ State IN_AIR {
 Partition
 
 State Throttle_Standby {
-  +5
-  depending on (OFF_GROUND) { Validate Throttle_init; }
-  depending on (IN_AIR) { Validate Throttle_init; }
+  # +5
+  # depending on (OFF_GROUND) { Validate Throttle_init; }
+  # depending on (IN_AIR) { Validate Throttle_init; }
 }
 
 # INITIALIZE
