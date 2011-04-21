@@ -146,6 +146,7 @@ ROWS 18
   1 dot:QCLI_s:5 QCLI QCLI_s
   1 lot:QCLI_s:4 QCLI QCLI_s
   1 loc:QCLI_s:3 QCLI QCLI_s
+  1 reset:DS824:8 QCLI QCLI_s
   1 RFASt LampA SetPt
   1 RFBSt LampB SetPt
   1 RFCSt LampB SetPt
@@ -153,6 +154,7 @@ ROWS 18
   1 SDP_T SDP T
   1 SD_HP SDP P
   1 SD_LP SDP P
+  8 UVB1_Counts SDP P
   1 SFB1T Flow SFB 1T
   1 SFB2T Flow SFB 2T
   1 SFB3T Flow SFB 3T
@@ -245,3 +247,7 @@ ROWS 18
   1 DACS_RHC DACS RH
   1 DACS_P   DACS P
   1 DACS_PTRHS DACS Status
+  1 SPV_T1C  SPV T
+  1 SPV_T2C  SPV T
+  1 SPV_RHC  SPV RH
+  1 SPV_PTRHS SPV Status
