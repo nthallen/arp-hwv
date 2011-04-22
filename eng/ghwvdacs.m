@@ -1,5 +1,5 @@
 function fig = ghwvdacs(varargin);
 % ghwvdacs(...)
 % DACS
-ffig = ne_group(varargin,'DACS','phwvdacst','phwvdacsrh','phwvdacsp','phwvdacss');
+ffig = ne_group(varargin,'DACS','phwvdacsp','phwvdacst','phwvdacsrh','phwvdacss');
 if nargout > 0 fig = ffig; end
