@@ -242,11 +242,12 @@ ROWS 18
   8 UVB2_Counts Counts B
   8 UVC1_Counts Counts C
   8 UVC2_Counts Counts C
+  1 DACS_P   DACS P
   1 DACS_T1C DACS T
   1 DACS_T2C DACS T
   1 DACS_RHC DACS RH
-  1 DACS_P   DACS P
   1 DACS_PTRHS DACS Status
+  1 SPV_P    SPV P
   1 SPV_T1C  SPV T
   1 SPV_T2C  SPV T
   1 SPV_RHC  SPV RH

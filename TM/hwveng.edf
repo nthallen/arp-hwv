@@ -1,4 +1,4 @@
-spreadsheet hwveng_1 123
+spreadsheet hwveng_1 124
   1 AIStat %5.1lf
   2 AModP %5.1lf
   3 ARFBW %5.1lf
@@ -107,20 +107,21 @@ spreadsheet hwveng_1 123
   106 SFB3T %5.1lf
   107 SPV1T %5.1lf
   108 SPV2T %5.1lf
-  109 SPV_PTRHS %5.1lf
-  110 SPV_RHC %5.1lf
-  111 SPV_T1C %5.1lf
-  112 SPV_T2C %5.1lf
-  113 SSP_Flags %5.1lf
-  114 SSP_Num %5.1lf
-  115 SSP_SN %5.1lf
-  116 SSP_Stale %5.1lf
-  117 SSP_Status %5.1lf
-  118 SSP_TS %5.1lf
-  119 SSP_T_FPGA %5.1lf
-  120 SSP_T_HtSink %5.1lf
-  121 SWStat %5.1lf
-  122 TVPos %5.1lf
+  109 SPV_P %5.1lf
+  110 SPV_PTRHS %5.1lf
+  111 SPV_RHC %5.1lf
+  112 SPV_T1C %5.1lf
+  113 SPV_T2C %5.1lf
+  114 SSP_Flags %5.1lf
+  115 SSP_Num %5.1lf
+  116 SSP_SN %5.1lf
+  117 SSP_Stale %5.1lf
+  118 SSP_Status %5.1lf
+  119 SSP_TS %5.1lf
+  120 SSP_T_FPGA %5.1lf
+  121 SSP_T_HtSink %5.1lf
+  122 SWStat %5.1lf
+  123 TVPos %5.1lf
 spreadsheet hwveng_4 4
   1 IXStt %5.1lf
   2 TVStat %5.1lf
