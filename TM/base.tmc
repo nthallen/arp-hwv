@@ -191,7 +191,7 @@ TM 1 Hz AO MZ2St; Address MZ2St 0x404; /* Mirror Temp 2 Set Pt */
 TM 1 Hz AO MZ3St; Address MZ3St 0x402; /* Mirror Temp 3 Set Pt */
 TM 1 Hz AO MZ4St; Address MZ4St 0x400; /* Mirror Temp 4 Set Pt */
 TM 1 Hz AO LFBSt; Address LFBSt 0x414; /* Lab Flow Bubbler Set Point */
-TM 1 Hz AO LFAirSt; Address LFAirSt 0x416; /* Lab Flow Air Set Point */
+TM 1 Hz AO LFAirSt; Address LFAirSt 0x418; /* Lab Flow Air Set Point */
 
 %{
 /* SB/64 Ungated Counters
