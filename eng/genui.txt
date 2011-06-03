@@ -92,14 +92,18 @@ ROWS 18
   1 HtCSt LampC SetPt
   1 IWH1T Flow T
   1 IWH2T Flow T
-# 1 L1Flw
-# 1 L2Flw
-# 1 L3Flw
-# 1 L4Flw
-# 1 LFB1P
-# 1 LFB2P
-# 1 LFB_T
-# 1 LFT_P
+
+  1 LFBSt Lab SetPt
+  1 LFAirSt Lab SetPt
+  1 L1Flw Lab Flow
+  1 L2Flw Lab Flow
+  1 L3Flw Lab Flow
+  1 L4Flw Lab Flow
+  1 LFB1P Lab P
+  1 LFB2P Lab P
+  1 LFB_T Lab T
+  1 LFT_P Lab P
+  
   1 LTE1R4T HHHhk LTE
   1 Las_I   HHHhk I
   1 MM_1T   MZ T 1T
