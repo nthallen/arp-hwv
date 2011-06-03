@@ -19,4 +19,6 @@
   : Mirror Temp 2 Set Pt { $0 = MZ2St_Address; }
   : Mirror Temp 3 Set Pt { $0 = MZ3St_Address; }
   : Mirror Temp 4 Set Pt { $0 = MZ4St_Address; }
+  : Lab Flow Bubbler Set Pt { $0 = LFBSt_Address; }
+  : Lab Flow Air Set Pt { $0 = LFAirSt_Address; }
   ;

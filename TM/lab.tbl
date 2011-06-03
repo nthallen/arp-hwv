@@ -32,6 +32,8 @@ HK {
   LFT_P: (LFT_P,7) V;
   SD_HP: (SD_HP,5) Torr;
   VGlue 1+0;
+  LFBSt: (LFBSt,6);
+  LFAirSt: (LFAirSt,6);
   L1Flw: (L1Flw,7) V;
   L2Flw: (L2Flw,7) V;
   L3Flw: (L3Flw,7) V;
