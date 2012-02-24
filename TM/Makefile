@@ -1,10 +1,10 @@
-# Makefile Generated Thu Apr 07 14:09:50 CDT 2011
+# Makefile Generated Fri Feb 24 14:20:47 EST 2012
 MNC=HWV
-HOMEDIR=/home/hwv/src/TM
+HOMEDIR=/net/hwvgse.arp.harvard.edu/home/hwv/src/TM
 SPECFILE=HWV.spec
-SRC=ptrh.h base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
-SRC+=T30K75KU.tmc T10K75KU.tmc ptrh.cc ai_init.tmc ptrh_chk.tmc
-SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc idx64drv.cmd
+SRC=ptrhm.h base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
+SRC+=T30K75KU.tmc T10K75KU.tmc ptrhm.cc ai_init.tmc ptrh_chk.tmc
+SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrhm_col.cc idx64drv.cmd
 SRC+=dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 SRC+=waves.cmd qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc
 SRC+=digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
@@ -13,8 +13,8 @@ SRC+=hwv.edf hhh.edf PT.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
-OBJ+=HWVcol.cc HWV.pcm tm.dac HWVcoloui.c HWVcoloui.o HWVcol.o ptrh.o
-OBJ+=ptrh_col.o HWVcmd.cc HWVcmd.dat HWVsrvr.o HWVsrvroui.c
+OBJ+=HWVcol.cc HWV.pcm tm.dac HWVcoloui.c HWVcoloui.o HWVcol.o
+OBJ+=ptrhm.o ptrhm_col.o HWVcmd.cc HWVcmd.dat HWVsrvr.o HWVsrvroui.c
 OBJ+=HWVsrvroui.o HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
 OBJ+=HWVdisp.cc HWVdispoui.c HWVdispoui.o HWVdisp.o HWVtblnc.tmc
 OBJ+=lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc HWVdispnc.cc
@@ -36,10 +36,11 @@ DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
 SRCDIST+=HWV.tma A.sol B.sol C.sol base.tmc idx64.tmc swstat.tmc
-SRCDIST+=ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh.cc
+SRCDIST+=ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc
+SRCDIST+=ptrhm.cc
 NONRCS=
 TMCBASE=base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
-TMCBASE+=T30K75KU.tmc T10K75KU.tmc ptrh.cc
+TMCBASE+=T30K75KU.tmc T10K75KU.tmc ptrhm.cc
 CMDBASE=/usr/local/share/huarp/root.cmd
 CMDBASE+=/usr/local/share/huarp/getcon.cmd
 CMDBASE+=/usr/local/share/huarp/idx64.cmd
@@ -66,28 +67,28 @@ extdistribution : $(DSTRB) $(SRCDIST)
 	@distribute $(FORCE) $(TGTDIR)/bin/$(VERSION)/Base $(SRCDIST)
 distribution : extdistribution
 	@distribute $(FORCE) $(TGTDIR) $(IDISTRIB)
-HWVcol : HWVcol.o ptrh.o ptrh_col.o HWVcoloui.o
-	$(LINK.privCXX) HWVcol.o ptrh.o ptrh_col.o HWVcoloui.o -lsubbus -ltmpp -ltm -lnort
+HWVcol : HWVcol.o ptrhm.o ptrhm_col.o HWVcoloui.o
+	$(LINK.privCXX) HWVcol.o ptrhm.o ptrhm_col.o HWVcoloui.o -lsubbus -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcoloui.c
 	$(PROMOTE) HWVcol
 HWVsrvr : HWVsrvr.o HWVsrvroui.o
 	$(LINK.privCXX) HWVsrvr.o HWVsrvroui.o -lsubbus -ltmpp -ltm -lnort
 	$(OUIUSE) HWVsrvroui.c
 	$(PROMOTE) HWVsrvr
-HWVdisp : HWVdisp.o ptrh.o HWVdispoui.o
-	$(LINK.normCXX) HWVdisp.o ptrh.o HWVdispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
+HWVdisp : HWVdisp.o ptrhm.o HWVdispoui.o
+	$(LINK.normCXX) HWVdisp.o ptrhm.o HWVdispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HWVdispoui.c
-HWVdispnc : HWVdispnc.o ptrh.o HWVdispncoui.o
-	$(LINK.normCXX) HWVdispnc.o ptrh.o HWVdispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
+HWVdispnc : HWVdispnc.o ptrhm.o HWVdispncoui.o
+	$(LINK.normCXX) HWVdispnc.o ptrhm.o HWVdispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) HWVdispncoui.c
-lydisp : lydisp.o ptrh.o lydispoui.o
-	$(LINK.normCXX) lydisp.o ptrh.o lydispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
+lydisp : lydisp.o ptrhm.o lydispoui.o
+	$(LINK.normCXX) lydisp.o ptrhm.o lydispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) lydispoui.c
-lydispnc : lydispnc.o ptrh.o lydispncoui.o
-	$(LINK.normCXX) lydispnc.o ptrh.o lydispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
+lydispnc : lydispnc.o ptrhm.o lydispncoui.o
+	$(LINK.normCXX) lydispnc.o ptrhm.o lydispncoui.o -ldispnc -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) lydispncoui.c
-HWValgo : HWValgo.o ptrh.o HWValgooui.o
-	$(LINK.normCXX) HWValgo.o ptrh.o HWValgooui.o -ltmpp -ltm -lnort
+HWValgo : HWValgo.o ptrhm.o HWValgooui.o
+	$(LINK.normCXX) HWValgo.o ptrhm.o HWValgooui.o -ltmpp -ltm -lnort
 	$(OUIUSE) HWValgooui.c
 doit : HWV.doit
 	mkdoit3 -o doit  HWV.doit
@@ -99,20 +100,20 @@ B.sft : B.sol
 	solfmt -oB.sft  B.sol
 C.sft : C.sol
 	solfmt -oC.sft  C.sol
-hwvengext : hwvengext.o ptrh.o hwvengextoui.o
-	$(LINK.normCXX) hwvengext.o ptrh.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+hwvengext : hwvengext.o ptrhm.o hwvengextoui.o
+	$(LINK.normCXX) hwvengext.o ptrhm.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvengextoui.c
-hwvrawext : hwvrawext.o ptrh.o hwvrawextoui.o
-	$(LINK.normCXX) hwvrawext.o ptrh.o hwvrawextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+hwvrawext : hwvrawext.o ptrhm.o hwvrawextoui.o
+	$(LINK.normCXX) hwvrawext.o ptrhm.o hwvrawextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvrawextoui.c
-hwvext : hwvext.o ptrh.o hwvextoui.o
-	$(LINK.normCXX) hwvext.o ptrh.o hwvextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+hwvext : hwvext.o ptrhm.o hwvextoui.o
+	$(LINK.normCXX) hwvext.o ptrhm.o hwvextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hwvextoui.c
-hhhext : hhhext.o ptrh.o hhhextoui.o
-	$(LINK.normCXX) hhhext.o ptrh.o hhhextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+hhhext : hhhext.o ptrhm.o hhhextoui.o
+	$(LINK.normCXX) hhhext.o ptrhm.o hhhextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) hhhextoui.c
-PText : PText.o ptrh.o PTextoui.o
-	$(LINK.normCXX) PText.o ptrh.o PTextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+PText : PText.o ptrhm.o PTextoui.o
+	$(LINK.normCXX) PText.o ptrhm.o PTextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
 	$(OUIUSE) PTextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
@@ -126,8 +127,8 @@ HWVcoloui.c : $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $
 	$(OUI) $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 HWVcoloui.o : HWVcoloui.c
 HWVcol.o : HWVcol.cc
-ptrh.o : ptrh.cc
-ptrh_col.o : ptrh_col.cc
+ptrhm.o : ptrhm.cc
+ptrhm_col.o : ptrhm_col.cc
 HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd /usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
 	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd /usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd waves.cmd
 HWVsrvr.o : HWVcmd.cc

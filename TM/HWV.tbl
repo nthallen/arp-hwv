@@ -1,8 +1,7 @@
 QCLI {
   HBox { +-; Title: "QCLI"; -+ };
   Wave: (QCLI_Wave,10);
-  Mode: { (QCLI_mode,7) (QCLI_laser,3); };
-  Stale: (QCLI_Stale,5);
+  Mode: { (QCLI_mode,7) (QCLI_laser,3) };
   SSP { (SSP_Num,8) (SSP_Status,7); }
 }
 
@@ -44,6 +43,13 @@ QCLIS {
       "Laser I:"     (QCLI_loc,4);
       "Inv Cmd:"     (QCLI_cordte,4);
       "Cmd Err:"     (QCLI_cmderr,4);
+    }; |; {
+      Com:  (QCLI_present,4);
+      Act:  (QCLI_rw,2);
+      FIFO: (QCLI_fifodep,3);
+      Err:  (QCLI_err,2);
+      Stale:;
+      >(QCLI_Stale,5);
     }
   }
 }

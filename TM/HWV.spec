@@ -7,7 +7,7 @@ tmcbase = qcli.tmc
 tmcbase = waves.tmc
 tmcbase = T30K75KU.tmc
 tmcbase = T10K75KU.tmc
-tmcbase = ptrh.cc
+tmcbase = ptrhm.cc
 
 cmdbase = /usr/local/share/huarp/root.cmd
 cmdbase = /usr/local/share/huarp/getcon.cmd
@@ -28,14 +28,14 @@ SCRIPT = dccc.dccc
 SCRIPT = idx64.idx64
 SRCDIST = waves.qcli waves.m
 DISTRIB = waves.out A.sft
-SRC = ptrh.h
+SRC = ptrhm.h
 
 OBJ = waves.cmd waves.out waves.tmc waves.m waves.log
 OBJ = address.h
 
 TGTDIR = $(TGTNODE)/home/hwv
 
-HWVcol : ai_init.tmc /usr/local/share/huarp/DACS_ID.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc ptrh_col.cc -lsubbus
+HWVcol : ai_init.tmc /usr/local/share/huarp/DACS_ID.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc ptrhm_col.cc -lsubbus
 
 HWVsrvr : -lsubbus
 

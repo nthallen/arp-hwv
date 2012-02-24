@@ -5,6 +5,11 @@
 TM "Receive" QCLI 1;
 
 TM typedef unsigned short QCLI_Wave_t { text "%10d" QCLI_Wave_text(); }
+TM typedef unsigned short QCLI_CS_t {
+  text "%5d";
+  collect x = sbrwa(x.address);
+}
+
 TM 1 Hz QCLI_Wave_t QCLI_Wave;
 TM 1 Hz UINT QCLI_s;
 TM 1 Hz UINT QCLI_Stale;
@@ -15,3 +20,5 @@ Group QCLI_grp ( QCLI_Wave, QCLI_s ) {
   QCLI_Stale = QCLI_obj->stale();
   QCLI_obj->synch();
 }
+
+TM 1 Hz QCLI_CS_t QCLI_CS; Address QCLI_CS 0x1000;

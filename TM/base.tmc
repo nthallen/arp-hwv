@@ -313,30 +313,54 @@ TM 1 Hz IOSwS_t IOSwS; Collect IOSwS = read_switches();
 
 /* DACS PTRH */
 %{
-  #include "ptrh.h"
-  ptrh DACS_ptrh =
-    ptrh("DACS",0x300,0xB177,0x9A58,0x6DBF,0x62BA,0x81BF,0x6C80);
-  ptrh SPV_ptrh =
-    ptrh("SPV", 0x320,0xB4E4,0x9BD8,0x7383,0x6D36,0x7629,0x6C80);
+  #include "ptrhm.h"
+  ptrhm DACS_ptrh =
+    ptrhm("DACS",0x200,0xB177,0x9A58,0x6DBF,0x62BA,0x81BF,0x6C80);
+  ptrhm SPV_ptrh =
+    ptrhm("SPV", 0x220,0xB4E4,0x9BD8,0x7383,0x6D36,0x7629,0x6C80);
 %}
 TM typedef unsigned char MS5607Db { text "%3d"; }
 TM typedef UINT PTRH_S { text " %03x"; }
 
-TM 1 Hz UINT DACS_T1; collect DACS_T1 = DACS_ptrh.SHT21T();
-TM 1 Hz UINT DACS_RH; collect DACS_RH = DACS_ptrh.SHT21RH();
-TM 1 Hz UINT DACS_T2a; collect DACS_T2a = DACS_ptrh.MS5607Ta();
-TM 1 Hz MS5607Db DACS_T2b; collect DACS_T2b = DACS_ptrh.MS5607Tb(); 
-TM 1 Hz UINT DACS_Pa; collect DACS_Pa = DACS_ptrh.MS5607Pa();
-TM 1 Hz MS5607Db DACS_Pb; collect DACS_Pb = DACS_ptrh.MS5607Pb(); 
-TM 1 Hz PTRH_S DACS_PTRHS; collect DACS_PTRHS = DACS_ptrh.Status();
+TM 1 Hz UINT DACS_T1;
+TM 1 Hz UINT DACS_RH;
+TM 1 Hz UINT DACS_T2a;
+TM 1 Hz MS5607Db DACS_T2b;
+TM 1 Hz UINT DACS_Pa;
+TM 1 Hz MS5607Db DACS_Pb;
+TM 1 Hz PTRH_S DACS_PTRHS;
 
-TM 1 Hz UINT SPV_T1; collect SPV_T1 = SPV_ptrh.SHT21T();
-TM 1 Hz UINT SPV_RH; collect SPV_RH = SPV_ptrh.SHT21RH();
-TM 1 Hz UINT SPV_T2a; collect SPV_T2a = SPV_ptrh.MS5607Ta();
-TM 1 Hz MS5607Db SPV_T2b; collect SPV_T2b = SPV_ptrh.MS5607Tb(); 
-TM 1 Hz UINT SPV_Pa; collect SPV_Pa = SPV_ptrh.MS5607Pa();
-TM 1 Hz MS5607Db SPV_Pb; collect SPV_Pb = SPV_ptrh.MS5607Pb(); 
-TM 1 Hz PTRH_S SPV_PTRHS; collect SPV_PTRHS = SPV_ptrh.Status();
+Group DACS_ptrh ( DACS_T1, DACS_RH, DACS_T2a,
+    DACS_T2b, DACS_Pa, DACS_Pb, DACS_PTRHS ) {
+  DACS_ptrh.acquire();
+  DACS_T1 = DACS_ptrh.SHT21T();
+  DACS_RH = DACS_ptrh.SHT21RH();
+  DACS_T2a = DACS_ptrh.MS5607Ta();
+  DACS_T2b = DACS_ptrh.MS5607Tb();
+  DACS_Pa = DACS_ptrh.MS5607Pa();
+  DACS_Pb = DACS_ptrh.MS5607Pb();
+  DACS_PTRHS = DACS_ptrh.Status();
+}
+
+TM 1 Hz UINT SPV_T1;
+TM 1 Hz UINT SPV_RH;
+TM 1 Hz UINT SPV_T2a;
+TM 1 Hz MS5607Db SPV_T2b;
+TM 1 Hz UINT SPV_Pa;
+TM 1 Hz MS5607Db SPV_Pb;
+TM 1 Hz PTRH_S SPV_PTRHS;
+
+Group SPV_ptrh ( SPV_T1, SPV_RH, SPV_T2a,
+    SPV_T2b, SPV_Pa, SPV_Pb, SPV_PTRHS ) {
+  SPV_ptrh.acquire();
+  SPV_T1 = SPV_ptrh.SHT21T();
+  SPV_RH = SPV_ptrh.SHT21RH();
+  SPV_T2a = SPV_ptrh.MS5607Ta();
+  SPV_T2b = SPV_ptrh.MS5607Tb();
+  SPV_Pa = SPV_ptrh.MS5607Pa();
+  SPV_Pb = SPV_ptrh.MS5607Pb();
+  SPV_PTRHS = SPV_ptrh.Status();
+}
 
 TM typedef unsigned char SolStat_t { text "%3d"; }
 %{

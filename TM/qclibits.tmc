@@ -2,6 +2,7 @@
   const char *ok_fail_text[] = { "  ok", "FAIL" };
   const char *no_yes_text[]  = { " no", "yes" };
   const char *off_on_text[] = { "off", " on" };
+  const char *rw_text[] = { "--", "-W", "R-", "RW" };
   const char *qclimode_text[] = {
 	"   idle",
 	"program",
@@ -19,6 +20,9 @@ TM typedef int onebit_t { text "%1d"; }
 TM typedef int twobits_t { text "%02b"; }
 TM typedef int off_on_t { text "%3d" off_on_text[]; }
 TM typedef int qclimode_t { text "%7d" qclimode_text[]; }
+TM typedef int rw_t { text "%2d" rw_text[]; }
+TM typedef unsigned char fifodep_t { text "%3u"; }
+TM typedef unsigned char qclierr_t { text "%02x"; }
 
 no_yes_t QCLI_busy; invalidate QCLI_busy;
  { QCLI_busy = (QCLI_s & 0x8000) ? 1 : 0;
@@ -55,3 +59,20 @@ ok_fail_t QCLI_loc; invalidate QCLI_loc;
    validate QCLI_loc; }
 qclimode_t QCLI_mode; invalidate QCLI_mode;
  { QCLI_mode = QCLI_s & 0x7; validate QCLI_mode; }
+rw_t QCLI_rw; invalidate QCLI_rw;
+  { QCLI_rw = ((QCLI_CS & 0x4000) ? 2 : 0) +
+                ((QCLI_CS & 0x400) ? 1 : 0);
+    validate QCLI_rw;
+  }
+ok_fail_t QCLI_present; invalidate QCLI_present;
+  { QCLI_present = (QCLI_CS & 0x800) ? 0 : 1;
+    validate QCLI_present;
+  }
+fifodep_t QCLI_fifodep; invalidate QCLI_fifodep;
+  { QCLI_fifodep = QCLI_CS & 0xFF;
+    validate QCLI_fifodep;
+  }
+qclierr_t QCLI_err; invalidate QCLI_err;
+  { QCLI_err = ((QCLI_CS >> 8) & 0xBB) ^ 0x8;
+    validate QCLI_err;
+  }
