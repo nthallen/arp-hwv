@@ -5,13 +5,9 @@
   memo=/dev/huarp/$Experiment/memo
   echo "Running script interact" >$memo
 
-  opts="baud=115200 -ihflow -echoe -onlcr -ohflow -echoke -echoctl -imaxbel"
-  stty $opts </dev/ser2
-
-  echo "Programming QCLI Waveforms" >$memo
-  rm -f qclisprog.log
-  { qclisprog -wd /dev/ser2 $TMBINDIR/waves.out 2>&1
-  } >qclisprog.log
+# opts="baud=115200 -ihflow -echoe -onlcr -ohflow -echoke -echoctl -imaxbel"
+# stty $opts </dev/ser2
+  qclidprog -d0 -cwc $TMBINDIR/waves.out
 
   Launch dccc dccc -f $TMBINDIR/dccc.dccc
   Launch DG/cmd HWVcol
@@ -22,6 +18,6 @@
 # Launch - soldrv $TMBINDIR/B.sft
 # Launch - soldrv $TMBINDIR/C.sft
   Launch - sspdrv -b1 -hSSP -N `mlf_find SSP`
-  Launch - qclisd -h QCLI -d /dev/ser2
+  Launch - qclidacsd -h QCLI -d0
   Launch - HWValgo -v
 
