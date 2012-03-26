@@ -10,8 +10,8 @@ tm.dac
 HWVcoloui.c
 HWVcoloui.o
 HWVcol.o
-ptrh.o
-ptrh_col.o
+ptrhm.o
+ptrhm_col.o
 HWVcmd.cc
 HWVcmd.dat
 HWVsrvr.o
@@ -48,7 +48,7 @@ HWValgooui.o
 HWValgo.o
 doit.dep
 lydoit.dep
-hwvengextedf.oui
+hwvengextcdf.oui
 hwvengext.tmc
 hwvengext.cc
 hwvengextoui.c

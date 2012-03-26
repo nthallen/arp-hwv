@@ -1,6 +1,6 @@
-# Makefile Generated Fri Feb 24 14:20:47 EST 2012
+# Makefile Generated Thu Mar 22 14:58:24 EDT 2012
 MNC=HWV
-HOMEDIR=/net/hwvgse.arp.harvard.edu/home/hwv/src/TM
+HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
 SRC=ptrhm.h base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
 SRC+=T30K75KU.tmc T10K75KU.tmc ptrhm.cc ai_init.tmc ptrh_chk.tmc
@@ -8,7 +8,7 @@ SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrhm_col.cc idx64drv.cmd
 SRC+=dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 SRC+=waves.cmd qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc
 SRC+=digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
-SRC+=HWV.tma HWV.doit ly.doit A.sol B.sol C.sol hwveng.edf hwvraw.edf
+SRC+=HWV.tma HWV.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.edf
 SRC+=hwv.edf hhh.edf PT.edf
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF dccc.dccc idx64.idx64
@@ -21,7 +21,7 @@ OBJ+=lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc HWVdispnc.cc
 OBJ+=HWVdispncoui.c HWVdispncoui.o HWVdispnc.o lydisp.cc lydispoui.c
 OBJ+=lydispoui.o lydisp.o lydispnc.cc lydispncoui.c lydispncoui.o
 OBJ+=lydispnc.o HWValgoa.tmc HWValgo.cc HWValgooui.c HWValgooui.o
-OBJ+=HWValgo.o doit.dep lydoit.dep hwvengextedf.oui hwvengext.tmc
+OBJ+=HWValgo.o doit.dep lydoit.dep hwvengextcdf.oui hwvengext.tmc
 OBJ+=hwvengext.cc hwvengextoui.c hwvengextoui.o hwvengext.o
 OBJ+=hwvrawextedf.oui hwvrawext.tmc hwvrawext.cc hwvrawextoui.c
 OBJ+=hwvrawextoui.o hwvrawext.o hwvextedf.oui hwvext.tmc hwvext.cc
@@ -101,7 +101,7 @@ B.sft : B.sol
 C.sft : C.sol
 	solfmt -oC.sft  C.sol
 hwvengext : hwvengext.o ptrhm.o hwvengextoui.o
-	$(LINK.normCXX) hwvengext.o ptrhm.o hwvengextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(LINK.normCXX) hwvengext.o ptrhm.o hwvengextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) hwvengextoui.c
 hwvrawext : hwvrawext.o ptrhm.o hwvrawextoui.o
 	$(LINK.normCXX) hwvrawext.o ptrhm.o hwvrawextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
@@ -191,14 +191,14 @@ doit.dep : HWV.doit
 lydoit.dep : ly.doit
 	mkdoit3 -M -o lydoit  ly.doit
 -include lydoit.dep
-hwvengextedf.oui : hwveng.edf
-	$(EDF2OUI) hwveng.edf
-hwvengext.tmc : hwveng.edf
-	$(EDF2EXT) hwveng.edf
+hwvengextcdf.oui : hwveng.cdf
+	$(EDF2OUI) hwveng.cdf
+hwvengext.tmc : hwveng.cdf
+	$(EDF2EXT) hwveng.cdf
 hwvengext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc hwvengext.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc hwvengext.tmc
-hwvengextoui.c : hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) hwvengextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hwvengextoui.c : hwvengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hwvengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvengextoui.o : hwvengextoui.c
 hwvengext.o : hwvengext.cc
 hwvrawextedf.oui : hwvraw.edf

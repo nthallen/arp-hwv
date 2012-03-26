@@ -51,7 +51,7 @@ A.sft : A.sol
 B.sft : B.sol
 C.sft : C.sol
 
-hwvengext : ptrh_conv.tmc hwveng.edf
+hwvengext : ptrh_conv.tmc hwveng.cdf
 hwvrawext : ptrh_conv.tmc hwvraw.edf
 hwvext : hwv.edf
 hhhext : hhh.edf
