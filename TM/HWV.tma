@@ -52,70 +52,27 @@ State Record {
         depending on (h2o2failA) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
-  +480  > Set lab Flow bubbler Set Pt 0
-  +5    > Set lab Flow air Set Pt 2.66
-  +300  > Set lab Flow bubbler Set Pt 1
-  +5    > Set lab Flow air Set Pt 2.66
+  +1200  > Set lab Flow bubbler Set Pt 0
+  +5    > Set lab Flow air Set Pt 4
+  +300  > Set lab Flow bubbler Set Pt 0.5
+  +5    > Set lab Flow air Set Pt 4
+  +300  > Set lab Flow bubbler Set Pt 1 
+  +5    > Set lab Flow air Set Pt 4
+  +300  > Set lab Flow bubbler Set Pt 1.5
+  +5    > Set lab Flow air Set Pt 4
   +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 2.66
+  +5    > Set lab Flow air Set Pt 4
   +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 2.66
+  +5    > Set lab Flow air Set Pt 4
   +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 2.66
+  +5    > Set lab Flow air Set Pt 4
   +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 2.66
-  +300  > Set lab Flow bubbler Set Pt 1.0
-  +5    > Set lab Flow air Set Pt 2.66
-  +300  > Set lab Flow bubbler Set Pt 0
-  +5    > Set lab Flow air Set Pt 2.66
-#
-  +300  > Set lab Flow bubbler Set Pt 0
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 1
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 1.0
-  +5    > Set lab Flow air Set Pt 2
-  +300  > Set lab Flow bubbler Set Pt 0
-  +5    > Set lab Flow air Set Pt 2
-#
-  +300  > Set lab Flow bubbler Set Pt 0
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 1
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 1.0
-  +5    > Set lab Flow air Set Pt 3.32
-  +300  > Set lab Flow bubbler Set Pt 0
-  +5    > Set lab Flow air Set Pt 3.32
-#
-  +300  > Set lab Flow bubbler Set Pt 0
+  +5    > Set lab Flow air Set Pt 4
+  +300  > Set lab Flow bubbler Set Pt 1.5
   +5    > Set lab Flow air Set Pt 4
   +300  > Set lab Flow bubbler Set Pt 1
   +5    > Set lab Flow air Set Pt 4
-  +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 4
-  +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 4
-  +300  > Set lab Flow bubbler Set Pt 3
-  +5    > Set lab Flow air Set Pt 4
-  +300  > Set lab Flow bubbler Set Pt 2
-  +5    > Set lab Flow air Set Pt 4
-  +300  > Set lab Flow bubbler Set Pt 1.0
+  +300  > Set lab Flow bubbler Set Pt 0.5
   +5    > Set lab Flow air Set Pt 4
   +300  > Set lab Flow bubbler Set Pt 0
   +5    > Set lab Flow air Set Pt 4

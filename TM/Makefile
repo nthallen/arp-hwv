@@ -1,6 +1,6 @@
-# Makefile Generated Thu Mar 22 14:58:24 EDT 2012
+# Makefile Generated Mon Mar 26 15:29:58 EDT 2012
 MNC=HWV
-HOMEDIR=/home/hwv/src/TM
+HOMEDIR=/net/hwvgse.arp.harvard.edu/home/hwv/src/TM
 SPECFILE=HWV.spec
 SRC=ptrhm.h base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc
 SRC+=T30K75KU.tmc T10K75KU.tmc ptrhm.cc ai_init.tmc ptrh_chk.tmc
@@ -8,8 +8,8 @@ SRC+=cnt_init.tmc idx64col.tmc sspcol.tmc ptrhm_col.cc idx64drv.cmd
 SRC+=dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 SRC+=waves.cmd qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc
 SRC+=digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
-SRC+=HWV.tma HWV.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.edf
-SRC+=hwv.edf hhh.edf PT.edf
+SRC+=HWV.tma HWV.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.cdf
+SRC+=hwv.cdf hhh.cdf PT.cdf
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -23,10 +23,10 @@ OBJ+=lydispoui.o lydisp.o lydispnc.cc lydispncoui.c lydispncoui.o
 OBJ+=lydispnc.o HWValgoa.tmc HWValgo.cc HWValgooui.c HWValgooui.o
 OBJ+=HWValgo.o doit.dep lydoit.dep hwvengextcdf.oui hwvengext.tmc
 OBJ+=hwvengext.cc hwvengextoui.c hwvengextoui.o hwvengext.o
-OBJ+=hwvrawextedf.oui hwvrawext.tmc hwvrawext.cc hwvrawextoui.c
-OBJ+=hwvrawextoui.o hwvrawext.o hwvextedf.oui hwvext.tmc hwvext.cc
-OBJ+=hwvextoui.c hwvextoui.o hwvext.o hhhextedf.oui hhhext.tmc
-OBJ+=hhhext.cc hhhextoui.c hhhextoui.o hhhext.o PTextedf.oui
+OBJ+=hwvrawextcdf.oui hwvrawext.tmc hwvrawext.cc hwvrawextoui.c
+OBJ+=hwvrawextoui.o hwvrawext.o hwvextcdf.oui hwvext.tmc hwvext.cc
+OBJ+=hwvextoui.c hwvextoui.o hwvext.o hhhextcdf.oui hhhext.tmc
+OBJ+=hhhext.cc hhhextoui.c hhhextoui.o hhhext.o PTextcdf.oui
 OBJ+=PText.tmc PText.cc PTextoui.c PTextoui.o PText.o HWVclt.o
 OBJ+=HWVcltoui.c HWVcltoui.o HWVcltnc.o HWVcltncoui.c HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc lydisp lydispnc HWValgo doit
@@ -104,16 +104,16 @@ hwvengext : hwvengext.o ptrhm.o hwvengextoui.o
 	$(LINK.normCXX) hwvengext.o ptrhm.o hwvengextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) hwvengextoui.c
 hwvrawext : hwvrawext.o ptrhm.o hwvrawextoui.o
-	$(LINK.normCXX) hwvrawext.o ptrhm.o hwvrawextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(LINK.normCXX) hwvrawext.o ptrhm.o hwvrawextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) hwvrawextoui.c
 hwvext : hwvext.o ptrhm.o hwvextoui.o
-	$(LINK.normCXX) hwvext.o ptrhm.o hwvextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(LINK.normCXX) hwvext.o ptrhm.o hwvextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) hwvextoui.c
 hhhext : hhhext.o ptrhm.o hhhextoui.o
-	$(LINK.normCXX) hhhext.o ptrhm.o hhhextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(LINK.normCXX) hhhext.o ptrhm.o hhhextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) hhhextoui.c
 PText : PText.o ptrhm.o PTextoui.o
-	$(LINK.normCXX) PText.o ptrhm.o PTextoui.o -ltmpp -ltm -lssp -lmem -lm -lnort
+	$(LINK.normCXX) PText.o ptrhm.o PTextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) PTextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
@@ -201,44 +201,44 @@ hwvengextoui.c : hwvengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvengextoui.o : hwvengextoui.c
 hwvengext.o : hwvengext.cc
-hwvrawextedf.oui : hwvraw.edf
-	$(EDF2OUI) hwvraw.edf
-hwvrawext.tmc : hwvraw.edf
-	$(EDF2EXT) hwvraw.edf
+hwvrawextcdf.oui : hwvraw.cdf
+	$(EDF2OUI) hwvraw.cdf
+hwvrawext.tmc : hwvraw.cdf
+	$(EDF2EXT) hwvraw.cdf
 hwvrawext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc hwvrawext.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc ptrh_conv.tmc hwvrawext.tmc
-hwvrawextoui.c : hwvrawextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) hwvrawextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hwvrawextoui.c : hwvrawextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hwvrawextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvrawextoui.o : hwvrawextoui.c
 hwvrawext.o : hwvrawext.cc
-hwvextedf.oui : hwv.edf
-	$(EDF2OUI) hwv.edf
-hwvext.tmc : hwv.edf
-	$(EDF2EXT) hwv.edf
+hwvextcdf.oui : hwv.cdf
+	$(EDF2OUI) hwv.cdf
+hwvext.tmc : hwv.cdf
+	$(EDF2EXT) hwv.cdf
 hwvext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvext.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hwvext.tmc
-hwvextoui.c : hwvextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) hwvextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hwvextoui.c : hwvextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hwvextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvextoui.o : hwvextoui.c
 hwvext.o : hwvext.cc
-hhhextedf.oui : hhh.edf
-	$(EDF2OUI) hhh.edf
-hhhext.tmc : hhh.edf
-	$(EDF2EXT) hhh.edf
+hhhextcdf.oui : hhh.cdf
+	$(EDF2OUI) hhh.cdf
+hhhext.tmc : hhh.cdf
+	$(EDF2EXT) hhh.cdf
 hhhext.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hhhext.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc hhhext.tmc
-hhhextoui.c : hhhextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) hhhextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hhhextoui.c : hhhextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) hhhextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hhhextoui.o : hhhextoui.c
 hhhext.o : hhhext.cc
-PTextedf.oui : PT.edf
-	$(EDF2OUI) PT.edf
-PText.tmc : PT.edf
-	$(EDF2EXT) PT.edf
+PTextcdf.oui : PT.cdf
+	$(EDF2OUI) PT.cdf
+PText.tmc : PT.cdf
+	$(EDF2EXT) PT.cdf
 PText.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc PText.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc PText.tmc
-PTextoui.c : PTextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) PTextedf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+PTextoui.c : PTextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) PTextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 PTextoui.o : PTextoui.c
 PText.o : PText.cc
 HWVclt.o : HWVcmd.cc

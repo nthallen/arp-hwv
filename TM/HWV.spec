@@ -52,10 +52,10 @@ B.sft : B.sol
 C.sft : C.sol
 
 hwvengext : ptrh_conv.tmc hwveng.cdf
-hwvrawext : ptrh_conv.tmc hwvraw.edf
-hwvext : hwv.edf
-hhhext : hhh.edf
-PText : PT.edf
+hwvrawext : ptrh_conv.tmc hwvraw.cdf
+hwvext : hwv.cdf
+hhhext : hhh.cdf
+PText : PT.cdf
 %%
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g
