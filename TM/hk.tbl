@@ -21,6 +21,19 @@ Throttle {
   Pot:  (TVPos,7)  (TVKill,5);
 }
 
+DataSys {
+  HBox { +-; Title: "Data System"; -+ };
+  HBox{
+    {
+      CPU: (CPU_Pct,3) %;
+      Disk: (Disk,5) %;
+    }; |; {
+      CPU_T: (vl_cpuT,4) C;
+      Brd_T: (vl_bdT,4) C;
+    }
+  }
+}
+
 SD {
   HBox { +-; Title: "Secondary Duct"; -+ };
   SDPDP: (SDPDP,5) V;
@@ -105,7 +118,8 @@ Software {
     {
       [Inlet];
       [PIF];
-      [SD]
+      [SD];
+      [DataSys]
     }; |; {
       HBox {
 	{ [D1]; [PDACS]; [Software] }; |;

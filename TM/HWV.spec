@@ -8,6 +8,9 @@ tmcbase = waves.tmc
 tmcbase = T30K75KU.tmc
 tmcbase = T10K75KU.tmc
 tmcbase = ptrhm.cc
+tmcbase = vl_temp.tmc
+tmcbase = /usr/local/share/huarp/cpu_usage.tmc
+tmcbase = /usr/local/share/huarp/tmdf.tmc
 
 cmdbase = /usr/local/share/huarp/root.cmd
 cmdbase = /usr/local/share/huarp/getcon.cmd
@@ -35,7 +38,7 @@ OBJ = address.h
 
 TGTDIR = $(TGTNODE)/home/hwv
 
-HWVcol : ai_init.tmc /usr/local/share/huarp/DACS_ID.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc ptrhm_col.cc -lsubbus
+HWVcol : ai_init.tmc /usr/local/share/huarp/DACS_ID.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc vl_temp_col.tmc ptrhm_col.cc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc -lsubbus
 
 HWVsrvr : -lsubbus
 
