@@ -1,4 +1,5 @@
 csv hwvraw_1 119
+  0 Thwvraw_1
   1 AIStat %6.0lf 1*
   2 AModP %6.0lf 1*
   3 ARFBW %6.0lf 1*
@@ -118,7 +119,7 @@ csv hwvraw_1 119
   117 SWStat %6.0lf 1*
   118 TVPos %6.0lf 1*
 csv hwvraw_8 6
-  0 Time  %.3lf
+  0 Thwvraw_8 %.3lf
   1 HHH1P %6.0lf 1*
   2 HHH1T %6.0lf 1*
   3 HHH2P %6.0lf 1*
