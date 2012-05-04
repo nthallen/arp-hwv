@@ -1,0 +1,258 @@
+HEADER Harvard Water Vapor
+MNEMONIC hwv
+HOMEDIR HWV_Data_Dir
+ROWS 18
+  1 A_LMT LampA Temp LMT
+  1 AModP LampA Pres
+  1 ARFBW LampA RF BW
+  1 ARFFW LampA RF FW
+  1 A_IRV LampA IRV
+  1 LMA_I LampA Current
+  1 A_RgT GasDeck Temp
+  1 AirHP GasDeck Pres
+  1 AirLP GasDeck Pres
+  1 B_LMT LampB Temp
+  1 BModP LampB Pres
+  1 BRFBW LampB RF BW
+  1 BRFFW LampB RF FW
+  1 B_IRV LampB IRV
+  1 B_RFT LampB Temp
+  1 CModP LampC Pres
+  1 CRFBW LampC RF BW
+  1 CRFFW LampC RF FW
+  1 C_IRV LampC IRV
+  1 C_LMT LampC Temp
+  1 C_RFT LampC Temp
+  1 ChpAT LampA Temp
+  1 ChpBT LampB Temp
+  1 ChpCT LampC Temp
+  1 LMA_I Current Lamps LampA
+  1 LMB_I Current Lamps LampB
+  1 LMC_I Current Lamps LampC
+  1 LCmd1_I Current Lab Lab1
+  1 LCmd2_I Current Lab Lab2
+  1 MZ1_I Current MZ MHZ1
+  1 MZ2_I Current MZ MHZ2
+  1 MZ3_I Current MZ MHZ3
+  1 MZ4_I Current MZ MHZ4
+  1 AirA_I Current Air AirA
+  1 AirB_I Current Air AirB
+  1 Cmd_15_I Current Spare Cmd_11
+  1 Cmd_0_DS:DS822:0 Commands DS
+  1 Cmd_1_DS:DS822:1 Commands DS
+  1 Cmd_2_DS:DS822:2 Commands DS
+  1 Cmd_3_DS:DS822:3 Commands DS
+  1 Cmd_4_DS:DS822:4 Commands DS
+  1 Cmd_5_DS:DS822:5 Commands DS
+  1 Cmd_6_DS:DS822:6 Commands DS
+  1 Cmd_7_DS:DS822:7 Commands DS
+  1 Cmd_8_DS:DS824:0 Commands DS
+  1 Cmd_9_DS:DS824:1 Commands DS
+  1 Cmd_10_DS:DS824:2 Commands DS
+  1 Cmd_11_DS:DS824:3 Commands DS
+  1 Cmd_12_DS:DS824:4 Commands DS
+  1 Cmd_13_DS:DS824:5 Commands DS
+  1 Cmd_14_DS:DS824:6 Commands DS
+  1 Cmd_15_DS:DS824:7 Commands DS
+  1 Cmd_0_S:DS844:0 Commands S
+  1 Cmd_1_S:DS844:1 Commands S
+  1 Cmd_2_S:DS844:2 Commands S
+  1 Cmd_3_S:DS844:3 Commands S
+  1 Cmd_4_S:DS844:4 Commands S
+  1 Cmd_5_S:DS844:5 Commands S
+  1 Cmd_6_S:DS844:6 Commands S
+  1 Cmd_7_S:DS844:7 Commands S
+  1 Cmd_8_S:DS844:8 Commands S
+  1 Cmd_9_S:DS844:9 Commands S
+  1 Cmd_10_S:DS844:10 Commands S
+  1 Cmd_11_S:DS844:11 Commands S
+  1 Cmd_12_S:DS844:12 Commands S
+  1 Cmd_13_S:DS844:13 Commands S
+  1 Cmd_14_S:DS844:14 Commands S
+  1 Cmd_15_S:DS844:15 Commands S
+  1 IOSW0:DS853:4 Power Switches
+  1 IOSW1:DS853:5 Power Switches
+  1 Flight:DS853:6 Power Switches
+  1 SpCPSw:DS853:7 Power Switches
+  1 FAA_T LampA Temp
+  1 FAB_T LampB Temp
+  1 FAC_T LampC Temp
+  8 HHH1P HHHPT P
+  8 HHH1T HHHPT T
+  8 HHH2P HHHPT P
+  8 HHH2T HHHPT T
+  8 HHHDP HHHPT P
+  1 HHHPT HHHPT T
+  1 HPV1T HHHPT T
+  1 HPV2T HHHPT T
+  1 HPV_P HHHPT P
+  1 HPV_RH HHHPT RH
+  1 HtASt LampA SetPt
+  1 HtBSt LampB SetPt
+  1 HtCSt LampC SetPt
+  1 IWH1T Flow T
+  1 IWH2T Flow T
+
+  1 LFBSt Lab SetPt
+  1 LFAirSt Lab SetPt
+  1 L1Flw Lab Flow
+  1 L2Flw Lab Flow
+  1 L3Flw Lab Flow
+  1 L4Flw Lab Flow
+  1 LFB1P Lab P
+  1 LFB2P Lab P
+  1 LFB_T Lab T
+  1 LFT_P Lab P
+  
+  1 LTE1R4T HHHhk LTE
+  1 Las_I   HHHhk I
+  1 MM_1T   MZ T 1T
+  1 MM_2T   MZ T 2T
+  1 MM_3T   MZ T 3T
+  1 MM_4T   MZ T 4T
+  1 MZ1CT   MZ CT 1T
+  1 MZ1St   MZ Set 1
+  1 MZ2CT   MZ CT 2T
+  1 MZ2St   MZ Set 2
+  1 MZ3CT   MZ CT 3T
+  1 MZ3St   MZ Set 3
+  1 MZ4CT   MZ CT 4T
+  1 MZ4St   MZ Set 4
+  1 PDACS_1T Power Temp
+  1 PDACS_2T Power Temp
+  1 PDACS_3T Power Temp
+  1 PDACS_4T Power Temp
+  1 PDACS_5T Power Temp
+  1 PIB1T Flow PIB 1
+  1 PIB2T Flow PIB 2
+  1 PIB3T Flow PIB 3
+  1 PIB4T Flow PIB 4
+  1 PIB5T Flow PIB 5
+  1 PIB6T Flow PIB 6
+  1 PIB7T Flow PIB 7
+  1 PIF1T Flow PIF 1
+  1 PIF2T Flow PIF 2
+  1 PIF3T Flow PIF 3
+  1 PIF4T Flow PIF 4
+  1 PIF5T Flow PIF 5
+  1 PIF6T Flow PIF 6
+  1 PIF7T Flow PIF 7
+  1 PampT HHHhk T
+  1 QCLI_Stale QCLI Stale
+  1 QCLI_Wave QCLI Wave
+  1 Busy:QCLI_s:15 QCLI QCLI_s
+  1 cksum:QCLI_s:14 QCLI QCLI_s
+  1 cmderr:QCLI_s:13 QCLI QCLI_s
+  1 laser:QCLI_s:12 QCLI QCLI_s
+  1 InvCmd:QCLI_s:11 QCLI QCLI_s
+  1 ready:QCLI_s:9 QCLI QCLI_s
+  1 waveerr:QCLI_s:8 QCLI QCLI_s
+  1 dot:QCLI_s:5 QCLI QCLI_s
+  1 lot:QCLI_s:4 QCLI QCLI_s
+  1 loc:QCLI_s:3 QCLI QCLI_s
+  1 reset:DS824:8 QCLI QCLI_s
+  1 RFASt LampA SetPt
+  1 RFBSt LampB SetPt
+  1 RFCSt LampB SetPt
+  1 SDPDP SDP DP
+  1 SDP_T SDP T
+  1 SD_HP SDP P
+  1 SD_LP SDP P
+  8 UVB1_Counts SDP P
+  1 SFB1T Flow SFB 1T
+  1 SFB2T Flow SFB 2T
+  1 SFB3T Flow SFB 3T
+  1 SPV1T SPV T
+  1 SPV2T SPV T
+  1 CAOVF1:SSP_Flags:0 SSP OVF
+  1 CAOVF2:SSP_Flags:1 SSP OVF
+  1 CAOVF3:SSP_Flags:2 SSP OVF
+  1 PAOVF1:SSP_Flags:3 SSP OVF
+  1 PAOVF2:SSP_Flags:4 SSP OVF
+  1 PAOVF3:SSP_Flags:5 SSP OVF
+  1 ADOVF1:SSP_Flags:6 SSP OVF
+  1 ADOVF2:SSP_Flags:7 SSP OVF
+  1 ADOVF3:SSP_Flags:8 SSP OVF
+  1 SSP_Num SSP Num
+  1 SSP_SN SSP SN
+  1 SSP_Stale SSP Stale
+  1 SSP_Status SSP Status
+  1 SSP_TS SSP TSkip
+  1 SSP_T_FPGA SSP T
+  1 SSP_T_HtSink SSP T
+  1 SWStat General SWStat
+  1 IOSwS  General IOSwS
+  1 N0:AIStat:0 General AIStat
+  1 N1:AIStat:1 General AIStat
+  1 N0S:AIStat:2 General AIStat
+  1 N1S:AIStat:3 General AIStat
+  1 B4:AIStat:4 General AIStat
+  1 B5:AIStat:5 General AIStat
+  1 B6:AIStat:6 General AIStat
+  1 B7:AIStat:7 General AIStat
+  1 B8:AIStat:8 General AIStat
+  1 B9:AIStat:9 General AIStat
+  1 B10:AIStat:10 General AIStat
+  1 B11:AIStat:11 General AIStat
+
+  1 TVPos Throttle Pot
+  4 C:TVStat:7 Throttle Bits
+  4 Z:TVStat:6 Throttle Bits
+  4 B:TVStat:5 Throttle Bits
+  4 A:TVStat:4 Throttle Bits
+  4 R:TVStat:3 Throttle Bits
+  4 D:TVStat:2 Throttle Bits
+  4 O:TVStat:1 Throttle Bits
+  4 I:TVStat:0 Throttle Bits
+  4 TVStep Throttle Step
+  4 Scan:IXStt:0 Throttle Bits
+  
+  8 Resynch:Ct0Stat:15 CtStat Ct0
+  8 L2Stat:Ct0Stat:14 CtStat Ct0
+  8 Ovf16_4:Ct0Stat:7 CtStat Ct0
+  8 Ovf16_3:Ct0Stat:6 CtStat Ct0
+  8 Ovf16_2:Ct0Stat:5 CtStat Ct0
+  8 Ovf16_1:Ct0Stat:4 CtStat Ct0
+  8 Ovf20_4:Ct0Stat:3 CtStat Ct0
+  8 Ovf20_3:Ct0Stat:2 CtStat Ct0
+  8 Ovf20_2:Ct0Stat:1 CtStat Ct0
+  8 Ovf20_1:Ct0Stat:0 CtStat Ct0
+  8 Resynch:Ct1Stat:15 CtStat Ct1
+  8 L2Stat:Ct1Stat:14 CtStat Ct1
+  8 Ovf16_4:Ct1Stat:7 CtStat Ct1
+  8 Ovf16_3:Ct1Stat:6 CtStat Ct1
+  8 Ovf16_2:Ct1Stat:5 CtStat Ct1
+  8 Ovf16_1:Ct1Stat:4 CtStat Ct1
+  8 Ovf20_4:Ct1Stat:3 CtStat Ct1
+  8 Ovf20_3:Ct1Stat:2 CtStat Ct1
+  8 Ovf20_2:Ct1Stat:1 CtStat Ct1
+  8 Ovf20_1:Ct1Stat:0 CtStat Ct1
+  8 Resynch:Ct2Stat:15 CtStat Ct2
+  8 L2Stat:Ct2Stat:14 CtStat Ct2
+  8 Ovf16_4:Ct2Stat:7 CtStat Ct2
+  8 Ovf16_3:Ct2Stat:6 CtStat Ct2
+  8 Ovf16_2:Ct2Stat:5 CtStat Ct2
+  8 Ovf16_1:Ct2Stat:4 CtStat Ct2
+  8 Ovf20_4:Ct2Stat:3 CtStat Ct2
+  8 Ovf20_3:Ct2Stat:2 CtStat Ct2
+  8 Ovf20_2:Ct2Stat:1 CtStat Ct2
+  8 Ovf20_1:Ct2Stat:0 CtStat Ct2
+  8 PMTA_Counts Counts A
+  8 PMTB_Counts Counts B
+  8 PMTC_Counts Counts C
+  8 UVA1_Counts Counts A
+  8 UVA2_Counts Counts A
+  8 UVB1_Counts Counts B
+  8 UVB2_Counts Counts B
+  8 UVC1_Counts Counts C
+  8 UVC2_Counts Counts C
+  1 DACS_P   DACS P
+  1 DACS_T1C DACS T
+  1 DACS_T2C DACS T
+  1 DACS_RHC DACS RH
+  1 DACS_PTRHS DACS Status
+  1 SPV_P    SPV P
+  1 SPV_T1C  SPV T
+  1 SPV_T2C  SPV T
+  1 SPV_RHC  SPV RH
+  1 SPV_PTRHS SPV Status
