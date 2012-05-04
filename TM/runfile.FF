@@ -12,6 +12,7 @@
   Launch dccc dccc -f $TMBINDIR/dccc.dccc
   Launch DG/cmd HWVcol
   Launch cmd/server HWVsrvr
+  Launch - tmdf
   Launch - lgr -N `mlf_find LOG`
   Launch - idx64 `cat $TMBINDIR/idx64.idx64`
   Launch - soldrv $TMBINDIR/A.sft
