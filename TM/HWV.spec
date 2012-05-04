@@ -64,6 +64,8 @@ COLFLAGS=-Haddress.h
 CXXFLAGS=-g
 address.h : HWVcol.cc
 HWVsrvr.o : address.h
+hwveng.cdf : genui.txt
+	genui -d ../eng -c genui.txt
 waves.cmd waves.out waves.tmc waves.m : waves.qcli
 	qclicomp -o waves.out -c waves.cmd -d waves.tmc \
 	  -v waves.log -m waves.m waves.qcli || \

@@ -1,4 +1,4 @@
-# Makefile Generated Mon Mar 26 16:10:24 EDT 2012
+# Makefile Generated Fri May 04 15:14:14 EDT 2012
 MNC=HWV
 HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
@@ -51,6 +51,9 @@ CMDBASE+=/usr/local/share/huarp/idx64.cmd
 CMDBASE+=/usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd
 CMDBASE+=qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd swstat.cmd
 CMDBASE+=waves.cmd
+COLBASE=
+SWSBASE=
+QCLIBASE=
 RCS=$(SRC) $(TOOL) $(SCRIPT)
 SOURCE=$(RCS) $(NONRCS)
 OBJECT=$(OBJ) *.err
@@ -59,11 +62,11 @@ DSTRB=$(TGT) $(DISTRIB) $(SCRIPT)
 TGTDIR= $(TGTNODE)/home/hwv
 include /usr/local/share/huarp/appgen.mk
 
-all : Makefile $(TGT)
+all : Makefile $(TGT) .cvsignore
 Makefile : HWV.spec
 	appgen HWV.spec
 VERSION=`cat VERSION`
-extdistribution : $(DSTRB) $(SRCDIST)
+extdistribution : $(DSTRB) $(SRCDIST) VERSION
 	@[ -d $(TGTDIR)/bin ] || mkdir $(TGTDIR)/bin
 	@[ -d $(TGTDIR)/bin/$(VERSION) ] || mkdir $(TGTDIR)/bin/$(VERSION)
 	@[ -d  $(TGTDIR)/bin/$(VERSION)/Base ] || mkdir $(TGTDIR)/bin/$(VERSION)/Base
@@ -141,13 +144,9 @@ HWVsrvroui.c : $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OU
 	$(OUI) $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 HWVsrvroui.o : HWVsrvroui.c
 HWVtbl.tmc : HWV.tbl
-	$(TABLE) HWV.tbl
 lyalphatbl.tmc : lyalpha.tbl
-	$(TABLE) lyalpha.tbl
 hktbl.tmc : hk.tbl
-	$(TABLE) hk.tbl
 labtbl.tmc : lab.tbl
-	$(TABLE) lab.tbl
 HWVdisp.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc
 HWVdispoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -155,13 +154,9 @@ HWVdispoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispoui.o : HWVdispoui.c
 HWVdisp.o : HWVdisp.cc
 HWVtblnc.tmc : HWV.tbl
-	$(NCTABLE) HWV.tbl
 lyalphatblnc.tmc : lyalpha.tbl
-	$(NCTABLE) lyalpha.tbl
 hktblnc.tmc : hk.tbl
-	$(NCTABLE) hk.tbl
 labtblnc.tmc : lab.tbl
-	$(NCTABLE) lab.tbl
 HWVdispnc.cc : base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
 	$(TMC) base.tmc idx64.tmc swstat.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
 HWVdispncoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -260,12 +255,14 @@ tidy :
 	rm -f $(OBJECT)
 clean : tidy
 	rm -f $(TARGET)
-.cvsignore :
-	@for i in Makefile '.B4*' $(OBJECT) $(TARGET); do echo "$$i"; done >.cvsignore
+.cvsignore : Makefile
+	@for i in $(OBJECT) $(TARGET); do echo "$$i"; done >.cvsignore
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g
 address.h : HWVcol.cc
 HWVsrvr.o : address.h
+hwveng.cdf : genui.txt
+	genui -d ../eng -c genui.txt
 waves.cmd waves.out waves.tmc waves.m : waves.qcli
 	qclicomp -o waves.out -c waves.cmd -d waves.tmc \
 	  -v waves.log -m waves.m waves.qcli || \

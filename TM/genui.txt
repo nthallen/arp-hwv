@@ -26,6 +26,15 @@ ROWS 18
   1 ChpAT LampA Temp
   1 ChpBT LampB Temp
   1 ChpCT LampC Temp
+  1 LampAS:DS844:7 LampA Status S
+  1 LampADS:DS822:7 LampA Status DS
+  1 ChopADS:DS824:9 LampA Status Chop
+  1 LampBS:DS844:0 LampB Status S
+  1 LampBDS:DS822:0 LampB Status DS
+  1 ChopBDS:DS824:10 LampB Status Chop
+  1 LampCS:DS844:2 LampC Status S
+  1 LampCDS:DS822:2 LampC Status DS
+  1 ChopCDS:DS824:11 LampC Status Chop
   1 LMA_I Current Lamps LampA
   1 LMB_I Current Lamps LampB
   1 LMC_I Current Lamps LampC
@@ -38,38 +47,32 @@ ROWS 18
   1 AirA_I Current Air AirA
   1 AirB_I Current Air AirB
   1 Cmd_15_I Current Spare Cmd_11
-  1 Cmd_0_DS:DS822:0 Commands DS
-  1 Cmd_1_DS:DS822:1 Commands DS
-  1 Cmd_2_DS:DS822:2 Commands DS
-  1 Cmd_3_DS:DS822:3 Commands DS
-  1 Cmd_4_DS:DS822:4 Commands DS
-  1 Cmd_5_DS:DS822:5 Commands DS
-  1 Cmd_6_DS:DS822:6 Commands DS
-  1 Cmd_7_DS:DS822:7 Commands DS
-  1 Cmd_8_DS:DS824:0 Commands DS
-  1 Cmd_9_DS:DS824:1 Commands DS
-  1 Cmd_10_DS:DS824:2 Commands DS
-  1 Cmd_11_DS:DS824:3 Commands DS
-  1 Cmd_12_DS:DS824:4 Commands DS
-  1 Cmd_13_DS:DS824:5 Commands DS
-  1 Cmd_14_DS:DS824:6 Commands DS
-  1 Cmd_15_DS:DS824:7 Commands DS
-  1 Cmd_0_S:DS844:0 Commands S
-  1 Cmd_1_S:DS844:1 Commands S
-  1 Cmd_2_S:DS844:2 Commands S
-  1 Cmd_3_S:DS844:3 Commands S
-  1 Cmd_4_S:DS844:4 Commands S
-  1 Cmd_5_S:DS844:5 Commands S
-  1 Cmd_6_S:DS844:6 Commands S
-  1 Cmd_7_S:DS844:7 Commands S
-  1 Cmd_8_S:DS844:8 Commands S
-  1 Cmd_9_S:DS844:9 Commands S
-  1 Cmd_10_S:DS844:10 Commands S
-  1 Cmd_11_S:DS844:11 Commands S
-  1 Cmd_12_S:DS844:12 Commands S
-  1 Cmd_13_S:DS844:13 Commands S
-  1 Cmd_14_S:DS844:14 Commands S
-  1 Cmd_15_S:DS844:15 Commands S
+  1 Cmd1DS:DS822:1 Commands DS
+  1 Cmd3DS:DS822:3 Commands DS
+  1 Cmd4DS:DS822:4 Commands DS
+  1 Cmd5DS:DS822:5 Commands DS
+  1 MZ1DS:DS822:6 Commands DS
+  1 MZ2DS:DS822:8 Commands DS
+  1 Cmd9DS:DS822:9 Commands DS
+  1 MZ3DS:DS822:10 Commands DS
+  1 MZ4DS:DS822:11 Commands DS
+  1 Cmd12DS:DS822:12 Commands DS
+  1 Cmd13DS:DS822:13 Commands DS
+  1 Cmd14DS:DS822:14 Commands DS
+  1 Cmd15DS:DS822:15 Commands DS
+  1 Cmd1S:DS844:1 Commands S
+  1 Cmd3S:DS844:3 Commands S
+  1 Cmd4S:DS844:4 Commands S
+  1 Cmd5S:DS844:5 Commands S
+  1 MZ1S:DS844:6 Commands S
+  1 MZ2S:DS844:8 Commands S
+  1 Cmd9S:DS844:9 Commands S
+  1 MZ3S:DS844:10 Commands S
+  1 MZ4S:DS844:11 Commands S
+  1 Cmd12S:DS844:12 Commands S
+  1 Cmd13S:DS844:13 Commands S
+  1 Cmd14S:DS844:14 Commands S
+  1 Cmd15S:DS844:15 Commands S
   1 IOSW0:DS853:4 Power Switches
   1 IOSW1:DS853:5 Power Switches
   1 Flight:DS853:6 Power Switches
@@ -140,17 +143,18 @@ ROWS 18
   1 PampT HHHhk T
   1 QCLI_Stale QCLI Stale
   1 QCLI_Wave QCLI Wave
-  1 Busy:QCLI_s:15 QCLI QCLI_s
-  1 cksum:QCLI_s:14 QCLI QCLI_s
-  1 cmderr:QCLI_s:13 QCLI QCLI_s
-  1 laser:QCLI_s:12 QCLI QCLI_s
-  1 InvCmd:QCLI_s:11 QCLI QCLI_s
-  1 ready:QCLI_s:9 QCLI QCLI_s
-  1 waveerr:QCLI_s:8 QCLI QCLI_s
-  1 dot:QCLI_s:5 QCLI QCLI_s
-  1 lot:QCLI_s:4 QCLI QCLI_s
-  1 loc:QCLI_s:3 QCLI QCLI_s
-  1 reset:DS824:8 QCLI QCLI_s
+  1 QCLI_busy:QCLI_s:15 QCLI QCLI_s busy
+  1 QCLI_cksum:QCLI_s:14 QCLI QCLI_s cksum
+  1 QCLI_cmderr:QCLI_s:13 QCLI QCLI_s cmderr
+  1 QCLi_laser:QCLI_s:12 QCLI QCLI_s laser
+  1 QCLI_cordte:QCLI_s:11 QCLI QCLI_s InvCmd
+  1 QCLI_ready:QCLI_s:9 QCLI QCLI_s ready
+  1 QCLI_waveerr:QCLI_s:8 QCLI QCLI_s waveerr
+  1 QCLI_dot:QCLI_s:5 QCLI QCLI_s dot
+  1 QCLI_lot:QCLI_s:4 QCLI QCLI_s lot
+  1 QCLI_loc:QCLI_s:3 QCLI QCLI_s loc
+  1 QCLI_present:QCLI_CS:11 QCLI QCLI_s present
+  1 Cmd24DS:DS824:8 QCLI QCLI_s reset
   1 RFASt LampA SetPt
   1 RFBSt LampB SetPt
   1 RFCSt LampB SetPt
@@ -251,8 +255,17 @@ ROWS 18
   1 DACS_T2C DACS T
   1 DACS_RHC DACS RH
   1 DACS_PTRHS DACS Status
+  1 CPU_Pct  DACS CPU
+  1 Disk     DACS CPU 
+  1 vl_bdT   DACS T
+  1 vl_cpuT  DACS T
+
   1 SPV_P    SPV P
   1 SPV_T1C  SPV T
   1 SPV_T2C  SPV T
   1 SPV_RHC  SPV RH
   1 SPV_PTRHS SPV Status
+
+  1 SolStA SolSt A
+  1 SolStB SolSt B
+  1 SolStC SolSt C
