@@ -1,11 +1,13 @@
 #! /bin/bash
 flt=''
+gse=hwvgse
 for run in $*; do
   if [ $run = "-f" ]; then
     flt=F
   else
     echo $run
     [ -d $run$flt ] || mkdir $run$flt
-    scp hwvgse:/home/hwv/anal/$run/*.mat $run$flt
+    scp $gse:/home/hwv/anal/$run/*.csv $run$flt
+    [ -n "$flt" ] && scp $gse:/home/hwv/raw/flight/$run/HWV.log $run$flt/HWV.log
   fi
 done
