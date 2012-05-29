@@ -1,0 +1,24 @@
+SW_Variable: SWStat SW Status
+  SWS_TAKEOFF 1 Altitude Takeoff:
+    depending on (ON_GROUND) using_swp = 1; break;
+  SWS_LAND 4 Altitude Land:
+    depending on (OFF_GROUND) using_swp = SWStat; break;
+
+  SWS_DFB_START 10 Laser Start:
+    Validate DFB_Start; break;
+  SWS_DFB_STOP  11 Laser Stop:
+    Validate DFB_Stop; break;
+  SWS_DFB_HHH   12 Laser Select HHH and Start:
+    Validate DFB_HHH; break;
+
+  SWS_H2O_ENABLE 20 Lamp Enable:
+    H2O2_Lamp_Enable = 1;
+    depending on (h2o2shutOffA) Validate h2o2initA;
+    break;
+  SWS_H2O_DISABLE 21 Lamp Disable:
+    H2O2_Lamp_Enable = 0; break;
+
+  SWS_TIME_WARP 253 Time Warp: break;
+  SWS_READFILE 254 ReadFile: Validate ReadFile; break;
+  SWS_SHUTDOWN 255 Shutdown: Validate Shutdown; break;
+

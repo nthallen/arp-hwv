@@ -1,6 +1,6 @@
 tmcbase = base.tmc
 tmcbase = idx64.tmc
-tmcbase = swstat.tmc
+#tmcbase = swstat.tmc
 #tmcbase = ptrh.tmc
 tmcbase = ssp.tmc
 tmcbase = qcli.tmc
@@ -22,8 +22,11 @@ cmdbase = qcli.cmd
 cmdbase = ssp.cmd
 cmdbase = ai.cmd ao.cmd
 cmdbase = soldrv.cmd
-cmdbase = swstat.cmd
+#cmdbase = swstat.cmd
 cmdbase = waves.cmd
+cmdbase = fail.cmd
+
+swsbase = HWV.sws
 
 SCRIPT = interact
 SCRIPT = runfile.FF
@@ -46,7 +49,7 @@ HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tm
 
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc lyalpha.tbl
 
-HWValgo : ptrh_conv.tmc HWV.tma
+HWValgo : ptrh_conv.tmc HWV.tma HWV.sws
 
 doit : HWV.doit
 lydoit : ly.doit

@@ -2,6 +2,7 @@
 TM typedef double VOLTS;
 TM typedef double CELCIUS;
 TM typedef double TORR;
+TM typedef unsigned char UCHAR { text "%3u"; }
 TM typedef unsigned short UINT { text "%5u"; }
 TM typedef unsigned long ULONG { text "%8ld"; }
 TM typedef long L20 { text "%8ld"; }

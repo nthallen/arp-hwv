@@ -26,7 +26,6 @@
 
 %{
   #include "msg.h"
-  #include "swstat.h"
   int H2O2_Lamp_Enable = 1;
 %}
 
@@ -87,47 +86,6 @@ State Shutdown {
       Hold until valid (h2o2shutOffA,h2o2heatOffA,DFB_Shutdown) or 55;
  +10  > Fail Light On
       > quit
-}
-
-
-#---------------------------------------------------------------------# Partition 2: Software Status
-#---------------------------------------------------------------------
-
-Partition
-
-State SW_Stat_Wait NoLog {
-  { int reSet_it;
-    reSet_it = 1;
-    switch (SWStat) {
-      default:
-      case 0:   reSet_it = 0; break;
-      case SWS_TAKEOFF: depending on (ON_GROUND) using_swp = 1; break;
-      case SWS_LAND: depending on (OFF_GROUND) using_swp = SWStat; break;
-
-
-      case SWS_H2O_ENABLE:
-        H2O2_Lamp_Enable = 1;
-        depending on (h2o2shutOffA) Validate h2o2initA;
-        break;
-      case SWS_H2O_DISABLE:
-        H2O2_Lamp_Enable = 0; break;
-
-      case SWS_DFB_START: Validate DFB_Start; break;
-      case SWS_DFB_STOP: Validate DFB_Stop; break;
-      case SWS_DFB_HHH: Validate DFB_HHH; break;
-
-      case SWS_TIME_WARP: break;
-      case SWS_READFILE: Validate ReadFile; break;
-      case SWS_SHUTDOWN: Validate Shutdown; break;
-    }
-    if (reSet_it) Validate SW_Stat_ReSet;
-  }
-}
-
-State SW_Stat_ReSet NoLog {
-	> _SW Status Set 0
-	Hold until (SWStat == 0) or 10;
-	Validate SW_Stat_Wait;
 }
 
 
