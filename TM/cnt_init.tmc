@@ -8,3 +8,31 @@
   }
 %}
 TM INITFUNC Ct64_init();
+
+%{
+  subbus_mread_req *Cts0_req;
+  subbus_mread_req *Cts1_req;
+  subbus_mread_req *Cts2_req;
+
+  void Cts0_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7) {
+    Cts0_req = pack_mread_requests(A1, A2, A3, A4, A5, A6, A7, 0);
+  }
+  void Cts1_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7) {
+    Cts1_req = pack_mread_requests(A1, A2, A3, A4, A5, A6, A7, 0);
+  }
+  void Cts2_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7) {
+    Cts2_req = pack_mread_requests(A1, A2, A3, A4, A5, A6, A7, 0);
+  }
+%}
+TM INITFUNC Cts0_init(Ct0Stat.address,
+  PMTA_Counts.address, PMTA_Counts.address+2,
+  PMTB_Counts.address, PMTB_Counts.address+2,
+  PMTC_Counts.address, PMTC_Counts.address+2);
+TM INITFUNC Cts1_init(Ct1Stat.address,
+  UVA1_Counts.address, UVA1_Counts.address+2,
+  UVA2_Counts.address, UVA2_Counts.address+2,
+  UVB1_Counts.address, UVB1_Counts.address+2);
+TM INITFUNC Cts2_init(Ct2Stat.address,
+  UVB2_Counts.address, UVB2_Counts.address+2,
+  UVC1_Counts.address, UVC1_Counts.address+2,
+  UVC2_Counts.address, UVC2_Counts.address+2);
