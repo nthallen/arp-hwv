@@ -142,7 +142,7 @@ ROWS 18
   1 PIF7T Flow PIF 7
   1 PampT HHHhk T
   1 QCLI_Stale QCLI Stale
-  1 QCLI_Wave QCLI Wave
+  1 QCLI_Wave QCLI Wave %.0lf
   1 QCLI_busy:QCLI_s:15 QCLI QCLI_s busy
   1 QCLI_cksum:QCLI_s:14 QCLI QCLI_s cksum
   1 QCLI_cmderr:QCLI_s:13 QCLI QCLI_s cmderr
@@ -180,12 +180,12 @@ ROWS 18
   1 SSP_Num SSP Num
   1 SSP_SN SSP SN
   1 SSP_Stale SSP Stale
-  1 SSP_Status SSP Status
+  1 SSP_Status SSP Status %.0lf
   1 SSP_TS SSP TSkip
   1 SSP_T_FPGA SSP T
   1 SSP_T_HtSink SSP T
   1 SWStat General SWStat
-  1 IOSwS  General IOSwS
+  1 IOSwS  General IOSwS %.0lf
   1 N0:AIStat:0 General AIStat
   1 N1:AIStat:1 General AIStat
   1 N0S:AIStat:2 General AIStat
@@ -211,36 +211,36 @@ ROWS 18
   4 TVStep Throttle Step
   4 Scan:IXStt:0 Throttle Bits
   
-  8 Resynch:Ct0Stat:15 CtStat Ct0
-  8 L2Stat:Ct0Stat:14 CtStat Ct0
-  8 Ovf16_4:Ct0Stat:7 CtStat Ct0
-  8 Ovf16_3:Ct0Stat:6 CtStat Ct0
-  8 Ovf16_2:Ct0Stat:5 CtStat Ct0
-  8 Ovf16_1:Ct0Stat:4 CtStat Ct0
-  8 Ovf20_4:Ct0Stat:3 CtStat Ct0
-  8 Ovf20_3:Ct0Stat:2 CtStat Ct0
-  8 Ovf20_2:Ct0Stat:1 CtStat Ct0
-  8 Ovf20_1:Ct0Stat:0 CtStat Ct0
-  8 Resynch:Ct1Stat:15 CtStat Ct1
-  8 L2Stat:Ct1Stat:14 CtStat Ct1
-  8 Ovf16_4:Ct1Stat:7 CtStat Ct1
-  8 Ovf16_3:Ct1Stat:6 CtStat Ct1
-  8 Ovf16_2:Ct1Stat:5 CtStat Ct1
-  8 Ovf16_1:Ct1Stat:4 CtStat Ct1
-  8 Ovf20_4:Ct1Stat:3 CtStat Ct1
-  8 Ovf20_3:Ct1Stat:2 CtStat Ct1
-  8 Ovf20_2:Ct1Stat:1 CtStat Ct1
-  8 Ovf20_1:Ct1Stat:0 CtStat Ct1
-  8 Resynch:Ct2Stat:15 CtStat Ct2
-  8 L2Stat:Ct2Stat:14 CtStat Ct2
-  8 Ovf16_4:Ct2Stat:7 CtStat Ct2
-  8 Ovf16_3:Ct2Stat:6 CtStat Ct2
-  8 Ovf16_2:Ct2Stat:5 CtStat Ct2
-  8 Ovf16_1:Ct2Stat:4 CtStat Ct2
-  8 Ovf20_4:Ct2Stat:3 CtStat Ct2
-  8 Ovf20_3:Ct2Stat:2 CtStat Ct2
-  8 Ovf20_2:Ct2Stat:1 CtStat Ct2
-  8 Ovf20_1:Ct2Stat:0 CtStat Ct2
+  8 Resynch:Ct0Stat:15 CtStat Ct0 %.0lf
+  8 L2Stat:Ct0Stat:14 CtStat Ct0 %.0lf
+  8 Ovf16_4:Ct0Stat:7 CtStat Ct0 %.0lf
+  8 Ovf16_3:Ct0Stat:6 CtStat Ct0 %.0lf
+  8 Ovf16_2:Ct0Stat:5 CtStat Ct0 %.0lf
+  8 Ovf16_1:Ct0Stat:4 CtStat Ct0 %.0lf
+  8 Ovf20_4:Ct0Stat:3 CtStat Ct0 %.0lf
+  8 Ovf20_3:Ct0Stat:2 CtStat Ct0 %.0lf
+  8 Ovf20_2:Ct0Stat:1 CtStat Ct0 %.0lf
+  8 Ovf20_1:Ct0Stat:0 CtStat Ct0 %.0lf
+  8 Resynch:Ct1Stat:15 CtStat Ct1 %.0lf
+  8 L2Stat:Ct1Stat:14 CtStat Ct1 %.0lf
+  8 Ovf16_4:Ct1Stat:7 CtStat Ct1 %.0lf
+  8 Ovf16_3:Ct1Stat:6 CtStat Ct1 %.0lf
+  8 Ovf16_2:Ct1Stat:5 CtStat Ct1 %.0lf
+  8 Ovf16_1:Ct1Stat:4 CtStat Ct1 %.0lf
+  8 Ovf20_4:Ct1Stat:3 CtStat Ct1 %.0lf
+  8 Ovf20_3:Ct1Stat:2 CtStat Ct1 %.0lf
+  8 Ovf20_2:Ct1Stat:1 CtStat Ct1 %.0lf
+  8 Ovf20_1:Ct1Stat:0 CtStat Ct1 %.0lf
+  8 Resynch:Ct2Stat:15 CtStat Ct2 %.0lf
+  8 L2Stat:Ct2Stat:14 CtStat Ct2 %.0lf
+  8 Ovf16_4:Ct2Stat:7 CtStat Ct2 %.0lf
+  8 Ovf16_3:Ct2Stat:6 CtStat Ct2 %.0lf
+  8 Ovf16_2:Ct2Stat:5 CtStat Ct2 %.0lf
+  8 Ovf16_1:Ct2Stat:4 CtStat Ct2 %.0lf
+  8 Ovf20_4:Ct2Stat:3 CtStat Ct2 %.0lf
+  8 Ovf20_3:Ct2Stat:2 CtStat Ct2 %.0lf
+  8 Ovf20_2:Ct2Stat:1 CtStat Ct2 %.0lf
+  8 Ovf20_1:Ct2Stat:0 CtStat Ct2 %.0lf
   8 PMTA_Counts Counts A
   8 PMTB_Counts Counts B
   8 PMTC_Counts Counts C
@@ -254,7 +254,7 @@ ROWS 18
   1 DACS_T1C DACS T
   1 DACS_T2C DACS T
   1 DACS_RHC DACS RH
-  1 DACS_PTRHS DACS Status
+  1 DACS_PTRHS DACS Status %.0lf
   1 CPU_Pct  DACS CPU
   1 Disk     DACS CPU 
   1 vl_bdT   DACS T
@@ -269,3 +269,13 @@ ROWS 18
   1 SolStA SolSt A
   1 SolStB SolSt B
   1 SolStC SolSt C
+
+  1 PM0V1 HK_Power Voltage
+  1 PM0V2 HK_Power Voltage
+  1 PM0I1 HK_Power Current
+  1 PM0I2 HK_Power Current
+  1 PM0I1_S:PM0Stat:0 HK_Power Status
+  1 PM0I2_S:PM0Stat:2 HK_Power Status
+  1 PM0V1_S:PM0Stat:1 HK_Power Status
+  1 PM0V2_S:PM0Stat:3 HK_Power Status
+  1 PM0TO_S:PM0Stat:4 HK_Power Status
