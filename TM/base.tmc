@@ -70,21 +70,21 @@ TM typedef unsigned short AO
 TM 8 Hz UINT MFCtr, Synch;
 
 /* AI */
-TM 1 Hz AI_XP384 A_IRV; Address A_IRV 0xCB6; /* Axis A IR Voltage 0xC0E */
+TM 1 Hz AI_XP384 A_IRV; Address A_IRV 0xC0E; /* Axis A IR Voltage 0xC0E 0xCB6 */
 TM 1 Hz AI_T30K A_LMT; Address A_LMT 0xCA4; /* Lamp Module A Temp */
 TM 1 Hz AI_T30K A_RgT; Address A_RgT 0xCC2; /* Air Regulator Temp */
 /* TM 1 Hz AI_T30K ADetT; Address ADetT 0xC44; */ /* Axis A PMT Temp */
 TM 1 Hz AI_XP384 AirHP; Address AirHP 0xCE2; /* Air High Prs */
-TM 1 Hz AI_XP384 AirLP; Address AirLP 0xC58; /* Air Low Prs 0xC04 */
+TM 1 Hz AI_XP384 AirLP; Address AirLP 0xC04; /* Air Low Prs 0xC04 0xC58 */
 TM 1 Hz AI_XP384 AModP; Address AModP 0xC26; /* Axis A Lamp Module Pressure */
-TM 1 Hz AI_X1    ARFBW; Address ARFBW 0xC38; /* Axis A RF Backward Pwr 0xC06 */
-TM 1 Hz AI_X1    ARFFW; Address ARFFW 0xCE4; /* Axis A RF Forward Pwr */
+TM 1 Hz AI_X1 ARFBW; Address ARFBW 0xC06; /* Axis A RF Backward Pwr 0xC06 0xC38 */
+TM 1 Hz AI_X1 ARFFW; Address ARFFW 0xCE4; /* Axis A RF Forward Pwr */
 TM 1 Hz AI_XP384 B_IRV; Address B_IRV 0xC2E; /* Axis B IR Voltage */
 TM 1 Hz AI_T30K B_LMT; Address B_LMT 0xCA6; /* Lamp Module B Temp */
 TM 1 Hz AI_T30K B_RFT; Address B_RFT 0xCC6; /* Axis B RF Amplifier Temp */
 /* TM 1 Hz AI_T30K BDetT; Address BDetT 0xC46; */ /* Axis B PMT Temp */
 TM 1 Hz AI_XP384 BModP; Address BModP 0xC28; /* Axis B Lamp Module Pressure */
-TM 1 Hz AI_XP384 BRFBW; Address BRFBW 0xCD8; /* Axis B RF Backward Pwr 0xC08 */
+TM 1 Hz AI_XP384 BRFBW; Address BRFBW 0xC08; /* Axis B RF Backward Pwr 0xC08 0xCD8 */
 TM 1 Hz AI_XP384 BRFFW; Address BRFFW 0xCE6; /* Axis B RF Forward Pwr */
 TM 1 Hz AI_XP384 C_IRV; Address C_IRV 0xC4E; /* Axis C IR Voltage */
 TM 1 Hz AI_T30K C_LMT; Address C_LMT 0xCA8; /* Lamp Module C Temp */
@@ -110,14 +110,14 @@ TM 1 Hz AI_X1 AirA_I; Address AirA_I 0xD38; /* Command Current 12 */
 TM 1 Hz AI_X1 AirB_I; Address AirB_I 0xD3C; /* Command Current 14 */
 TM 1 Hz AI_X1 Cmd_15_I; Address Cmd_15_I 0xD3E; /* Command Current 15 */
 TM 1 Hz AI_XP384 CModP; Address CModP 0xC2A; /* Axis C Lamp Module Pressure */
-TM 1 Hz AI_XP384 CRFBW; Address CRFBW 0xC98; /* Axis C RF Backward Pwr 0xC0A */
+TM 1 Hz AI_XP384 CRFBW; Address CRFBW 0xC0A; /* Axis C RF Backward Pwr 0xC0A 0xC98 */
 TM 1 Hz AI_XP384 CRFFW; Address CRFFW 0xCE8; /* Axis C RF Forward Pwr */
 TM 1 Hz AI_T30K FAA_T; Address FAA_T 0xC64; /* Axis A Filter Assy Temp */
 TM 1 Hz AI_T30K FAB_T; Address FAB_T 0xC66; /* Axis B Filter Assy Temp */
 TM 1 Hz AI_T30K FAC_T; Address FAC_T 0xC68; /* Axis C Filter Assy Temp */
 TM 8 Hz AI_X1 HHH1P; Address HHH1P 0xCEE; /* HHH Cell Prs #1 */
 TM 8 Hz AI_T10K HHH1T; Address HHH1T 0xC8E; /* HHH Cell T #1 */
-TM 8 Hz AI_X1 HHH2P; Address HHH2P 0xC9C; /* HHH Cell Prs #2 0xC10 */
+TM 8 Hz AI_X1 HHH2P; Address HHH2P 0xC10; /* HHH Cell Prs #2 0xC10 0xC9C */
 TM 8 Hz AI_T10K HHH2T; Address HHH2T 0xCAE; /* HHH Cell T #2 */
 TM 8 Hz AI_X1 HHHDP; Address HHHDP 0xC30; /* HHH Cell Diff Prs */
 TM 1 Hz AI_T30K HHHPT; Address HHHPT 0xCCE; /* HHH Cell Prs Assy Temp */
@@ -134,7 +134,7 @@ TM 1 Hz AI_XP768 L4Flw; Address L4Flw 0xCD4; /* Lab Flow #4 */
 TM 1 Hz AI_X1 Las_I; Address Las_I 0xCF2; /* HHH Laser Current */
 TM 1 Hz AI_T30K LFB_T; Address LFB_T 0xC36; /* Lab Bubbler Temp */
 TM 1 Hz AI_XP384 LFB1P; Address LFB1P 0xCF4; /* Lab Bubbler Prs #1 */
-TM 1 Hz AI_XP384 LFB2P; Address LFB2P 0xC5A; /* Lab Bubbler Prs #2 0xC16 */
+TM 1 Hz AI_XP384 LFB2P; Address LFB2P 0xC16; /* Lab Bubbler Prs #2 0xC16 0xC5A */
 TM 1 Hz AI_XP384 LFT_P; Address LFT_P 0xC56; /* Lab Flow Tube3 Prs */
 TM 1 Hz AI_X1 LTE1R4T; Address LTE1R4T 0xCD2; /* Laser TEC Temp */
 TM 1 Hz AI_T30K MM_1T; Address MM_1T 0xC52; /* Mirror Mount Diagnostic T */
@@ -143,22 +143,22 @@ TM 1 Hz AI_T30K MM_3T; Address MM_3T 0xC92; /* Mirror Mount Diagnostic T */
 TM 1 Hz AI_T30K MM_4T; Address MM_4T 0xCB2; /* Mirror Mount Diagnostic T */
 TM 1 Hz AI_X1 MZ1CT; Address MZ1CT 0xCD0; /* Mirror Mount Control Temp */
 TM 1 Hz AI_X1 MZ2CT; Address MZ2CT 0xCF0; /* Mirror Mount Control Temp */
-TM 1 Hz AI_X1 MZ3CT; Address MZ3CT 0xCDC; /* Mirror Mount Control Temp 0xC12 */
+TM 1 Hz AI_X1 MZ3CT; Address MZ3CT 0xC12; /* Mirror Mount Control Temp 0xC12 0xCDC */
 TM 1 Hz AI_X1 MZ4CT; Address MZ4CT 0xC32; /* Mirror Mount Control Temp */
-TM 1 Hz AI_X1 PampT; Address PampT 0xC5C; /* Power Amp Temp 0xC14 */
+TM 1 Hz AI_X1 PampT; Address PampT 0xC14; /* Power Amp Temp 0xC14 0xC5C */
 TM 1 Hz AI_T30K PDACS_1T; Address PDACS_1T 0xC3E; /* PDACS Housekeeping Temp */
 TM 1 Hz AI_T30K PDACS_2T; Address PDACS_2T 0xC7E; /* PDACS Housekeeping Temp */
 TM 1 Hz AI_T30K PDACS_3T; Address PDACS_3T 0xCBE; /* PDACS Housekeeping Temp */
 TM 1 Hz AI_T30K PDACS_4T; Address PDACS_4T 0xCDE; /* PDACS Housekeeping Temp */
 TM 1 Hz AI_T30K PDACS_5T; Address PDACS_5T 0xCFE; /* PDACS Housekeeping Temp */
 TM 1 Hz AI_T10K PIB1T; Address PIB1T 0xCE0; /* Primary Inlet Rear Therm Ring */
-TM 1 Hz AI_T10K PIB2T; Address PIB2T 0xCBC; /* Primary Inlet Rear Therm Ring 0xC02 */
+TM 1 Hz AI_T10K PIB2T; Address PIB2T 0xC02; /* Primary Inlet Rear Therm Ring 0xC02 0xCBC */
 TM 1 Hz AI_T10K PIB3T; Address PIB3T 0xC22; /* Primary Inlet Rear Therm Ring */
 TM 1 Hz AI_T10K PIB4T; Address PIB4T 0xC42; /* Primary Inlet Rear Therm Ring */
 TM 1 Hz AI_T10K PIB5T; Address PIB5T 0xC62; /* Primary Inlet Rear Therm Ring */
 TM 1 Hz AI_T10K PIB6T; Address PIB6T 0xC82; /* Primary Inlet Rear Therm Ring */
 TM 1 Hz AI_T10K PIB7T; Address PIB7T 0xCA2; /* Primary Inlet Rear Therm Ring */
-TM 1 Hz AI_T10K PIF1T; Address PIF1T 0xCFC; /* Primary Inlet Fwd Therm Ring 0xC00 */
+TM 1 Hz AI_T10K PIF1T; Address PIF1T 0xC00; /* Primary Inlet Fwd Therm Ring 0xC00 0xCFC */
 TM 1 Hz AI_T10K PIF2T; Address PIF2T 0xC20; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF3T; Address PIF3T 0xC40; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF4T; Address PIF4T 0xC60; /* Primary Inlet Fwd Therm Ring */
@@ -175,7 +175,7 @@ TM 1 Hz AI_T10K SFB3T; Address SFB3T 0xC8A; /* Secondary Inlet Therm Ring */
 /* TM 1 Hz AI_T10K SFB4T; Address SFB4T 0xCAA; */ /* Secondary Inlet Therm Ring */
 /* TM 1 Hz AI_T10K SFB5T; Address SFB5T 0xCCA; */ /* Secondary Inlet Therm Ring */
 /* TM 1 Hz AI_T10K SFB6T; Address SFB6T 0xCEA; */ /* Secondary Inlet Therm Ring */
-/* TM 1 Hz AI_T10K SFB7T; Address SFB7T 0xCDA; */ /* Secondary Inlet Therm Ring 0xC0C */
+/* TM 1 Hz AI_T10K SFB7T; Address SFB7T 0xC0C; */ /* Secondary Inlet Therm Ring 0xC0C 0xCDA */
 TM 1 Hz AI_T30K SPV1T; Address SPV1T 0xC76; /* Signal Prs Vessel T #1 */
 TM 1 Hz AI_T30K SPV2T; Address SPV2T 0xC96; /* Signal Prs Vessel T #2 */
 TM 1 Hz AI_X1 TVPos; Address TVPos 0xCAC; /* Throttle Valve Position */
@@ -267,33 +267,39 @@ TM 8Hz Ctstat Ct1Stat; Address Ct1Stat 0x620; /* Counter 1 Stat */
 TM 8Hz Ctstat Ct2Stat; Address Ct2Stat 0x640; /* Counter 2 Stat */
 
 Group Cts0 ( Ct0Stat, PMTA_Counts, PMTB_Counts, PMTC_Counts ) {
-  Ct0Stat = sbrwa( Ct0Stat.address );
-  PMTA_Counts.low  = sbrwa( PMTA_Counts.address );
-  PMTA_Counts.high = sbrba( PMTA_Counts.address+2 );
-  PMTB_Counts.low  = sbrwa( PMTB_Counts.address );
-  PMTB_Counts.high = sbrba( PMTB_Counts.address+2 );
-  PMTC_Counts.low  = sbrwa( PMTC_Counts.address );
-  PMTC_Counts.high = sbrba( PMTC_Counts.address+2 );
+  unsigned short Cts0_Raw[7];
+  mread_subbus(Cts0_req, &Cts0_Raw[0]);
+  Ct0Stat = Cts0_Raw[0];
+  PMTA_Counts.low  = Cts0_Raw[1];
+  PMTA_Counts.high = Cts0_Raw[2];
+  PMTB_Counts.low  = Cts0_Raw[3];
+  PMTB_Counts.high = Cts0_Raw[4];
+  PMTC_Counts.low  = Cts0_Raw[5];
+  PMTC_Counts.high = Cts0_Raw[6];
 }
 
 Group Cts1 ( Ct1Stat, UVA1_Counts, UVA2_Counts, UVB1_Counts ) {
-  Ct1Stat = sbrwa( Ct1Stat.address );
-  UVA1_Counts.low  = sbrwa( UVA1_Counts.address );
-  UVA1_Counts.high = sbrba( UVA1_Counts.address+2 );
-  UVA2_Counts.low  = sbrwa( UVA2_Counts.address );
-  UVA2_Counts.high = sbrba( UVA2_Counts.address+2 );
-  UVB1_Counts.low  = sbrwa( UVB1_Counts.address );
-  UVB1_Counts.high = sbrba( UVB1_Counts.address+2 );
+  unsigned short Cts1_Raw[7];
+  mread_subbus(Cts1_req, &Cts1_Raw[0]);
+  Ct1Stat = Cts1_Raw[0];
+  UVA1_Counts.low  = Cts1_Raw[1];
+  UVA1_Counts.high = Cts1_Raw[2];
+  UVA2_Counts.low  = Cts1_Raw[3];
+  UVA2_Counts.high = Cts1_Raw[4];
+  UVB1_Counts.low  = Cts1_Raw[5];
+  UVB1_Counts.high = Cts1_Raw[6];
 }
 
 Group Cts2 ( Ct2Stat, UVB2_Counts, UVC1_Counts, UVC2_Counts ) {
-  Ct2Stat = sbrwa( Ct2Stat.address );
-  UVB2_Counts.low  = sbrwa( UVB2_Counts.address );
-  UVB2_Counts.high = sbrba( UVB2_Counts.address+2 );
-  UVC1_Counts.low  = sbrwa( UVC1_Counts.address );
-  UVC1_Counts.high = sbrba( UVC1_Counts.address+2 );
-  UVC2_Counts.low  = sbrwa( UVC2_Counts.address );
-  UVC2_Counts.high = sbrba( UVC2_Counts.address+2 );
+  unsigned short Cts2_Raw[7];
+  mread_subbus(Cts2_req, &Cts2_Raw[0]);
+  Ct2Stat = Cts2_Raw[0];
+  UVB2_Counts.low  = Cts2_Raw[1];
+  UVB2_Counts.high = Cts2_Raw[2];
+  UVC1_Counts.low  = Cts2_Raw[3];
+  UVC1_Counts.high = Cts2_Raw[4];
+  UVC2_Counts.low  = Cts2_Raw[5];
+  UVC2_Counts.high = Cts2_Raw[6];
 }
 
 /* Digital Status Lines */

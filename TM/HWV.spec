@@ -26,6 +26,17 @@ cmdbase = soldrv.cmd
 cmdbase = waves.cmd
 cmdbase = fail.cmd
 
+colbase = ai_init.tmc
+colbase = ptrh_chk.tmc
+colbase = cnt_init.tmc
+colbase = idx64col.tmc
+colbase = sspcol.tmc
+colbase = vl_temp_col.tmc
+colbase = ptrhm_col.cc
+colbase = /usr/local/share/huarp/DACS_ID.tmc
+colbase = /usr/local/share/huarp/cpu_usage_col.tmc
+colbase = /usr/local/share/huarp/tmdf_col.tmc
+
 swsbase = HWV.sws
 
 SCRIPT = interact
@@ -41,8 +52,7 @@ OBJ = address.h
 
 TGTDIR = $(TGTNODE)/home/hwv
 
-HWVcol : ai_init.tmc /usr/local/share/huarp/DACS_ID.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc vl_temp_col.tmc ptrhm_col.cc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc -lsubbus
-
+HWVcol : -lsubbus
 HWVsrvr : -lsubbus
 
 HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui
