@@ -257,6 +257,7 @@ ROWS 18
   1 DACS_PTRHS DACS Status %.0lf
   1 CPU_Pct  DACS CPU
   1 Disk     DACS CPU 
+  1 freemem  DACS Memory
   1 vl_bdT   DACS T
   1 vl_cpuT  DACS T
 

@@ -1,4 +1,4 @@
-csv hwveng_1 147
+csv hwveng_1 148
   0 Thwveng_1 %.3lf
   1 AIStat 
   2 AModP 
@@ -144,8 +144,9 @@ csv hwveng_1 147
   142 SolStB 
   143 SolStC 
   144 TVPos 
-  145 vl_bdT 
-  146 vl_cpuT 
+  145 freemem 
+  146 vl_bdT 
+  147 vl_cpuT 
 csv hwveng_4 4
   0 Thwveng_4 %.3lf
   1 IXStt 
