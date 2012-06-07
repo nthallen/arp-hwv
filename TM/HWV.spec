@@ -1,3 +1,4 @@
+tmcbase = /usr/local/share/huarp/freemem.tmc
 tmcbase = base.tmc
 tmcbase = idx64.tmc
 #tmcbase = swstat.tmc
@@ -9,6 +10,7 @@ tmcbase = T30K75KU.tmc
 tmcbase = T10K75KU.tmc
 tmcbase = ptrhm.cc
 tmcbase = vl_temp.tmc
+tmcbase = pwrmon.tmc
 tmcbase = /usr/local/share/huarp/cpu_usage.tmc
 tmcbase = /usr/local/share/huarp/tmdf.tmc
 
@@ -33,6 +35,7 @@ colbase = idx64col.tmc
 colbase = sspcol.tmc
 colbase = vl_temp_col.tmc
 colbase = ptrhm_col.cc
+colbase = /usr/local/share/huarp/freemem_col.tmc
 colbase = /usr/local/share/huarp/DACS_ID.tmc
 colbase = /usr/local/share/huarp/cpu_usage_col.tmc
 colbase = /usr/local/share/huarp/tmdf_col.tmc
@@ -55,7 +58,7 @@ TGTDIR = $(TGTNODE)/home/hwv
 HWVcol : -lsubbus
 HWVsrvr : -lsubbus
 
-HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui
+HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui
 
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc lyalpha.tbl
 

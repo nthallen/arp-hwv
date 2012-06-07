@@ -31,7 +31,8 @@ DataSys {
       CPU_T: (vl_cpuT,4) C;
       Brd_T: (vl_bdT,4) C;
     }
-  }
+  };
+  >{FreeMem: (freemem,7) MB}<
 }
 
 SD {
@@ -40,7 +41,6 @@ SD {
   SD_LP: (SD_LP,5) Torr;
   SD_HP: (SD_HP,5) Torr;
   SDP_T: (SDP_T,6) C;
-  [Throttle]
 }
 
 MZ {
@@ -105,6 +105,13 @@ Gas_Deck {
   AirLP: (AirLP,7) V;
 }
 
+pwrmon {
+  HBox { +-; Title: "PwrMon"; -+ };
+  (PM0TO,2)   >"I(mV)"<   >V<;
+  "1:" HBox{ (PM0I1,5); (PM0I1S,1) } HBox{ (PM0V1,7); (PM0V1S,1) };
+  "2:" HBox{ (PM0I2,5); (PM0I2S,1) } HBox{ (PM0V2,7); (PM0V2S,1) };
+}
+
 Software {
   HBox { +-; Title: Software; -+ };
   SWStat: (SWStat,5);
@@ -118,14 +125,15 @@ Software {
     {
       [Inlet];
       [PIF];
-      [SD];
-      [DataSys]
+      [DataSys];
+      [Throttle];
     }; |; {
-      HBox {
-	{ [D1]; [PDACS]; [Software] }; |;
-	{ [D2]; [HHH_Cell]; [Gas_Deck] }
-      }
+      [PDACS]; [SD]
+    }; |; {
+      [D2]; [HHH_Cell];
+    }; |; {
+      [pwrmon]; [Gas_Deck]; [D1]; 
     }
   };
-  [MZ]
+  HBox { [MZ]; |; [Software] }
 }
