@@ -1,0 +1,2 @@
+#! /bin/sh
+sudo tar -pxzf hci.init.tar.gz -C /net/hci

@@ -1,0 +1,2 @@
+#! /bin/sh
+sudo tar --no-recursion -czf hwv.init.tar.gz -C /net/hwv -T MANIFEST
