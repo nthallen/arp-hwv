@@ -39,7 +39,7 @@ ICOS Waveform HHH_10MHz {
 
 ICOS Waveform HHH_ConstantI {
   Tz = 10 msec;
-  Iz = 70 mA;
+  Iz = 90 mA;
   SampleRate = 10 MHz;
   dI/dt = 0 A/sec;
 }
