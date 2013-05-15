@@ -13,6 +13,7 @@ tmcbase = vl_temp.tmc
 tmcbase = pwrmon.tmc
 tmcbase = /usr/local/share/huarp/cpu_usage.tmc
 tmcbase = /usr/local/share/huarp/tmdf.tmc
+tmcbase = dacsmread.tmc
 
 cmdbase = /usr/local/share/huarp/root.cmd
 cmdbase = /usr/local/share/huarp/getcon.cmd
@@ -39,6 +40,7 @@ colbase = /usr/local/share/huarp/freemem_col.tmc
 colbase = /usr/local/share/huarp/DACS_ID.tmc
 colbase = /usr/local/share/huarp/cpu_usage_col.tmc
 colbase = /usr/local/share/huarp/tmdf_col.tmc
+colbase = dacsmread_col.tmc
 
 swsbase = HWV.sws
 
@@ -49,9 +51,11 @@ SCRIPT = idx64.idx64
 SRCDIST = waves.qcli waves.m
 DISTRIB = waves.out A.sft
 SRC = ptrhm.h
+SRC = dacsmread.txt
 
 OBJ = waves.cmd waves.out waves.tmc waves.m waves.log
 OBJ = address.h
+OBJ = dacsmread.tmc dacsmread_col.tmc
 
 TGTDIR = $(TGTNODE)/home/hwv
 
@@ -86,3 +90,5 @@ waves.cmd waves.out waves.tmc waves.m : waves.qcli
 	qclicomp -o waves.out -c waves.cmd -d waves.tmc \
 	  -v waves.log -m waves.m waves.qcli || \
 	  ( rm -f waves.out waves.cmd waves.tmc waves.log waves.m; false )
+dacsmread.tmc dacsmread_col.tmc : dacsmread.txt
+	./dacsmread.pl dacsmread

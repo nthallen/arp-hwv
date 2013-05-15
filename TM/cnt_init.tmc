@@ -10,29 +10,27 @@
 TM INITFUNC Ct64_init();
 
 %{
-  subbus_mread_req *Cts0_req;
-  subbus_mread_req *Cts1_req;
-  subbus_mread_req *Cts2_req;
+  subbus_mread_req *Cts_req;
 
-  void Cts0_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7) {
-    Cts0_req = pack_mread_requests(A1, A2, A3, A4, A5, A6, A7, 0);
-  }
-  void Cts1_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7) {
-    Cts1_req = pack_mread_requests(A1, A2, A3, A4, A5, A6, A7, 0);
-  }
-  void Cts2_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7) {
-    Cts2_req = pack_mread_requests(A1, A2, A3, A4, A5, A6, A7, 0);
+  void Cts_init(int A1, int A2, int A3, int A4, int A5, int A6, int A7,
+                int B1, int B2, int B3, int B4, int B5, int B6, int B7,
+                int C1, int C2, int C3, int C4, int C5, int C6, int C7) {
+    Cts_req = pack_mread_requests(
+      A1, A2, A3, A4, A5, A6, A7,
+      B1, B2, B3, B4, B5, B6, B7,
+      C1, C2, C3, C4, C5, C6, C7, 0);
   }
 %}
-TM INITFUNC Cts0_init(Ct0Stat.address,
+TM INITFUNC Cts_init(
+  Ct0Stat.address,
   PMTA_Counts.address, PMTA_Counts.address+2,
   PMTB_Counts.address, PMTB_Counts.address+2,
-  PMTC_Counts.address, PMTC_Counts.address+2);
-TM INITFUNC Cts1_init(Ct1Stat.address,
+  PMTC_Counts.address, PMTC_Counts.address+2,
+  Ct1Stat.address,
   UVA1_Counts.address, UVA1_Counts.address+2,
   UVA2_Counts.address, UVA2_Counts.address+2,
-  UVB1_Counts.address, UVB1_Counts.address+2);
-TM INITFUNC Cts2_init(Ct2Stat.address,
+  UVB1_Counts.address, UVB1_Counts.address+2,
+  Ct2Stat.address,
   UVB2_Counts.address, UVB2_Counts.address+2,
   UVC1_Counts.address, UVC1_Counts.address+2,
   UVC2_Counts.address, UVC2_Counts.address+2);

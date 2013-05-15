@@ -284,44 +284,37 @@ TM 8 Hz CT24 UVB1_Counts; Address UVB1_Counts 0x63C; /* Axis B UV1 counts */
 TM 8 Hz CT24 UVB2_Counts; Address UVB2_Counts 0x650; /* Axis B UV2 counts */
 TM 8 Hz CT24 UVC1_Counts; Address UVC1_Counts 0x654; /* Axis C UV1 counts */
 TM 8 Hz CT24 UVC2_Counts; Address UVC2_Counts 0x658; /* Axis C UV2 counts */
-TM 8Hz Ctstat Ct0Stat; Address Ct0Stat 0x600; /* Counter 0 Stat */
-TM 8Hz Ctstat Ct1Stat; Address Ct1Stat 0x620; /* Counter 1 Stat */
-TM 8Hz Ctstat Ct2Stat; Address Ct2Stat 0x640; /* Counter 2 Stat */
+TM 8 Hz Ctstat Ct0Stat; Address Ct0Stat 0x600; /* Counter 0 Stat */
+TM 8 Hz Ctstat Ct1Stat; Address Ct1Stat 0x620; /* Counter 1 Stat */
+TM 8 Hz Ctstat Ct2Stat; Address Ct2Stat 0x640; /* Counter 2 Stat */
 
-Group Cts0 ( Ct0Stat, PMTA_Counts, PMTB_Counts, PMTC_Counts ) {
-  unsigned short Cts0_Raw[7];
-  mread_subbus(Cts0_req, &Cts0_Raw[0]);
-  Ct0Stat = Cts0_Raw[0];
-  PMTA_Counts.low  = Cts0_Raw[1];
-  PMTA_Counts.high = Cts0_Raw[2];
-  PMTB_Counts.low  = Cts0_Raw[3];
-  PMTB_Counts.high = Cts0_Raw[4];
-  PMTC_Counts.low  = Cts0_Raw[5];
-  PMTC_Counts.high = Cts0_Raw[6];
-}
-
-Group Cts1 ( Ct1Stat, UVA1_Counts, UVA2_Counts, UVB1_Counts ) {
-  unsigned short Cts1_Raw[7];
-  mread_subbus(Cts1_req, &Cts1_Raw[0]);
-  Ct1Stat = Cts1_Raw[0];
-  UVA1_Counts.low  = Cts1_Raw[1];
-  UVA1_Counts.high = Cts1_Raw[2];
-  UVA2_Counts.low  = Cts1_Raw[3];
-  UVA2_Counts.high = Cts1_Raw[4];
-  UVB1_Counts.low  = Cts1_Raw[5];
-  UVB1_Counts.high = Cts1_Raw[6];
-}
-
-Group Cts2 ( Ct2Stat, UVB2_Counts, UVC1_Counts, UVC2_Counts ) {
-  unsigned short Cts2_Raw[7];
-  mread_subbus(Cts2_req, &Cts2_Raw[0]);
-  Ct2Stat = Cts2_Raw[0];
-  UVB2_Counts.low  = Cts2_Raw[1];
-  UVB2_Counts.high = Cts2_Raw[2];
-  UVC1_Counts.low  = Cts2_Raw[3];
-  UVC1_Counts.high = Cts2_Raw[4];
-  UVC2_Counts.low  = Cts2_Raw[5];
-  UVC2_Counts.high = Cts2_Raw[6];
+Group Cts (
+    Ct0Stat, PMTA_Counts, PMTB_Counts, PMTC_Counts,
+    Ct1Stat, UVA1_Counts, UVA2_Counts, UVB1_Counts,
+    Ct2Stat, UVB2_Counts, UVC1_Counts, UVC2_Counts ) {
+  unsigned short Cts_Raw[21];
+  mread_subbus(Cts_req, &Cts_Raw[0]);
+  Ct0Stat = Cts_Raw[0];
+  PMTA_Counts.low  = Cts_Raw[1];
+  PMTA_Counts.high = Cts_Raw[2];
+  PMTB_Counts.low  = Cts_Raw[3];
+  PMTB_Counts.high = Cts_Raw[4];
+  PMTC_Counts.low  = Cts_Raw[5];
+  PMTC_Counts.high = Cts_Raw[6];
+  Ct1Stat = Cts_Raw[7+0];
+  UVA1_Counts.low  = Cts_Raw[7+1];
+  UVA1_Counts.high = Cts_Raw[7+2];
+  UVA2_Counts.low  = Cts_Raw[7+3];
+  UVA2_Counts.high = Cts_Raw[7+4];
+  UVB1_Counts.low  = Cts_Raw[7+5];
+  UVB1_Counts.high = Cts_Raw[7+6];
+  Ct2Stat = Cts_Raw[14+0];
+  UVB2_Counts.low  = Cts_Raw[14+1];
+  UVB2_Counts.high = Cts_Raw[14+2];
+  UVC1_Counts.low  = Cts_Raw[14+3];
+  UVC1_Counts.high = Cts_Raw[14+4];
+  UVC2_Counts.low  = Cts_Raw[14+5];
+  UVC2_Counts.high = Cts_Raw[14+6];
 }
 
 /* Digital Status Lines */
