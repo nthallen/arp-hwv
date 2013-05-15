@@ -4,6 +4,8 @@ waves.tmc
 waves.m
 waves.log
 address.h
+dacsmread.tmc
+dacsmread_col.tmc
 HWVcol.cc
 HWV.pcm
 tm.dac

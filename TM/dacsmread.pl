@@ -66,7 +66,7 @@ for my $groupp (@group) {
   my $group = $groupp->{group};
   print OF "  subbus_mread_req *$group;\n";
 }
-print OF "  }\n%}\n";
+print OF "%}\n";
 
 for my $groupp (@group) {
   next if @{$groupp->{addrs}} == 1;

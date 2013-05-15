@@ -325,7 +325,8 @@ TM typedef unsigned char DSByte
 TM 1 Hz DSWord DS822; Address DS822 0x822; /* DS for commands 0-15 */
 TM 1 Hz DSWord DS824; Address DS824 0x824; /* DS for commands 16-31 */
 TM 1 Hz DSWord DS844; Address DS844 0x844; /* S for commands 0-15 */
-  collect DS844 = sbrwa(DS844.address) ^ 0xFFFF;
+  /* collect DS844 = sbrwa(DS844.address) ^ 0xFFFF; */
+  /* collection rule handled in dacsmread.txt */
 /* TM 0 Hz DSByte DS860; Address DS860 0x860; */ /* S for commands 16-23 */
 /*  collect DS860 = sbrba(DS860.address) ^ 0xFF; */
 TM 1 Hz DSByte DS853; Address DS853 0x853; /* I/O Switches, etc. */
