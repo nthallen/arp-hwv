@@ -54,6 +54,7 @@ for my $rate (@rates) {
 
 open(OF, ">", "${base}_col.tmc") ||
   die "Unable to write to output file '${base}_col.tmc'\n";
+
 print OF <<EOF;
 %{
   #include "subbus.h"
@@ -63,22 +64,16 @@ EOF
 for my $groupp (@group) {
   next if @{$groupp->{addrs}} == 1;
   my $group = $groupp->{group};
-  print OF <<EOF;
-
-  subbus_mread_req *$group;
-  void pack_$group() {
-    $group = pack_mread_requests(
-EOF
-  print OF wrap("      ", "      ",
-    join ", ", map "$addr{$_}.address", @{$groupp->{addrs}}),
-      ");\n";
+  print OF "  subbus_mread_req *$group;\n";
 }
-
 print OF "  }\n%}\n";
+
 for my $groupp (@group) {
   next if @{$groupp->{addrs}} == 1;
   my $group = $groupp->{group};
-  print OF "TM INITFUNC pack_$group();\n";
+  print OF wrap("TM INITFUNC $group = pack_mread_requests(", "    ",
+    join ", ", map "$addr{$_}.address", @{$groupp->{addrs}}),
+      ");\n";
 }
 close(OF) || warn "Error closing ${base}_col.tmc\n";
 
