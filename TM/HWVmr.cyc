@@ -1,0 +1,21 @@
+Trigger BG {
+  Start: UVA1_Counts <= 50;
+  Region BG = UVA1_Counts <= 50;
+}
+
+Trigger FG {
+  Start: UVA1_Counts > 50;
+  Region FG = (Trigger_FG_Elapsed > 0.12) : UVA1_Counts <= 50; 
+}
+
+Trigger Avg {
+  Start: Region_FG &&
+         (Trigger_Avg_Elapsed < 0.5 ||
+          Trigger_Avg_Elapsed >= 1.0);
+  Region Avg = Region_FG && Trigger_Avg_Elapsed < 1.0;
+}
+
+Average UVA1_Counts, PMTA_Counts Over BG, Avg;
+Average SFB1T, HHH1T, UVB1_Counts, HHH1P Over Avg;
+
+
