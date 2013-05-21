@@ -29,7 +29,7 @@
      Inst1_cal = [7.0861e-9 471559642] (function of M (aka invCA))
      Inst1_cal = [66.3873e-10 0.12193e10] (from Jessica)
 
-     M = 0.001 * P * 2.46e19 * 298./ (T + 273.15); // P in Torr, T in Celcius
+     M = 0.001 * P * 2.46e19 * 298./ (T + 273.15); // P in hPa, T in Celcius
      XAir = exp(-L1C * M * (O2mr*O2sigma + CO2mr*CO2sigma + CH4mr*CH4sigma));
      nrmSig = dPMTA * XAir * 10000. / dUVA1
      H2Oc = nrmSig * polyval(invCA, M);
