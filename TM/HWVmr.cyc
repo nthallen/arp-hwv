@@ -1,0 +1,18 @@
+Rate UVA1_Counts;
+
+Trigger BG {
+  Start: convert(UVA1_Counts) <= 50;
+  Region BG = convert(UVA1_Counts) <= 50;
+}
+
+Trigger allFG {
+  Start: convert(UVA1_Counts) > 50;
+  Region allFG [ 0.24, 6.13 ];
+      /* (Trigger_allFG_Elapsed > 0.12) &&
+        (convert(UVA1_Counts) > 50); */
+}
+
+
+Average UVA1_Counts, PMTA_Counts Over BG;
+
+

@@ -79,6 +79,12 @@ PText.cc
 PTextoui.c
 PTextoui.o
 PText.o
+HWVmrcyc.tmc
+HWVmr2cyc.tmc
+hwvmrext.cc
+hwvmrextoui.c
+hwvmrextoui.o
+hwvmrext.o
 HWVclt.o
 HWVcltoui.c
 HWVcltoui.o
@@ -103,5 +109,6 @@ hwvrawext
 hwvext
 hhhext
 PText
+hwvmrext
 HWVclt
 HWVcltnc

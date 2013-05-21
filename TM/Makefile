@@ -1,6 +1,5 @@
-# Makefile Generated Thu Jun 07 13:12:55 EDT 2012
+# Makefile Generated Tue May 21 13:58:36 EDT 2013
 MNC=HWV
-HOMEDIR=/home/hwv/src/TM
 SPECFILE=HWV.spec
 SRC=ptrhm.h base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc
 SRC+=T30K75KU.tmc T10K75KU.tmc ptrhm.cc vl_temp.tmc pwrmon.tmc
@@ -11,7 +10,7 @@ SRC+=ao.cmd soldrv.cmd waves.cmd fail.cmd SWData.cmd qclibits.tmc
 SRC+=sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc
 SRC+=pwrmon_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl HWV.tma
 SRC+=HWV.sws HWV.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.cdf
-SRC+=hwv.cdf hhh.cdf PT.cdf
+SRC+=hwv.cdf hhh.cdf PT.cdf HWVmr.cyc HWVmr2.cyc HWVmr.tmc
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF dccc.dccc idx64.idx64
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -30,11 +29,12 @@ OBJ+=hwvrawextoui.c hwvrawextoui.o hwvrawext.o hwvextcdf.oui
 OBJ+=hwvext.tmc hwvext.cc hwvextoui.c hwvextoui.o hwvext.o
 OBJ+=hhhextcdf.oui hhhext.tmc hhhext.cc hhhextoui.c hhhextoui.o
 OBJ+=hhhext.o PTextcdf.oui PText.tmc PText.cc PTextoui.c PTextoui.o
-OBJ+=PText.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
-OBJ+=HWVcltncoui.c HWVcltncoui.o
+OBJ+=PText.o HWVmrcyc.tmc HWVmr2cyc.tmc hwvmrext.cc hwvmrextoui.c
+OBJ+=hwvmrextoui.o hwvmrext.o HWVclt.o HWVcltoui.c HWVcltoui.o
+OBJ+=HWVcltnc.o HWVcltncoui.c HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc lydisp lydispnc HWValgo doit
 TGT+=lydoit A.sft B.sft C.sft hwvengext hwvrawext hwvext hhhext PText
-TGT+=HWVclt HWVcltnc
+TGT+=hwvmrext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
@@ -43,7 +43,6 @@ SRCDIST+=base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc
 SRCDIST+=T10K75KU.tmc ptrhm.cc vl_temp.tmc pwrmon.tmc
 SRCDIST+=/usr/local/share/huarp/cpu_usage.tmc
 SRCDIST+=/usr/local/share/huarp/tmdf.tmc SWData.tmc SWData.h
-NONRCS=
 TMCBASE=/usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc
 TMCBASE+=ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc
 TMCBASE+=ptrhm.cc vl_temp.tmc pwrmon.tmc
@@ -140,6 +139,9 @@ hhhext : hhhext.o ptrhm.o hhhextoui.o
 PText : PText.o ptrhm.o PTextoui.o
 	$(LINK.normCXX) PText.o ptrhm.o PTextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) PTextoui.c
+hwvmrext : hwvmrext.o ptrhm.o hwvmrextoui.o
+	$(LINK.normCXX) hwvmrext.o ptrhm.o hwvmrextoui.o -ltmpp -ltm -lnort
+	$(OUIUSE) hwvmrextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcltoui.c
@@ -260,6 +262,16 @@ PTextoui.c : PTextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) PTextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 PTextoui.o : PTextoui.c SWData.h
 PText.o : PText.cc SWData.h
+HWVmrcyc.tmc : HWVmr.cyc
+	$(CYCLE) HWVmr.cyc
+HWVmr2cyc.tmc : HWVmr2.cyc
+	$(CYCLE) HWVmr2.cyc
+hwvmrext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc SWData.tmc HWVmrcyc.tmc HWVmr2cyc.tmc HWVmr.tmc
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc SWData.tmc HWVmrcyc.tmc HWVmr2cyc.tmc HWVmr.tmc
+hwvmrextoui.c : $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+hwvmrextoui.o : hwvmrextoui.c SWData.h
+hwvmrext.o : hwvmrext.cc SWData.h
 HWVclt.o : HWVcmd.cc
 	$(COMPILE.clt) HWVcmd.cc
 HWVcltoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui

@@ -1,0 +1,90 @@
+/* HWVmr.tmc: Realtime Lyman Alpha mixing ratio calculation */
+/* Signal: PMTA_l
+   UV normalization: UVA1_l
+   Pressure:
+     Flight:
+       UVB1_l with linear calibration
+       SD_HP/SD_LP (probably not....)
+     Lab:
+       HHH1P with linear calibration
+       LFT_P with linear calibration
+   Temperature:
+     Flight: SFB1T with linear calibration
+     Lab: HHH1T with the same linear calibration
+   Absorption Corrections:
+     O2: 20% MR unless N2  O2sigma: 1.13e-20 + 1.72e-23 * P (torr)
+     CO2: 378e-6 MR  CO2sigma: 3.72e-20
+     CH4: 1.5e-6 MR  CH4sigma: 500*3.72e-20
+     H2O: TBD MR     H2Osigma: 1.57e-17
+   
+   Calibration:
+     SFB1T_cal = [1.0102 1.04] Celcius
+     HHH1T_cal = [0.96228783 2.06939487] Celcius
+     HHH1P_cal = [201.512098 -5.64399177] Celcius
+     LFT_P_cal = [246.747615 0.13] Torr
+     SD_HP_cal = [0.998543 -5.1434] >= 100 Torr
+     SD_LP_cal = [] < 100 Torr
+     O2sigma_cal = [1.72e-23 1.13e-20] (function of pressure in Torr)
+     UVB1_cal  = [0.1058 -6.6468] (hPa) * 760/1013 (Torr) (1/8 sec counts) (undivided)
+     Inst1_cal = [7.0861e-9 471559642] (function of M (aka invCA))
+
+     M = 0.001 * P * 2.46e19 * 298./ (T + 273.15); // P in Torr, T in Celcius
+     XAir = exp(-L1C * M * (O2mr*O2sigma + CO2mr*CO2sigma + CH4mr*CH4sigma));
+     nrmSig = dPMTA * XAir * 10000. / dUVA1
+     H2Oc = nrmSig * polyval(invCA, M);
+*/
+%{
+  #include "tmctime.h"
+
+  #define O2mr (0.2)
+  double O2sigma_cal[] = { 1.72e-23, 1.13e-20 }; /* as a function of pressure in torr */
+  #define CO2mr (378e-6)
+  #define CO2sigma (3.72e-20)
+  #define CH4mr (1.5e-6)
+  #define CH4sigma (500*3.72e-20)
+  #define H2Osigma (1.57e-17)
+  #define L1C 5.24
+  double HHH1T_cal[] = { 0.96228783, 2.06939487 };
+  double LFT_P_cal[] = { 246.747615, 0.13 };
+  double HHH1P_cal[] = { 201.512098, -5.64399177 };
+  double Inst1_cal[] = { 7.0861e-9, 471559642 };
+  
+  double Iterate(double C0) {
+    double Cn, step, ac, eac;
+    int i;
+    Cn = C0;
+    for (i = 0; i < 10; ++i) {
+      ac = L1C * H2Osigma * Cn;
+      eac = exp(ac);
+      step = (C0 - Cn*eac)/((1+ac)*eac);
+      Cn += step;
+      if (step/Cn < 1e-6) break;
+    }
+    return Cn;
+  }
+%}
+
+TM typedef double PPM { text "%7.1lf"; }
+PPM h2o_lya_ppm; Invalidate h2o_lya_ppm;
+double P, T, M;
+
+depending on (1Hz, PMTA_Counts_FG once, UVA1_Counts_FG once,
+                   LFT_P_FG once, HHH1T_FG once) {
+  double dPMTA, dUVA1, XAir, O2sigma, Kcal, H2Oc;
+  dPMTA = PMTA_Counts_FG - PMTA_Counts_BG;
+  dUVA1 = UVA1_Counts_FG - UVA1_Counts_BG;
+  P = LFT_P_FG * LFT_P_cal[0] + LFT_P_cal[1];
+  T = HHH1T_FG * HHH1T_cal[0] + HHH1T_cal[1];
+  M = 0.001 * P * 2.46e19 * 298./ (T + 273.15);
+  O2sigma = P*O2sigma_cal[0] + O2sigma_cal[1];
+  XAir = exp(-L1C * M * (O2mr*O2sigma+CO2mr*CO2sigma+CH4mr*CH4sigma));
+  Kcal = M*Inst1_cal[0] + Inst1_cal[1];
+  H2Oc = dPMTa * XAir * 10000. * Kcal / dUVA1;
+  H2Oc = Iterate(H2Oc);
+  h2o_lya_ppm = 1e6 * H2Oc / M;
+  validate h2o_lya_ppm;
+}
+
+printf("%.3lf,%.1lf,%.2lf,%.2lf,%.4le\n", dtime(), h2o_lya_ppm, P, T, M);
+/* printf("%.3lf,%.1lf\n", dtime(), h2o_lya_ppm); */
+
