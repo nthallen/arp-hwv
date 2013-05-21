@@ -27,6 +27,7 @@
      O2sigma_cal = [1.72e-23 1.13e-20] (function of pressure in Torr)
      UVB1_cal  = [0.1058 -6.6468] (hPa) * 760/1013 (Torr) (1/8 sec counts) (undivided)
      Inst1_cal = [7.0861e-9 471559642] (function of M (aka invCA))
+     Inst1_cal = [66.3873e-10 0.12193e10] (from Jessica)
 
      M = 0.001 * P * 2.46e19 * 298./ (T + 273.15); // P in Torr, T in Celcius
      XAir = exp(-L1C * M * (O2mr*O2sigma + CO2mr*CO2sigma + CH4mr*CH4sigma));
@@ -47,7 +48,7 @@
   double HHH1T_cal[] = { 0.96228783, 2.06939487 };
   double LFT_P_cal[] = { 246.747615, 0.13 };
   double HHH1P_cal[] = { 201.512098, -5.64399177 };
-  double Inst1_cal[] = { 7.0861e-9, 471559642 };
+  double Inst1_cal[] = { 66.3873e-10, 0.12193e10 };
   
   double Iterate(double C0) {
     double Cn, step, ac, eac;
@@ -75,7 +76,7 @@ depending on (1Hz, PMTA_Counts_FG once, UVA1_Counts_FG once,
   dUVA1 = UVA1_Counts_FG - UVA1_Counts_BG;
   P = LFT_P_FG * LFT_P_cal[0] + LFT_P_cal[1];
   T = HHH1T_FG * HHH1T_cal[0] + HHH1T_cal[1];
-  M = 0.001 * P * 2.46e19 * 298./ (T + 273.15);
+  M = 0.001 * P * (1013./760.) * 2.46e19 * 298./ (T + 273.15);
   O2sigma = P*O2sigma_cal[0] + O2sigma_cal[1];
   XAir = exp(-L1C * M * (O2mr*O2sigma+CO2mr*CO2sigma+CH4mr*CH4sigma));
   Kcal = M*Inst1_cal[0] + Inst1_cal[1];
