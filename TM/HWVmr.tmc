@@ -35,6 +35,7 @@
      H2Oc = nrmSig * polyval(invCA, M);
 */
 %{
+  #include <math.h>
   #include "tmctime.h"
 
   #define O2mr (0.2)
@@ -59,7 +60,7 @@
       eac = exp(ac);
       step = (C0 - Cn*eac)/((1+ac)*eac);
       Cn += step;
-      if (step/Cn < 1e-6) break;
+      if (fabs(step/Cn) < 1e-6) break;
     }
     return Cn;
   }
