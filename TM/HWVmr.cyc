@@ -1,21 +1,18 @@
+Rate UVA1_Counts;
+
 Trigger BG {
-  Start: UVA1_Counts <= 50;
-  Region BG = UVA1_Counts <= 50;
+  Start: convert(UVA1_Counts) <= 50;
+  Region BG = convert(UVA1_Counts) <= 50;
 }
 
-Trigger FG {
-  Start: UVA1_Counts > 50;
-  Region FG = (Trigger_FG_Elapsed > 0.12) : UVA1_Counts <= 50; 
+Trigger allFG {
+  Start: convert(UVA1_Counts) > 50;
+  Region allFG [ 0.24, 6.13 ];
+      /* (Trigger_allFG_Elapsed > 0.12) &&
+        (convert(UVA1_Counts) > 50); */
 }
 
-Trigger Avg {
-  Start: Region_FG &&
-         (Trigger_Avg_Elapsed < 0.5 ||
-          Trigger_Avg_Elapsed >= 1.0);
-  Region Avg = Region_FG && Trigger_Avg_Elapsed < 1.0;
-}
 
-Average UVA1_Counts, PMTA_Counts Over BG, Avg;
-Average SFB1T, HHH1T, UVB1_Counts, HHH1P Over Avg;
+Average UVA1_Counts, PMTA_Counts Over BG;
 
 

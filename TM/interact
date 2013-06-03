@@ -18,7 +18,7 @@
   Launch - soldrv $TMBINDIR/A.sft
 # Launch - soldrv $TMBINDIR/B.sft
 # Launch - soldrv $TMBINDIR/C.sft
-  Launch - sspdrv -b1 -hSSP -N `mlf_find SSP`
+# Launch - sspdrv -b1 -hSSP -N `mlf_find SSP`
   Launch - qclidacsd -h QCLI -d0
-  Launch - HWValgo -v
+# Launch - HWValgo -v
 

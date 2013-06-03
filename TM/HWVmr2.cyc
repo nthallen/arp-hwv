@@ -1,0 +1,21 @@
+Rate UVA1_Counts;
+/* Use of Trigger_FG_Elapsed in Trigger FG's start condition
+   necessarily refers to the value on the previous iteration,
+   since Trigger_FG_Elapsed is evaluated after the start
+   condition is evaluated.
+*/
+Trigger FG {
+  Start: Region_allFG &&
+         (convert(UVA1_Counts) > 50) &&
+         (Trigger_FG_Elapsed < 0.5 ||
+          Trigger_FG_Elapsed >= 0.87);
+  /* Region FG [0, 1); */
+  Region FG = (Trigger_FG_Elapsed >= 0) &&
+              (convert(UVA1_Counts) > 50) :
+              (convert(UVA1_Counts) < 50);
+}
+
+Average UVA1_Counts, PMTA_Counts, SFB1T, HHH1T, UVB1_Counts,
+  LFT_P, HHH1P Over FG;
+
+
