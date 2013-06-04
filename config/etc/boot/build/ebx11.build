@@ -1,0 +1,117 @@
+#
+# Build file for QNX Neutrino booting on Versalogic EBX11 Python
+#
+[linker="ntox86-ld -T$QNX_TARGET/x86/lib/nto.link %(h!=0, -Ttext 0x%t%)%(d!=0, -Tdata 0x%d%) -o%o %i %[M -L%^i -uinit_%n -lmod_%n%]"]
+[virtual=x86,bios +compress] boot = {
+	# Reserve 64k of video memory to handle multiple video cards 
+	startup-bios -s64k
+
+	# PATH is the *safe* path for executables (confstr(_CS_PATH...))
+	# LD_LIBRARY_PATH is the *safe* path for libraries (confstr(_CS_LIBPATH))
+	#    i.e. This is the path searched for libs in setuid/setgid executables.
+	PATH=/proc/boot:/bin:/usr/bin LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib:/lib/dll procnto-instr
+}
+
+[+script] startup-script = {
+  display_msg "  "
+  display_msg "Starting QNX 6.5.0 on EBX-11"
+  display_msg "  "
+  procmgr_symlink ../../proc/boot/libc.so.3 /usr/lib/ldqnx.so.2
+
+  display_msg "==> Starting PCI Services"
+  seedres
+  pci-bios
+  waitfor /dev/pci
+
+  display_msg "==> Starting USB Services"
+  io-usb -duhci -dohci -dehci &
+  waitfor /dev/io-usb
+
+  display_msg "==> Starting Console Manager"
+  io-hid -d usb -d ps2ser kbd:kbddev:ps2mouse:mousedev &
+  waitfor /dev/io-hid/io-hid
+  devc-con-hid -n4 &
+  waitfor /dev/con1
+  reopen /dev/con1
+
+  display_msg "==> Starting EIDE Driver"
+  devb-eide blk auto=none qnx6 sync=optional cam quiet
+  waitfor /dev/hd0
+  mount -e /dev/hd0
+  waitfor /dev/hd0t79
+  mount -t qnx4 /dev/hd0t79 /
+
+  display_msg "==> Emulating /etc/system/sysinit"
+  getconf -s CS_TIMEZONE UTC
+  slogger
+  pipe
+  mqueue
+  random -t
+
+  display_msg "==> Starting io-pkt-v4 -ptcpip"
+  io-pkt-v4 -ptcpip
+
+  display_msg "==> Running /etc/rc.d/rc.sysinit"
+  # Default user programs to priorty 10, other scheduler (pri=10o)
+  [pri=10o] PATH=/sbin:/usr/sbin:/bin:/usr/bin ksh -c /etc/rc.d/rc.sysinit
+}
+
+# Include the current "libc.so". It will be created as a real file using
+# its internal "SONAME", with "libc.so" being a symlink to it. The symlink
+# will point to the last "libc.so.*" so if an earlier libc is needed
+# (e.g. libc.so.1) add it before the this line.
+libc.so
+libhiddi.so
+libusbdi.so
+
+# Include all the files for the default filesystems
+libcam.so
+io-blk.so
+cam-disk.so
+fs-qnx4.so
+fs-qnx6.so
+fs-dos.so
+# fs-ext2.so
+# cam-cdrom.so
+# fs-cd.so
+# fs-udf.so
+# fs-nt.so
+# fs-mac.so
+
+# USB for console driver
+devu-ehci.so
+devu-ohci.so
+devu-uhci.so
+devh-usb.so
+devh-ps2ser.so
+
+[data=copy]
+seedres
+pci-bios
+devb-eide
+# devb-umass
+# devb-ahci
+# devb-mvSata
+# devb-adpu320
+# devb-aha8
+# umass-enum
+# [search=${QNX_TARGET}/etc] umass-enum.cfg
+io-usb
+io-hid
+io-pkt-v4
+slogger
+pipe
+mqueue
+random
+mount
+# fesh
+# devc-con
+devc-con-hid
+
+# These files will be unlinked after the system has started
+# to release the memory back to the system. They are only
+# needed during boot. If needed later on, they will be loaded
+# from the boot device.
+unlink_list={
+/proc/boot/devb-*
+}
