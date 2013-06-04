@@ -1,0 +1,23 @@
+# Startup for hwv2
+
+# Note: chkfsys is only for QNX4 file systems
+# QNX4 Fsys is recommended for CF drives
+echo "==> Checking file system"
+/sbin/chkfsys -qruP /
+
+setconf LIBPATH $(getconf LIBPATH):/usr/pkg/lib
+
+echo "==> Starting FTDI Driver"
+# shut down driver started by enum
+slay -f devc-serusb
+sleep 1
+dacs=vid=0x0403,did=0x6010,module=ftdi 
+/sbin/devc-serusb -d $dacs
+# bat=vid=0x0403,did=0x6001,module=ftdi
+# waitfor /dev/serusb2
+# /sbin/devc-serusb -F -b 460800 -d $bat
+
+echo "==> Restarting Serial Driver"
+slay -f devc-ser8250
+sleep 1
+/sbin/devc-ser8250 -u1 3f8,10 -u2 2f8,3 -c 7372800/16 -u3 300,4
