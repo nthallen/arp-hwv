@@ -41,7 +41,7 @@ HK {
 }
 
 SW {
-  Time: (flttime,8);
+  Time: (flttime,9);
   MFCtr: (MFCtr,5);
 }
 
