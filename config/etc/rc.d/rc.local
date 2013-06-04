@@ -1,2 +1,36 @@
+echo "==> Adding /usr/pkg/lib to LIBPATH"
 setconf LIBPATH $(getconf LIBPATH):/usr/pkg/lib
+
+if /sbin/ifconfig -l | grep -q fxp0; then
+  echo "==> Network driver already started"
+else
+  echo "==> Starting network driver"
+  mount -T io-pkt devnp-speedo.so
+  netmanager
+fi
+
+if [ ! -d /net ]; then
+  echo "==> Starting QNET driver"
+  mount -T io-pkt lsm-qnet.so
+fi
+
+echo "==> Checking file system"
+/sbin/chkfsys -Pqru /
+
+echo "==> Cleaning out huarp run dir"
+rm -rf /var/huarp/run/*
+
+if [ -e /dev/ser1 ]; then
+  echo "==> Skipping ser8250 for mother board"
+else
+  echo "==> Starting ser8250 for mother board"
+  devc-ser8250 -u1 3f8,4 -u2 2f8,3 -u3 3e8,7
+fi
+
+echo "==> Starting serusb driver for DACS"
 /sbin/devc-serusb -d vid=0x0403,did=0x6010,module=ftdi
+
+# echo "==> Starting Network Daemons"
+# /usr/bin/pdebug 8000
+# /usr/sbin/sshd
+# /usr/sbin/ntpd
