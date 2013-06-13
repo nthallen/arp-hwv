@@ -87,6 +87,5 @@ depending on (1Hz, PMTA_Counts_FG once, UVA1_Counts_FG once,
   validate h2o_lya_ppm;
 }
 
-printf("%.3lf,%.1lf,%.2lf,%.2lf,%.4le\n", dtime(), h2o_lya_ppm, P, T, M);
-/* printf("%.3lf,%.1lf\n", dtime(), h2o_lya_ppm); */
+/* printf("%.3lf,%.1lf,%.2lf,%.2lf,%.4le\n", dtime(), h2o_lya_ppm, P, T, M); */
 
