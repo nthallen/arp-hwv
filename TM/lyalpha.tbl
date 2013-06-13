@@ -20,6 +20,8 @@ Det {
       ChpAT:  (ChpAT,6) C;
       A_LMT:  (A_LMT,6) C;
       AModP:  (AModP,7)  V;
+      VGlue 0+1;
+      "[H2O]:"  (h2o_lya_ppm) ppm;
     }
   }
 }

@@ -62,9 +62,13 @@ TGTDIR = $(TGTNODE)/home/hwv
 HWVcol : -lsubbus
 HWVsrvr : -lsubbus
 
-HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui
+HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc \
+  SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc \
+  HWVmr.cyc HWVmr2.cyc HWVmr.tmc \
+  HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui
 
-lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc lyalpha.tbl
+lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc \
+         HWVmr.cyc HWVmr2.cyc HWVmr.tmc lyalpha.tbl
 
 HWValgo : ptrh_conv.tmc HWV.tma HWV.sws
 

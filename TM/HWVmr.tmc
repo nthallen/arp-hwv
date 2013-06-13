@@ -75,7 +75,7 @@ depending on (1Hz, PMTA_Counts_FG once, UVA1_Counts_FG once,
   double dPMTA, dUVA1, XAir, O2sigma, Kcal, H2Oc;
   dPMTA = PMTA_Counts_FG - PMTA_Counts_BG;
   dUVA1 = UVA1_Counts_FG - UVA1_Counts_BG;
-  P = LFT_P_FG * LFT_P_cal[0] + LFT_P_cal[1];
+  P = LFT_P_FG; /* * LFT_P_cal[0] + LFT_P_cal[1]; */
   T = HHH1T_FG * HHH1T_cal[0] + HHH1T_cal[1];
   M = 0.001 * P * (1013./760.) * 2.46e19 * 298./ (T + 273.15);
   O2sigma = P*O2sigma_cal[0] + O2sigma_cal[1];

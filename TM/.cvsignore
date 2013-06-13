@@ -19,6 +19,8 @@ HWVcmd.dat
 HWVsrvr.o
 HWVsrvroui.c
 HWVsrvroui.o
+HWVmrcyc.tmc
+HWVmr2cyc.tmc
 HWVtbl.tmc
 lyalphatbl.tmc
 hktbl.tmc
@@ -81,8 +83,6 @@ PText.cc
 PTextoui.c
 PTextoui.o
 PText.o
-HWVmrcyc.tmc
-HWVmr2cyc.tmc
 hwvmrext.cc
 hwvmrextoui.c
 hwvmrextoui.o
