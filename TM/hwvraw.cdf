@@ -103,9 +103,6 @@ csv hwvraw_1 119
   101 SDP_T %6.0lf 1*
   102 SD_HP %6.0lf 1*
   103 SD_LP %6.0lf 1*
-  104 SFB1T %6.0lf 1*
-  105 SFB2T %6.0lf 1*
-  106 SFB3T %6.0lf 1*
   107 SPV1T %6.0lf 1*
   108 SPV2T %6.0lf 1*
   109 SSP_Flags %6.0lf 1*
@@ -118,10 +115,13 @@ csv hwvraw_1 119
   116 SSP_T_HtSink %6.0lf 1*
   117 SWStat %6.0lf 1*
   118 TVPos %6.0lf 1*
-csv hwvraw_8 6
+csv hwvraw_8 9
   0 Thwvraw_8 %.3lf
   1 HHH1P %6.0lf 1*
   2 HHH1T %6.0lf 1*
   3 HHH2P %6.0lf 1*
   4 HHH2T %6.0lf 1*
   5 HHHDP %6.0lf 1*
+  6 SFB1T %6.0lf 1*
+  7 SFB2T %6.0lf 1*
+  8 SFB3T %6.0lf 1*

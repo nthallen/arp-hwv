@@ -77,12 +77,6 @@ hhhext.cc
 hhhextoui.c
 hhhextoui.o
 hhhext.o
-PTextcdf.oui
-PText.tmc
-PText.cc
-PTextoui.c
-PTextoui.o
-PText.o
 lyamrextcdf.oui
 lyamrext.tmc
 lyamrext.cc
@@ -112,7 +106,6 @@ hwvengext
 hwvrawext
 hwvext
 hhhext
-PText
 lyamrext
 HWVclt
 HWVcltnc

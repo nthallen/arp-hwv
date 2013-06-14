@@ -1,14 +1,14 @@
-csv hhh_1 41
- 0  Thhh
+csv hhh_1 36
+ 0  Thhh_1 %.3lf
  1  MZ1_I
  2  MZ2_I
  3  MZ3_I
  4  MZ4_I
- 5  HHH1P
- 6  HHH1T
- 7  HHH2P
- 8  HHH2T
- 9  HHHDP
+ 5  PIF6T
+ 6  MM_1T
+ 7  MM_2T
+ 8  MM_3T
+ 9  MM_4T
  10 HHHPT
  11 HPV_P
  12 HPV_RH %5.1f
@@ -35,9 +35,11 @@ csv hhh_1 41
  33 PIF3T
  34 PIF4T
  35 PIF5T
- 36 PIF6T
- 37 MM_1T
- 38 MM_2T
- 39 MM_3T
- 40 MM_4T
 
+csv hhh_8 6
+ 0  Thhh_8 %.3lf
+ 1  HHH1P
+ 2  HHH1T
+ 3  HHH2P
+ 4  HHH2T
+ 5  HHHDP

@@ -82,7 +82,7 @@ hwvengext : ptrh_conv.tmc hwveng.cdf
 hwvrawext : ptrh_conv.tmc hwvraw.cdf
 hwvext : hwv.cdf
 hhhext : hhh.cdf
-PText : PT.cdf
+# PText : PT.cdf
 lyamrext : HWVmr.cyc HWVmr2.cyc HWVmr.tmc lyamr.cdf
 %%
 COLFLAGS=-Haddress.h
