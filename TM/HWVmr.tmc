@@ -68,22 +68,23 @@
 
 TM typedef double PPM { text "%7.1lf"; }
 PPM h2o_lya_ppm; Invalidate h2o_lya_ppm;
-double P, T, M;
+double h2o_lya_P, h2o_lya_T, h2o_lya_M;
 
 depending on (1Hz, PMTA_Counts_FG once, UVA1_Counts_FG once,
                    LFT_P_FG once, HHH1T_FG once) {
   double dPMTA, dUVA1, XAir, O2sigma, Kcal, H2Oc;
   dPMTA = PMTA_Counts_FG - PMTA_Counts_BG;
   dUVA1 = UVA1_Counts_FG - UVA1_Counts_BG;
-  P = LFT_P_FG; /* * LFT_P_cal[0] + LFT_P_cal[1]; */
-  T = HHH1T_FG * HHH1T_cal[0] + HHH1T_cal[1];
-  M = 0.001 * P * (1013./760.) * 2.46e19 * 298./ (T + 273.15);
-  O2sigma = P*O2sigma_cal[0] + O2sigma_cal[1];
-  XAir = exp(-L1C * M * (O2mr*O2sigma+CO2mr*CO2sigma+CH4mr*CH4sigma));
-  Kcal = M*Inst1_cal[0] + Inst1_cal[1];
+  h2o_lya_P = LFT_P_FG; /* * LFT_P_cal[0] + LFT_P_cal[1]; */
+  h2o_lya_T = HHH1T_FG * HHH1T_cal[0] + HHH1T_cal[1];
+  h2o_lya_M = 0.001 * h2o_lya_P * (1013./760.) * 2.46e19 * 298. /
+    (h2o_lya_T + 273.15);
+  O2sigma = h2o_lya_P*O2sigma_cal[0] + O2sigma_cal[1];
+  XAir = exp(-L1C * h2o_lya_M * (O2mr*O2sigma+CO2mr*CO2sigma+CH4mr*CH4sigma));
+  Kcal = h2o_lya_M*Inst1_cal[0] + Inst1_cal[1];
   H2Oc = dPMTa * XAir * 10000. * Kcal / dUVA1;
   H2Oc = Iterate(H2Oc);
-  h2o_lya_ppm = 1e6 * H2Oc / M;
+  h2o_lya_ppm = 1e6 * H2Oc / h2o_lya_M;
   validate h2o_lya_ppm;
 }
 

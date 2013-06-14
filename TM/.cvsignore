@@ -83,10 +83,12 @@ PText.cc
 PTextoui.c
 PTextoui.o
 PText.o
-hwvmrext.cc
-hwvmrextoui.c
-hwvmrextoui.o
-hwvmrext.o
+lyamrextcdf.oui
+lyamrext.tmc
+lyamrext.cc
+lyamrextoui.c
+lyamrextoui.o
+lyamrext.o
 HWVclt.o
 HWVcltoui.c
 HWVcltoui.o
@@ -111,6 +113,6 @@ hwvrawext
 hwvext
 hhhext
 PText
-hwvmrext
+lyamrext
 HWVclt
 HWVcltnc

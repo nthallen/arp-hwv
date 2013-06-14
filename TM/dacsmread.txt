@@ -53,7 +53,7 @@ TM 1 Hz AI_XP768 L2Flw; Address L2Flw 0xC94; /* Lab Flow #2 */
 TM 1 Hz AI_XP768 L3Flw; Address L3Flw 0xCB4; /* Lab Flow #3 */
 TM 1 Hz AI_XP768 L4Flw; Address L4Flw 0xCD4; /* Lab Flow #4 */
 TM 1 Hz AI_X1 Las_I; Address Las_I 0xCF2; /* HHH Laser Current */
-TM 1 Hz AI_T30K LFB_T; Address LFB_T 0xC36; /* Lab Bubbler Temp */
+TM 8 Hz AI_T30K LFB_T; Address LFB_T 0xC36; /* Lab Bubbler Temp */
 TM 1 Hz AI_XP384 LFB1P; Address LFB1P 0xCF4; /* Lab Bubbler Prs #1 */
 TM 1 Hz AI_XP384 LFB2P; Address LFB2P 0xC16; /* Lab Bubbler Prs #2 0xC16 0xC5A */
 TM 8 Hz AI_XP384 LFT_P; Address LFT_P 0xC56; /* Lab Flow Tube3 Prs */
