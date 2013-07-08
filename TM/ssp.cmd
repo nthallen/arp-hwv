@@ -5,7 +5,7 @@
 #ifdef SERVER
   #include "hsatod.h"
   #define QCLI_ICOS \
-      (HSAD_OPT_A|HSAD_OPT_B|HSAD_OPT_C|HSAD_TRIG_3|HSAD_TRIG_RISING)
+      (HSAD_OPT_A|HSAD_OPT_B|HSAD_TRIG_3|HSAD_TRIG_RISING)
 
   hsatod_setup_t ssp_setup;
 
