@@ -67,7 +67,7 @@ switch (SWStat) {
     case P_HHH1P:
       P = convert(HHH1P) * 201.512098 -5.64399177; break;
     case P_LFT_P:
-      P = convert(LFT_P) * 246.747615 + 0.13; break;
+      P = convert(LFT_P); break;
   }
   if ( Avg.Process(convert(UVA1_Counts) >= 50,
           LyAmrSample(dtime(), convert(PMTA_Counts),
