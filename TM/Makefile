@@ -1,4 +1,4 @@
-# Makefile Generated Thu Jul 11 11:29:11 EDT 2013
+# Makefile Generated Thu Jul 11 12:08:36 EDT 2013
 MNC=HWV
 SPECFILE=HWV.spec
 SRC=ptrhm.h dacsmread.txt base.tmc idx64.tmc ssp.tmc qcli.tmc
@@ -141,8 +141,8 @@ hwvext : hwvext.o ptrhm.o hwvextoui.o
 hhhext : hhhext.o ptrhm.o hhhextoui.o
 	$(LINK.normCXX) hhhext.o ptrhm.o hhhextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) hhhextoui.c
-lyamrext : lyamrext.o ptrhm.o lyamrextoui.o
-	$(LINK.normCXX) lyamrext.o ptrhm.o lyamrextoui.o -ltmpp -ltm -lnort
+lyamrext : lyamrext.o ptrhm.o LyAmrSample.o Circular.o LyAmrAvg.o lyamrextoui.o
+	$(LINK.normCXX) lyamrext.o ptrhm.o LyAmrSample.o Circular.o LyAmrAvg.o lyamrextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) lyamrextoui.c
 HWVclt : HWVclt.o HWVcltoui.o
 	$(LINK.normCXX) HWVclt.o HWVcltoui.o -ltmph -lph -ltmpp -ltm -lnort
@@ -268,8 +268,8 @@ lyamrextcdf.oui : lyamr.cdf
 	$(EDF2OUI) lyamr.cdf
 lyamrext.tmc : lyamr.cdf
 	$(EDF2EXT) lyamr.cdf
-lyamrext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc SWData.tmc HWVmrcyc.tmc HWVmr2cyc.tmc HWVmr.tmc lyamrext.tmc
-	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc SWData.tmc HWVmrcyc.tmc HWVmr2cyc.tmc HWVmr.tmc lyamrext.tmc
+lyamrext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc SWData.tmc HWVmr2.tmc lyamrext.tmc
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc SWData.tmc HWVmr2.tmc lyamrext.tmc
 lyamrextoui.c : lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 lyamrextoui.o : lyamrextoui.c SWData.h
