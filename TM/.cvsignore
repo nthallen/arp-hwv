@@ -19,8 +19,6 @@ HWVcmd.dat
 HWVsrvr.o
 HWVsrvroui.c
 HWVsrvroui.o
-HWVmrcyc.tmc
-HWVmr2cyc.tmc
 HWVtbl.tmc
 lyalphatbl.tmc
 hktbl.tmc
@@ -29,6 +27,9 @@ HWVdisp.cc
 HWVdispoui.c
 HWVdispoui.o
 HWVdisp.o
+LyAmrSample.o
+Circular.o
+LyAmrAvg.o
 HWVtblnc.tmc
 lyalphatblnc.tmc
 hktblnc.tmc
@@ -37,6 +38,8 @@ HWVdispnc.cc
 HWVdispncoui.c
 HWVdispncoui.o
 HWVdispnc.o
+HWVmrcyc.tmc
+HWVmr2cyc.tmc
 lydisp.cc
 lydispoui.c
 lydispoui.o

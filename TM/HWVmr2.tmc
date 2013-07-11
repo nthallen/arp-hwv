@@ -15,7 +15,7 @@
   double O2sigma_cal[] = { 1.72e-23, 1.13e-20 }; /* as a function of pressure in torr */
   double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; /* as a function of [M] */
   
-  LyAmrAvg Avg((2, 2, 8, 1, 1, 0);
+  LyAmrAvg Avg(2, 2, 8, 1, 1, 0);
   enum T_t { T_SFB1T, T_HHH1T, T_LFB_T } T_sel = T_SFB1T;
   enum P_t { P_UVB1, P_SD_HP, P_HHH1P, P_LFT_P } P_sel = P_UVB1;
   
@@ -61,7 +61,7 @@ switch (SWStat) {
   switch (P_sel) {
     default:
     case P_UVB1:
-      P = UVB1_Counts * 0.079376 - 4.98674; break;
+      P = convert(UVB1_Counts) * 0.079376 - 4.98674; break;
     case P_SD_HP:
       P = convert(SD_HP) * 0.998543 - 5.1434; break;
     case P_HHH1P:
@@ -69,8 +69,9 @@ switch (SWStat) {
     case P_LFT_P:
       P = convert(LFT_P) * 246.747615 + 0.13; break;
   }
-  if ( Avg.Process(UVA1_Counts>=50,
-          LyAmrSample(dtime(), PMTA_Counts, UVA1_Counts, T, P)) ) {
+  if ( Avg.Process(convert(UVA1_Counts) >= 50,
+          LyAmrSample(dtime(), convert(PMTA_Counts),
+            convert(UVA1_Counts), T, P)) ) {
     double dPMTA, dUVA1, XAir, O2sigma, Kcal, H2Oc;
     dPMTA = Avg.fg.C - Avg.bg.C;
     dUVA1 = Avg.fg.U - Avg.bg.U;
