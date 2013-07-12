@@ -86,8 +86,8 @@ TM 1 Hz AI_T10K PIF4T; Address PIF4T 0xC60; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF5T; Address PIF5T 0xC80; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF6T; Address PIF6T 0xCA0; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF7T; Address PIF7T 0xCC0; /* Primary Inlet Fwd Therm Ring */
-TM 1 Hz AI_P1000Torr SD_HP; Address SD_HP 0xC6C; /* Secondary Duct High Prs (1000 torr) */
-TM 1 Hz AI_P100Torr SD_LP; Address SD_LP 0xC4C; /* Secondary Duct Low Prs (100 torr) */
+TM 8 Hz AI_P1000Torr SD_HP; Address SD_HP 0xC6C; /* Secondary Duct High Prs (1000 torr) */
+TM 8 Hz AI_P100Torr SD_LP; Address SD_LP 0xC4C; /* Secondary Duct Low Prs (100 torr) */
 TM 1 Hz AI_T30K SDP_T; Address SDP_T 0xC8C; /* Secondary Duct Prs Guage Temp */
 TM 1 Hz AI_SDPDP SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
 TM 8 Hz AI_T10K SFB1T; Address SFB1T 0xC4A; /* Secondary Inlet Therm Ring */
