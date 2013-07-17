@@ -48,6 +48,7 @@ SCRIPT = interact
 SCRIPT = runfile.FF
 SCRIPT = dccc.dccc
 SCRIPT = idx64.idx64
+SCRIPT = hwv_analysis
 SRCDIST = waves.qcli waves.m
 DISTRIB = waves.out A.sft
 SRC = ptrhm.h

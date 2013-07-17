@@ -1,0 +1,62 @@
+#! /bin/sh
+# hwv_analysis: Analysis script
+#   COPY_SCANS=yes reduce
+#     Copy SSP directories
+#   COPY_SCANS=no reduce
+#     Suppress copying of SSP directories
+#   reduce
+#     Will copy SSP scans for data or junk runs
+#
+#   DIRCKSUM=yes reduce
+#     Perform dircksum after extraction and copying
+#   DIRCKSUM=no reduce
+#     Do not perform dircksum even for flight data
+#   reduce
+#     Will perform dircksum for flight data only
+
+function nl_error {
+  echo "hwv_analysis: $*" >&2
+  exit 1
+}
+
+directory=$1
+analdir=$2
+[ -z "$directory" -o -z "$analdir" ] && nl_error "usage: $0 <directory> <analdir>"
+[ -d $directory ] || nl_error "Cannot locate directory '$directory'"
+[ -d "$PWD" ] || nl_error "PWD is apparently not defined"
+
+./BSext $directory $analdir
+run=`basename $directory`
+runtypedir=`dirname $directory`
+runtype=`basename $runtypedir`
+dest=$PWD/raw/$runtype/$run
+if [ ! -d $dest ]; then
+  if [ -z "$COPY_SCANS" ]; then
+    case $runtype in
+      data) COPY_SCANS=yes;;
+      junk) COPY_SCANS=yes;;
+      *) COPY_SCAN=no;;
+    esac
+  fi
+  scans=''
+  [ $COPY_SCANS = yes ] && scans="SSP"
+  mkdir -p $dest || nl_error "Cannot create directory $dest"
+  cd $directory
+  echo "hwv_analysis: Copying engineering data"
+  cp -r *.log tm.dac VERSION Base LOG $scans $dest
+fi
+if [ -z "$DIRCKSUM" ]; then
+  if [ $runtype = flight ]; then
+    DIRCKSUM=yes
+  else
+    DIRCKSUM=no
+  fi
+fi
+if [ $DIRCKSUM = yes -a ! -f $directory/.MD5SUM ]; then
+  echo "Performing dircksum on $directory"
+  run=`basename $directory`
+  parent=`dirname $directory`
+  on -f hwv dircksum -w -C $parent $run
+fi
+echo "hwv_analysis: finished $directory"
+
