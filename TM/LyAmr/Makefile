@@ -4,20 +4,24 @@ LDFLAGS = -L$(CPPUTEST_HOME)/lib
 CXXFLAGS = -Wall -g -O0
 LDLIBS = -lnort -lCppUTest -lstdc++
 
-.PHONY : test clean
+.PHONY : all test clean
 
-test : LyAmr_Test
+all : LyAmr_Test UDP_Test All_Test
+test : all
 	./LyAmr_Test -v
+	./UDP_Test -v
 clean :
-	rm -f *.o LyAmr_Test output.txt averages.txt
+	rm -f *.o LyAmr_Test output.txt averages.txt UDP_Test All_Test
 
-LYAMR_OBJ = AllTests.o
-LYAMR_OBJ += LyAmrSample.o LyAmrSample_Test.o
+LYAMR_OBJ = LyAmrSample.o LyAmrSample_Test.o
 LYAMR_OBJ += Circular.o Circular_Test.o
 LYAMR_OBJ += LyAmrAvg.o LyAmrAvg_Test.o
-LyAmr_Test : $(LYAMR_OBJ)
-	$(CC) $(LDFLAGS) $(CXXFLAGS) -o LyAmr_Test $(LYAMR_OBJ) $(LDLIBS)
+LyAmr_Test : AllTests.o $(LYAMR_OBJ)
+	$(CC) $(LDFLAGS) $(CXXFLAGS) -o LyAmr_Test AllTests.o $(LYAMR_OBJ) $(LDLIBS)
 
-UDP_OBJ = AllTests.o UDP.o UDP_Test.o
-UDP_Test : $(UDP_OBJ)
-	$(CC) $(LDFLAGS) $(CXXFLAGS) -o UDP_Test $(UDP_OBJ) $(LDLIBS)
+UDP_OBJ = UDP.o UDP_Test.o
+UDP_Test : AllTests.o $(UDP_OBJ)
+	$(CC) $(LDFLAGS) $(CXXFLAGS) -o UDP_Test AllTests.o $(UDP_OBJ) $(LDLIBS)
+
+All_Test : AllTests.o $(LYAMR_OBJ) $(UDP_OBJ)
+	$(CC) $(LDFLAGS) $(CXXFLAGS) -o All_Test AllTests.o $(LYAMR_OBJ) $(UDP_OBJ) $(LDLIBS)
