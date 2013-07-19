@@ -2,6 +2,7 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
 #include "UDP.h"
 #include "nortlib.h"
 #include "nl_assert.h"
@@ -41,6 +42,13 @@ UDPbcast::UDPbcast(const char *broadcast_ip, const char *broadcast_port) {
   addrlen = res->ai_addrlen;
   freeaddrinfo(res);
   ok_status = true;
+}
+
+UDPbcast::~UDPbcast() {
+  if (bcast_sock != -1) {
+    close(bcast_sock);
+    bcast_sock = -1;
+  }
 }
 
 bool UDPbcast::ok() { return ok_status; }
