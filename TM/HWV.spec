@@ -14,6 +14,7 @@ tmcbase = pwrmon.tmc
 tmcbase = /usr/local/share/huarp/cpu_usage.tmc
 tmcbase = /usr/local/share/huarp/tmdf.tmc
 tmcbase = dacsmread.tmc
+tmcbase = IWG1.tmc
 
 cmdbase = /usr/local/share/huarp/root.cmd
 cmdbase = /usr/local/share/huarp/getcon.cmd
@@ -41,6 +42,7 @@ colbase = /usr/local/share/huarp/DACS_ID.tmc
 colbase = /usr/local/share/huarp/cpu_usage_col.tmc
 colbase = /usr/local/share/huarp/tmdf_col.tmc
 colbase = dacsmread_col.tmc
+colbase = IWG1_col.tmc
 
 swsbase = HWV.sws
 
@@ -51,6 +53,7 @@ SCRIPT = idx64.idx64
 SCRIPT = hwv_analysis
 SRCDIST = waves.qcli waves.m
 DISTRIB = waves.out A.sft
+DISTRIB = ../IWG1/IWG1
 SRC = ptrhm.h
 SRC = dacsmread.txt
 
@@ -66,7 +69,8 @@ HWVsrvr : -lsubbus
 HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc \
   SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
-  HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui
+  HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui \
+  IWG1.tbl
 
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc \
          HWVmr.cyc HWVmr2.cyc HWVmr.tmc lyalpha.tbl
@@ -99,3 +103,5 @@ waves.cmd waves.out waves.tmc waves.m : waves.qcli
 	  ( rm -f waves.out waves.cmd waves.tmc waves.log waves.m; false )
 dacsmread.tmc dacsmread_col.tmc : dacsmread.txt
 	./dacsmread.pl dacsmread
+../IWG1/IWG1 :
+	cd ../IWG1 && make
