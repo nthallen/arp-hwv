@@ -17,3 +17,7 @@ LYAMR_OBJ += Circular.o Circular_Test.o
 LYAMR_OBJ += LyAmrAvg.o LyAmrAvg_Test.o
 LyAmr_Test : $(LYAMR_OBJ)
 	$(CC) $(LDFLAGS) $(CXXFLAGS) -o LyAmr_Test $(LYAMR_OBJ) $(LDLIBS)
+
+UDP_OBJ = AllTests.o UDP.o UDP_Test.o
+UDP_Test : $(UDP_OBJ)
+	$(CC) $(LDFLAGS) $(CXXFLAGS) -o UDP_Test $(UDP_OBJ) $(LDLIBS)
