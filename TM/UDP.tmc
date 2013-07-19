@@ -1,0 +1,26 @@
+%{
+  #include "LyAmr/UDP.h"
+  #include "tmctime.h"
+
+  int lya_stale = -1;
+  unsigned char lya_status = STATUS_Operating;
+  double cur_h2o_lya_ppm;
+  // UDPbcast UDP("10.3.1.255", 5100); // ER-2 LAN
+  UDPbcast UDP("10.245.83.127", 5100); // Link LAN
+%}
+
+depending on (h2o_lya_ppm) {
+  lya_stale = 0;
+  cur_h2o_lya_ppm;
+}
+
+depending on (1 Hz) {
+  if (lya_stale < 0) {
+    UDP.Broadcast(dtime(), STATUS_Operating);
+  } else if (lya_stale == 0) {
+    UDP.Broadcast(dtime(), STATUS_Ready | STATUS_Operating, cur_h2o_lya_ppm);
+    lya_stale = 1;
+  } else {
+    UDP.Broadcase(dtime(), STATUS_Ready| STATUS_Operating | STATUS_Calibrating);
+  }
+}

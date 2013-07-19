@@ -73,7 +73,11 @@ HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc \
   IWG1.tbl
 
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc \
-         HWVmr.cyc HWVmr2.cyc HWVmr.tmc lyalpha.tbl
+  HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
+  lyalpha.tbl
+lyamrudp : /usr/local/share/huarp/flttime.tmc \
+  HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
+  LyAmr/UDP.cc UDP.tmc
 
 HWValgo : ptrh_conv.tmc HWV.tma HWV.sws
 
