@@ -23,6 +23,7 @@ HWVtbl.tmc
 lyalphatbl.tmc
 hktbl.tmc
 labtbl.tmc
+IWG1tbl.tmc
 HWVdisp.cc
 HWVdispoui.c
 HWVdispoui.o
@@ -34,12 +35,11 @@ HWVtblnc.tmc
 lyalphatblnc.tmc
 hktblnc.tmc
 labtblnc.tmc
+IWG1tblnc.tmc
 HWVdispnc.cc
 HWVdispncoui.c
 HWVdispncoui.o
 HWVdispnc.o
-HWVmrcyc.tmc
-HWVmr2cyc.tmc
 lydisp.cc
 lydispoui.c
 lydispoui.o
@@ -48,6 +48,11 @@ lydispnc.cc
 lydispncoui.c
 lydispncoui.o
 lydispnc.o
+lyamrudpext.cc
+lyamrudpextoui.c
+lyamrudpextoui.o
+lyamrudpext.o
+UDP.o
 HWVsws.tma
 HWValgoa.tmc
 HWValgo.cc
@@ -99,6 +104,7 @@ HWVdisp
 HWVdispnc
 lydisp
 lydispnc
+lyamrudpext
 HWValgo
 doit
 lydoit
