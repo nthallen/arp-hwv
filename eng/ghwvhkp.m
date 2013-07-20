@@ -1,5 +1,5 @@
 function fig = ghwvhkp(varargin);
 % ghwvhkp(...)
-% HK Power
-ffig = ne_group(varargin,'HK Power','phwvhkpv','phwvhkpc','phwvhkps');
+% Power
+ffig = ne_group(varargin,'Power','phwvhkps','phwvhkpt');
 if nargout > 0 fig = ffig; end
