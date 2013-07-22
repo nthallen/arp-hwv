@@ -96,7 +96,7 @@ const char *UDPbcast::ISO8601(double utc) {
     --iutc;
   }
   struct tm *tms = gmtime(&iutc);
-  snprintf(buf, 24, "%4d-%02d-%02dT%02d:%02d:%05.3lf",
+  snprintf(buf, 24, "%4d-%02d-%02dT%02d:%02d:%06.3lf",
     tms->tm_year + 1900,
     tms->tm_mon + 1,
     tms->tm_mday,
