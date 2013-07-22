@@ -28,7 +28,7 @@ IWG1_UDP::IWG1_UDP() : Ser_Sel( 0, 0, 600 ) {
   // Set up TM
   tm_id = Col_send_init( "IWG1", &IWG1, sizeof(IWG1_data_t), 0);
   // Set up UDP listener
-  Bind(5000);
+  Bind("7071");
   flags = Selector::Sel_Read;
   flush_input();
   setenv("TZ", "UTC0", 1); // Force UTC for mktime()
@@ -138,34 +138,33 @@ int IWG1_UDP::not_nfloat(float *value) {
   return 0;
 }
 
-void IWG1_UDP::Bind(int port) {
-	char service[10];
-	struct addrinfo hints,*results, *p;
-  int err, ioflags;
+void IWG1_UDP::Bind(const char *port_str) {
+  struct addrinfo hints,*results, *p;
+  int err, ioflags, port;
 
-	if (port == 0)
+  port = atoi(port_str);
+  if (port == 0)
     nl_error( 3, "Invalid port in IWG1_UDP: 0" );
-	snprintf(service, 10, "%d", port);
 
-	memset(&hints, 0, sizeof(hints));	
-	hints.ai_family = AF_UNSPEC;		// don't care IPv4 of v6
-	hints.ai_socktype = SOCK_DGRAM;
-	hints.ai_flags = AI_PASSIVE;
-	
-	err = getaddrinfo(NULL, 
-						service,
-						&hints,
-						&results);
-	if (err)
+  memset(&hints, 0, sizeof(hints));	
+  hints.ai_family = AF_UNSPEC;		// don't care IPv4 of v6
+  hints.ai_socktype = SOCK_DGRAM;
+  hints.ai_flags = AI_PASSIVE;
+  
+  err = getaddrinfo(NULL, 
+            port_str,
+            &hints,
+            &results);
+  if (err)
     nl_error( 3, "IWG1_UDP::Bind: getaddrinfo error: %s", gai_strerror(err) );
-	for(p=results; p!= NULL; p=p->ai_next) {
-		fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-		if (fd < 0)
+  for(p=results; p!= NULL; p=p->ai_next) {
+    fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+    if (fd < 0)
       nl_error( 2, "IWG1_UPD::Bind: socket error: %s", strerror(errno) );
-		else if ( bind(fd, p->ai_addr, p->ai_addrlen) < 0 )
+    else if ( bind(fd, p->ai_addr, p->ai_addrlen) < 0 )
       nl_error( 2, "IWG1_UDP::Bind: bind error: %s", strerror(errno) );
-		else break;
-	}
+    else break;
+  }
   if (fd < 0)
     nl_error(3, "Unable to bind UDP socket");
     
@@ -178,12 +177,12 @@ void IWG1_UDP::Bind(int port) {
 }
 
 int IWG1_UDP::fillbuf() {
-	struct sockaddr_storage from;
-	socklen_t fromlen = sizeof(from);
-	int rv = recvfrom(fd, &buf[nc],	bufsize - nc - 1, 0,
-						(struct sockaddr*)&from, &fromlen);
-	
-	if (rv == -1) {
+  struct sockaddr_storage from;
+  socklen_t fromlen = sizeof(from);
+  int rv = recvfrom(fd, &buf[nc],	bufsize - nc - 1, 0,
+            (struct sockaddr*)&from, &fromlen);
+  
+  if (rv == -1) {
     if ( errno == EWOULDBLOCK ) {
       ++n_eagain;
     } else if (errno == EINTR) {
