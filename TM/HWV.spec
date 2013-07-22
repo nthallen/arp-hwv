@@ -97,6 +97,7 @@ lyamrext : HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc \
 %%
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g
+CPPFLAGS+=-I ../IWG1
 address.h : HWVcol.cc
 HWVsrvr.o : address.h
 hwveng.cdf : genui.txt
