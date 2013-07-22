@@ -1,5 +1,6 @@
 %{
   #include <math.h>
+  #include "tmctime.h"
   #include "IWG1.h"
   IWG1_data_t IWG1;
 
