@@ -11,7 +11,7 @@
 #include "oui.h"
 #include "nortlib.h"
 
-const char *host = "192.168.237.1";
+const char *host = 0;
 const char *port = "5100";
 
 int main(int argc, char **argv) {

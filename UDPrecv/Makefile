@@ -1,7 +1,7 @@
 CXXFLAGS=-Wall -g
 CPPFLAGS = -I /usr/local/include
 LDFLAGS = -L /usr/local/lib
-LDLIBS = -lnort -lstdc++
+LDLIBS = -lnort -lsocket -lstdc++
 
 UDPrecv : UDPrecv.o
 
