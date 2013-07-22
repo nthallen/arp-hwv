@@ -1,4 +1,4 @@
-# Makefile Generated Fri Jul 19 15:48:07 EDT 2013
+# Makefile Generated Sun Jul 21 13:21:12 EDT 2013
 MNC=HWV
 SPECFILE=HWV.spec
 SRC=ptrhm.h dacsmread.txt base.tmc idx64.tmc ssp.tmc qcli.tmc
@@ -306,6 +306,7 @@ clean : tidy
 	@for i in $(OBJECT) $(TARGET); do echo "$$i"; done >.cvsignore
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g
+CPPFLAGS+=-I ../IWG1
 address.h : HWVcol.cc
 HWVsrvr.o : address.h
 hwveng.cdf : genui.txt
