@@ -25,7 +25,6 @@ analdir=$2
 [ -d $directory ] || nl_error "Cannot locate directory '$directory'"
 [ -d "$PWD" ] || nl_error "PWD is apparently not defined"
 
-./BSext $directory $analdir
 run=`basename $directory`
 runtypedir=`dirname $directory`
 runtype=`basename $runtypedir`
