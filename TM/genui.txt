@@ -104,8 +104,8 @@ ROWS 18
   1 L4Flw HK:Lab Flow
   1 LFB1P HK:Lab P
   1 LFB2P HK:Lab P
-  1 LFB_T HK:Lab T
-  1 LFT_P HK:Lab P
+  8 LFB_T HK:Lab T
+  8 LFT_P HK:Lab P
   
   1 LTE1R4T HHH:HHHhk LTE
   1 Las_I   HHH:HHHhk I
@@ -160,10 +160,10 @@ ROWS 18
   1 RFCSt Lyman_Alpha:LampB SetPt
   1 SDPDP Lyman_Alpha:SDP DP
   1 SDP_T Lyman_Alpha:SDP T
-  1 SD_HP Lyman_Alpha:SDP P
-  1 SD_LP Lyman_Alpha:SDP P
+  8 SD_HP Lyman_Alpha:SDP P
+  8 SD_LP Lyman_Alpha:SDP P
   8 UVB1_Counts Lyman_Alpha:SDP P
-  1 SFB1T Lyman_Alpha:Flow SFB 1T
+  8 SFB1T Lyman_Alpha:Flow SFB 1T
   1 SFB2T Lyman_Alpha:Flow SFB 2T
   1 SFB3T Lyman_Alpha:Flow SFB 3T
   1 SPV1T HHH:SPV T
@@ -267,9 +267,9 @@ ROWS 18
   1 SPV_RHC  HHH:SPV RH
   1 SPV_PTRHS HHH:SPV Status
 
-  1 SolStA Lyman_Alpha:SolSt A
-  1 SolStB Lyman_Alpha:SolSt B
-  1 SolStC Lyman_Alpha:SolSt C
+  8 SolStA Lyman_Alpha:SolSt A
+  8 SolStB Lyman_Alpha:SolSt B
+  8 SolStC Lyman_Alpha:SolSt C
 
   1 PM0V1 HK:HK_Power Voltage
   1 PM0V2 HK:HK_Power Voltage
