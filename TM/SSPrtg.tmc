@@ -6,3 +6,9 @@ if (last_SSP != SSP_Num) {
   ci_sendfcmd(2, "PhRTG File SSP %u\n", SSP_Num );
   last_SSP = SSP_Num;
 }
+
+ci_sendfcmd(2, "PhRTG Datum LTE1R4T %lu %s\n", itime(), text(LTE1R4T));
+ci_sendfcmd(2, "PhRTG Datum h2o_lya_ppm %lu %s\n", itime(), text(h2o_lya_ppm));
+ci_sendfcmd(2, "PhRTG Datum A_IRV %lu %s\n", itime(), text(A_IRV));
+ci_sendfcmd(2, "PhRTG Datum SD_HP %lu %s\n", itime(), text(SD_HP));
+

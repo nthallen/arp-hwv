@@ -67,10 +67,10 @@ HWVcol : -lsubbus
 HWVsrvr : -lsubbus
 
 HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc \
-  SSPrtg.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc \
+  idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
-  HWV.tbl lyalpha.tbl hk.tbl lab.tbl /usr/local/share/oui/cic.oui \
-  IWG1.tbl
+  SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl \
+  /usr/local/share/oui/cic.oui IWG1.tbl
 
 lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
