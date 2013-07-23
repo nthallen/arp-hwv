@@ -21,5 +21,6 @@
   Launch - sspdrv -b1 -hSSP -N `mlf_find SSP`
   Launch - qclidacsd -h QCLI -d0
   Launch - IWG1
+  Launch - lyamrudpext
   Launch - HWValgo -v
 
