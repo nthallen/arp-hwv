@@ -10,7 +10,7 @@ class IWG1_UDP : public Ser_Sel {
     IWG1_UDP();
     int ProcessData(int flag);
   private:
-    void Bind(const char* port);
+    void Bind(const char *interface, const char* port);
     int fillbuf();
     int not_ndigits(int n, int &value);
     int not_ISO8601(double *Time);

@@ -28,7 +28,7 @@ IWG1_UDP::IWG1_UDP() : Ser_Sel( 0, 0, 600 ) {
   // Set up TM
   tm_id = Col_send_init( "IWG1", &IWG1, sizeof(IWG1_data_t), 0);
   // Set up UDP listener
-  Bind("7071");
+  Bind("10.9.1.155", "7071");
   flags = Selector::Sel_Read;
   flush_input();
   setenv("TZ", "UTC0", 1); // Force UTC for mktime()
@@ -138,7 +138,7 @@ int IWG1_UDP::not_nfloat(float *value) {
   return 0;
 }
 
-void IWG1_UDP::Bind(const char *port_str) {
+void IWG1_UDP::Bind(const char *interface, const char *port_str) {
   struct addrinfo hints,*results, *p;
   int err, ioflags, port;
 
@@ -151,7 +151,7 @@ void IWG1_UDP::Bind(const char *port_str) {
   hints.ai_socktype = SOCK_DGRAM;
   hints.ai_flags = AI_PASSIVE;
   
-  err = getaddrinfo(NULL, 
+  err = getaddrinfo(interface, 
             port_str,
             &hints,
             &results);
