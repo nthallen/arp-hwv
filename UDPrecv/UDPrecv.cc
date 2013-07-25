@@ -18,8 +18,10 @@ int main(int argc, char **argv) {
   //oui_init_options(argc, argv);
   UDPrecv R(host, port);
   for (;;) {
-    if (R.receive())
+    if (R.receive()) {
       printf("%s", R.data());
+      fflush(stdout);
+    }
   }
   return 0;
 }
