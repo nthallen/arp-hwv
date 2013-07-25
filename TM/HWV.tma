@@ -1,6 +1,6 @@
 # =============================================================================
-# WB57 flights, March, April 2011; Houston, TX, MACPEX mission.
-# Flight two.tma.  Runs dual axis water vapor (2").
+# ER2 July 2013 Palmdale, CA and Houston, TX, SEAC4RS Mission
+# Flight HWV.tma.  Runs Lyman Alpha and HHH
 # =============================================================================
 
 
@@ -8,23 +8,13 @@
 # Partition 1: Main Line Code
 # -----------------------------------------------------------------------------
 
-### Need to verify switches before we use them
-# Switches - 1100: Algo., 1111: No Algo. (Use runfile.1100 for flight)
-# For Flight, 2 Switches in the Off (Zero) Position.
-# If either switch in On (1, raised), most algo processing is suspended.
-# If both switches are On (1, raised) Shutdown begins immediately.
-
-# { tma_hold( ( (IOSwS & 3) == 1) || ( (IOSwS & 3) == 2) ); }
-#{ depending on (Shutdown) {} 
-#   else {
-#      if ( (IOSwS & 3) == 3)
-#          Validate Shutdown;
-#   }
-#}
+# Switches:
+#   1111: Auto Start (runfile.FF)
+#   1100: Wait for doit, etc
+# For Flight, all Switches Up
 
 %{
   #include "msg.h"
-  #include "swstat.h"
   int H2O2_Lamp_Enable = 1;
 %}
 
@@ -41,8 +31,13 @@ State Init {
 # WAIT 
 State Standby {
         depending on (OFF_GROUND) { Validate Record; }
-        depending on (IN_AIR) { Validate Record; }
         depending on (AI_Fail)   { Validate Shutdown; }
+
+ ############################
+ ###     FOR CST ONLY     ###
+ ### REMOVE BEFORE FLIGHT ###
+ ############################
+ +10:00 Validate Shutdown;
 }
 
 # RECORD  
@@ -63,65 +58,13 @@ State Shutdown {
 
 
 # -----------------------------------------------------------------------------
-# Partition 2: Software Status
-# -----------------------------------------------------------------------------
-
-Partition
-
-#     _____________________________________  Above Clouds
-#        ^                |
-#   swp= | 2 = high       v 3 = low
-#     _____________________________________  Below Clouds
-#        ^                |
-#        | 1 = takeoff    v 4 = landing
-#     _____________________________________  Ground   
-#
-
-State SW_Stat_Wait NoLog {
-  { int reset_it;
-    reset_it = 1;
-    switch (SWStat) {
-      default:
-      case 0:   reset_it = 0; break;
-      case SWS_TAKEOFF: depending on (ON_GROUND) using_swp = 1; break;
-      case SWS_CLIMB: depending on (OFF_GROUND) using_swp = SWStat; break;
-      case SWS_DESCEND: depending on (IN_AIR) using_swp = SWStat; break; 
-      case SWS_LAND: depending on (OFF_GROUND) using_swp = SWStat; break;
-
-      case SWS_H2O_ENABLE:
-        H2O2_Lamp_Enable = 1;
-        depending on (h2o2shutOffA) Validate h2o2initA;
-        break;
-      case SWS_H2O_DISABLE:
-        H2O2_Lamp_Enable = 0; break;
-
-      case SWS_DFB_START: Validate DFB_Start; break;
-      case SWS_DFB_STOP: Validate DFB_Stop; break;
-      case SWS_DFB_HHH: Validate DFB_HHH; break;
-
-      case SWS_TIME_WARP: break;
-      case SWS_READFILE: Validate ReadFile; break;
-      case SWS_SHUTDOWN: Validate Shutdown; break;
-    }
-    if (reset_it) Validate SW_Stat_Reset;
-  }
-}
-
-State SW_Stat_Reset NoLog {
-	> _SW Status Set 0
-	Hold until (SWStat == 0) or 10;
-	Validate SW_Stat_Wait;
-}
-
-
-# -----------------------------------------------------------------------------
 # Partition 3: Altitude
 # -----------------------------------------------------------------------------
 
 Partition
 
 # This partition converts pressure (altitude) into states 
-# (ON_GROUND, OFF_GROUND, IN_AIR). \
+# (ON_GROUND, OFF_GROUND).
 # The threshold pressures each have two values - one for 
 # the flight up and the other for the flight down.
 # This provides hysteresis and prevents bouncing.  
@@ -132,8 +75,8 @@ Partition
 %{ /* Altitude definitions */
     double P_ground_up = 525.;
     double P_ground_dn = 575.;
-    double P_clouds_up = 280.;
-    double P_clouds_dn = 370.;
+    // double P_clouds_up = 280.;
+    // double P_clouds_dn = 370.;
     int using_swp = 0;
 %}
 
@@ -145,17 +88,9 @@ State ON_GROUND {
 }
 
 State OFF_GROUND {
-  { if ((using_swp == 2) || (!using_swp && DACS_P > 0 && DACS_P < P_clouds_up)) {
-      Validate IN_AIR;
-    } else if ((using_swp == 4) || (!using_swp && DACS_P > P_ground_dn)) {
+  { if ((using_swp == SWS_LAND) || (!using_swp && DACS_P > P_ground_dn)) {
       Validate ON_GROUND;
     }
-  }
-}
-
-State IN_AIR {
-  { if ( (using_swp == 3) || (!using_swp && DACS_P > P_clouds_dn))
-      Validate OFF_GROUND;
   }
 }
 
@@ -167,9 +102,8 @@ State IN_AIR {
 Partition
 
 State Throttle_Standby {
-  # +5
-  # depending on (OFF_GROUND) { Validate Throttle_init; }
-  # depending on (IN_AIR) { Validate Throttle_init; }
+  +5
+  depending on (OFF_GROUND) { Validate Throttle_init; }
 }
 
 # INITIALIZE
@@ -219,7 +153,6 @@ State h2o2initA {
   +4  > Set Axis A Heat Set Pt 0
   +1  > Command Lamp Module A off
       depending on (OFF_GROUND) { Validate h2o2turnOnA; }
-      depending on (IN_AIR) { Validate h2o2turnOnA; }
 }
 
 # TURNS ON LAMP
@@ -313,7 +246,6 @@ Partition
 State HHH_Init {
      Depending on (Shutdown) { Validate HHH_Shutdown; }
      Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
-     Depending on (IN_AIR) { Validate HHH_Startup; }
      Depending on (OFF_GROUND) { Validate HHH_Startup; }
 }
 
