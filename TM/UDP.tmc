@@ -12,7 +12,7 @@
 
 depending on (h2o_lya_ppm) {
   lya_stale = 0;
-  cur_h2o_lya_ppm;
+  cur_h2o_lya_ppm = h2o_lya_ppm;
 }
 
 depending on (1 Hz) {
