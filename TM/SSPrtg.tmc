@@ -12,4 +12,10 @@ ci_sendfcmd(2, "PhRTG Datum h2o_lya_ppm %.3lf %s\n", dtime(),
     text(h2o_lya_ppm));
 ci_sendfcmd(2, "PhRTG Datum A_IRV %lu %s\n", itime(), text(A_IRV));
 ci_sendfcmd(2, "PhRTG Datum SD_HP %.3lf %s\n", dtime(), text(SD_HP));
+ci_sendfcmd(2, "PhRTG Datum IWH_T %.3lf %s %.1lf\n", dtime(), text(IWH1T),
+  convert(IWH2T));
+ci_sendfcmd(2, "PhRTG Datum PMTA_Counts %.3lf %s\n", dtime(),
+  text(PMTA_Counts));
+ci_sendfcmd(2, "PhRTG Datum UVA1_Counts %.3lf %s\n", dtime(),
+  text(UVA1_Counts));
 
