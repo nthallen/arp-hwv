@@ -188,7 +188,8 @@ State h2o2resetA {
   +1    > Set Axis A RF Set Pt 0
         { if ( ++h2o2Anresets >= 10 ) {
             msg(2,"Lamp A Max Reset Count Reached");
-            Validate h2o2failA;
+            A_Heat_SP -= 0.2;
+            h2o2Anresets = 0;
           }
         }
   +4    Validate h2o2turnOnA;
@@ -208,6 +209,10 @@ State h2o2failA {}
 
 Partition
 
+%{
+  double A_Heat_SP = 2.0;
+%}
+
 State h2o2heatinitA {
         depending on (h2o2recordA) { Validate h2o2heatOnA; }
 }
@@ -219,13 +224,15 @@ State h2o2heatOnA {
         depending on (h2o2shutOffA) { Validate h2o2heatOffA; }
         depending on (h2o2resetA) { Validate h2o2heatOffA; }
   +1    > Set Axis A RF Set Pt 6.3
-  +8    > Set Axis A Heat Set Pt 2.0
+  +8    { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
   +1    > Soldrv A select mode 3
         Hold until (convert(A_IRV) > 4.0);
-        { msg(2,"**Too much heat on A - running deep!**"); }
+        { msg(2,"**Too much heat on A - running deep!**");
+          A_Heat_SP -= 0.2;
+        }
         > Set Axis A Heat Set Pt 0
         Hold until (convert(A_IRV) < 1.0);
-        > Set Axis A Heat Set Pt 2.0
+        { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
         Validate h2o2heatOnA;       
 }
 
