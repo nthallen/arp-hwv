@@ -54,7 +54,7 @@ Debian on external drive
     Create account for flight with rooty password
       Copy relevant ssh keys into my account (cygwin, nortvm650a, *gse)
       Copy relevant ssh keys into flight account (*gse)
-    Install sshd
+    Install sshd, rsync
     edit /etc/fstab to mount /qnx4
        /dev/sda2 /qnx4 qnx4 ro,nofail 0 0
        # I don't know why there is a FAT partition in there...
