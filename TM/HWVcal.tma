@@ -1,0 +1,489 @@
+# =============================================================================
+# ER2 July 2013 Palmdale, CA and Houston, TX, SEAC4RS Mission
+# Flight HWV.tma.  Runs Lyman Alpha and HHH
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Partition 1: Main Line Code
+# -----------------------------------------------------------------------------
+
+# Switches:
+#   1111: Auto Start (runfile.FF)
+#   1100: Wait for doit, etc
+# For Flight, all Switches Up
+
+%{
+  #include "msg.h"
+  int H2O2_Lamp_Enable = 1;
+%}
+
+# INITIALIZE
+State Init {
+       > Telemetry Start
+  +1   > Fail Light Off
+  +1   > AI Double Convert Row Zero
+  +1   > Soldrv A select mode 2
+  +5   > Soldrv A select mode 0
+  +4   Validate Standby;
+}
+
+# WAIT 
+State Standby {
+    depending on (OFF_GROUND) { Validate Record; }
+    depending on (AI_Fail)   { Validate Shutdown; }
+}
+
+# RECORD  
+State Record {
+        depending on (ON_GROUND) { Validate Shutdown; }
+        depending on (h2o2failA) { Validate Shutdown; }
+        depending on (AI_Fail)   { Validate Shutdown; }
+        "In Record";
+}
+
+# SHUTDOWN
+State Shutdown {
+  +1  > Soldrv A select mode 0
+      Hold until valid (h2o2shutOffA,h2o2heatOffA,DFB_Shutdown) or 55;
+ +10  > Fail Light On
+      > quit
+}
+
+
+# -----------------------------------------------------------------------------
+# Partition 3: Altitude
+# -----------------------------------------------------------------------------
+
+Partition
+
+# This partition converts pressure (altitude) into states 
+# (ON_GROUND, OFF_GROUND).
+# The threshold pressures each have two values - one for 
+# the flight up and the other for the flight down.
+# This provides hysteresis and prevents bouncing.  
+# We are effectively using two switches: 
+# 	ON_GROUND and IN_AIR (BELOW CLOUDS = ABOVE CLOUDS)
+# REF: 650 torr ~5000 ft
+
+%{ /* Altitude definitions */
+    double P_ground_up = 525.;
+    double P_ground_dn = 575.;
+    // double P_clouds_up = 280.;
+    // double P_clouds_dn = 370.;
+    int using_swp = 0;
+%}
+
+State ON_GROUND {
+  { using_swp = 0; }
+  { if (using_swp || (DACS_P > 0 && DACS_P < P_ground_up))
+      Validate OFF_GROUND;
+  }
+}
+
+State OFF_GROUND {
+  { if ((using_swp == SWS_LAND) || (!using_swp && DACS_P > P_ground_dn)) {
+      Validate ON_GROUND;
+    }
+  }
+}
+
+
+# -----------------------------------------------------------------------------
+# Partition 4: Throttle Valve Control
+# -----------------------------------------------------------------------------
+
+Partition
+
+State Throttle_Standby {
+  +5
+  depending on (OFF_GROUND) { Validate Throttle_init; }
+}
+
+# INITIALIZE
+State Throttle_init     {
+       > drive Throttle Valve in 48000
+  +2   > drive Throttle Valve out 10000
+# +5   > drive Throttle Valve to 15000
+  +5   > drive Throttle Valve out 15000
+  +5   Validate Throttle_scan;
+}
+
+# RUN & SCAN
+State Throttle_scan {
+        depending on (ON_GROUND) { Validate Throttle_shut; }
+        depending on (Shutdown) { Validate Throttle_shut; }
+#       > drive Throttle Valve to 47000
+        > drive Throttle Valve out 22000
+        Hold until (SWStat == SWS_TIME_WARP) or 34:00;
+        > drive Throttle Valve in 7000
+  +2:00 > drive Throttle Valve in 7500
+  +2:00 > drive Throttle Valve in 7500
+#       > drive Throttle Valve to 40000
+# +2:00 > drive Throttle Valve to 32500
+# +2:00 > drive Throttle Valve to 25000
+  +2:00 Validate Throttle_scan;
+}
+
+State Throttle_shut {
+  > drive Throttle Valve in 48000
+  > drive Throttle Valve out 20
+}
+
+
+# -----------------------------------------------------------------------------
+# Partition 5: Axis A Lamp On/Off
+# -----------------------------------------------------------------------------
+
+Partition
+
+%{
+  int h2o2Anresets = 0;
+%}
+
+# WAIT UNTIL WB-57 TAKES OFF
+# INITIALIZE HEATER & LAMP
+State h2o2initA {
+  +4  > Set Axis A Heat Set Pt 0
+  +1  > Command Lamp Module A off
+      depending on (OFF_GROUND) { Validate h2o2turnOnA; }
+}
+
+# TURNS ON LAMP
+State h2o2turnOnA {
+       depending on (1 Hz) {
+         if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
+       }
+       depending on (Shutdown) { Validate h2o2shutOffA; }
+  +2   > Set Axis A RF Set Pt 6.3
+  +2   > Command Lamp Module A on
+  +10  Validate h2o2recordA;     
+}
+
+# For test purposes, state h2o2record was set for only a few minutes.  For
+# flight, set to at least one hour, depending on flight plan/duration.
+# WATCHDOG FOR LAMP GOING OFF
+State h2o2recordA {
+        depending on (Shutdown) { Validate h2o2shutOffA; }
+        depending on (1 Hz) {
+          if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
+        }
+        Hold until (convert(A_IRV) < 0.2);
+        Hold until (convert(A_IRV) > 0.2) or 5 else {
+          msg(2,"**Lamp turned off!!**");  
+          Validate h2o2resetA; } 
+        Validate h2o2recordA;
+}
+
+State h2o2resetA {
+        depending on (Shutdown) { Validate h2o2shutOffA; }
+        > Command Lamp Module A off
+  +1    > Set Axis A RF Set Pt 0
+        { if ( ++h2o2Anresets >= 10 ) {
+            msg(2,"Lamp A Max Reset Count Reached");
+            A_Heat_SP -= 0.2;
+            h2o2Anresets = 0;
+          }
+        }
+  +4    Validate h2o2turnOnA;
+}
+
+State h2o2shutOffA {
+  +1    > Command Lamp Module A off
+  +1    > Set Axis A RF Set Pt 0
+}
+
+State h2o2failA {}
+
+
+# -----------------------------------------------------------------------------
+# Partition 6: Axis A Lamp Heater On/Off
+# -----------------------------------------------------------------------------
+
+Partition
+
+%{
+  double A_Heat_SP = 2.0;
+%}
+
+State h2o2heatinitA {
+        depending on (h2o2recordA) { Validate h2o2heatOnA; }
+}
+
+# TURN ON LAMP HEATER & START SOL CYCLE
+# WATCHDOG FOR LAMP RUNNING DEEP
+State h2o2heatOnA {
+        depending on (Shutdown) { Validate h2o2heatOffA; }
+        depending on (h2o2shutOffA) { Validate h2o2heatOffA; }
+        depending on (h2o2resetA) { Validate h2o2heatOffA; }
+  +1    > Set Axis A RF Set Pt 6.3
+  +8    { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
+  +1    > Soldrv A select mode 3
+        Hold until (convert(A_IRV) > 4.0);
+        { msg(2,"**Too much heat on A - running deep!**");
+          A_Heat_SP -= 0.2;
+        }
+        > Set Axis A Heat Set Pt 0
+        Hold until (convert(A_IRV) < 1.0);
+        { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
+        Validate h2o2heatOnA;       
+}
+
+State h2o2heatOffA {
+        depending on (h2o2recordA) { Validate h2o2heatOnA; }
+        > Set Axis A Heat Set Pt 0
+}
+
+
+%{
+  #include "hsatod.h"
+%}
+
+
+Partition
+#----------------------------------------------------------------
+# Partition 7: HHH
+#----------------------------------------------------------------
+State HHH_Init {
+     Depending on (Shutdown) { Validate HHH_Shutdown; }
+     Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
+     Depending on (OFF_GROUND) { Validate HHH_Startup; }
+}
+
+State HHH_Startup {
+     Depending on (Shutdown) { Validate HHH_Shutdown; }
+     Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
+     Depending on (ON_GROUND) { Validate HHH_Shutdown; }
+     Validate DFB_HHH;
+}
+
+State HHH_Shutdown {}
+
+Partition
+#----------------------------------------------------------------
+# Partition 8: Laser1 HHH 1.4um DFB
+#----------------------------------------------------------------
+
+%{
+ int num_DFB_recovers=0;
+ #define LOW_CURRENT 0.02
+ #define DFB_TEMP_LIMIT 3.0
+ #define DFB_TEMP_OK(x) (x < DFB_TEMP_LIMIT)
+%}
+# DFB1 Starting and Stopping
+
+State DFB_Init {
+  +1 > SSP Stop
+  +1 > QCLI Stop
+     Validate DFB_Idle;
+}
+
+State DFB_Idle {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+}
+
+State DFB_Start {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    Hold until ( SSP_Status == SSP_STATUS_READY )
+    or 2 else {
+      nl_error( 2, "SSP Not Ready in DFB_Start" );
+      Validate DFB_SSP_Recover;
+    }
+    Hold until ( DFB_TEMP_OK(convert(LTE1R4T)) );
+    Hold until ( ((QCLI_s & 0x3938)^0x1000) == 0 ) or 5
+    else Validate DFB_QCLI_Recover;
+ +1 > SSP Start
+    Hold until ( SSP_Status == SSP_STATUS_ARMED )
+    or 20 else {
+      nl_error( 2, "Not Armed in DFB_Start" );
+      Validate DFB_SSP_Recover;
+    }
+    > QCLI Run
+    # Hold until ( SSP_Status == SSP_STATUS_TRIG && convert(HDFB_I) > LOW_CURRENT ) or 20
+    Hold until ( SSP_Status == SSP_STATUS_TRIG ) or 20
+    else Validate DFB_SSP_Recover;
+    { num_DFB_recovers = 0; }
+ +1 Validate DFB_Watch;
+}
+
+State DFB_Watch NoLog {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    { if ( SSP_Status == SSP_STATUS_READY ) {
+        nl_error( 2, "SSP Went Ready Spontaneously" );
+        Validate DFB_SSP_Recover;
+      }
+    }
+         # convert(HDFB_I) < LOW_CURRENT ||
+    hold until ( SSP_Status != SSP_STATUS_TRIG ||
+         !DFB_TEMP_OK(convert(LTE1R4T)) );
+    # hold until ( DFB_TEMP_OK(convert(LTE1R4T)) && 
+    #     convert(HDFB_I) >= LOW_CURRENT) or 1
+    hold until ( DFB_TEMP_OK(convert(LTE1R4T)) ) or 2
+    else Validate DFB_Out_Spec;
+    hold until ( SSP_Status == SSP_STATUS_TRIG ) or 5
+    else Validate DFB_SSP_Recover;
+    Validate DFB_Watch;
+}
+
+State DFB_SSP_Recover NoLog {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    > SSP Stop
+    { if ( ++num_DFB_recovers > 20 ) {
+        nl_error( 2, "Exceeded num_DFB_recovers. Trying reset" );
+        num_DFB_recovers = 0;
+        Validate DFB_QCLI_Reset;
+      }
+    }
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
+    else Validate DFB_SSP_Not_Talking;
+ +2 > QCLI Stop
+    Validate DFB_Start;
+}
+
+State DFB_SSP_Not_Talking {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    > SSP Stop
+    { if ( ++num_DFB_recovers > 20 ) Validate DFB_Fail; }
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
+    else Validate DFB_SSP_Not_Talking;
+    Validate DFB_SSP_Recover;
+}
+
+State DFB_Fail {
+    > Log Laser System 1 Has Failed
+ +1 Validate DFB_Shutdown;
+}
+
+State DFB_Shutdown {
+    > SSP Stop
+ +1 > QCLI Stop
+    > Log Laser System 1 Has Shutdown
+}
+
+State DFB_Out_Spec {
+   > QCLI Stop
+ +1 Validate DFB_QCLI_Recover;
+}
+
+State DFB_QCLI_Recover {
+   Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+
+ +1  { nl_error( 2, "QCLI reporting error status 0x%04X", QCLI_s ); }
+ +1  > QCLI Clear Errors
+     Hold until ( ((QCLI_s & 0x3938) ^0x1000) == 0 ) or 5
+     else {
+       nl_error( 2, "QCLI error did not clear: Resetting" );
+       Validate DFB_QCLI_Reset;
+     }
+     Validate DFB_Start;
+}
+
+State DFB_QCLI_Reset {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    { if ( ++num_DFB_recovers > 20 ) {
+        nl_error( 2,"Exceeded num_DFB_recovers in QCLI_Reset: Invoking shutdown" );
+        Validate DFB_Fail;
+      }
+    }
+ +1 > Command QCLI Reset On
+    > Command QCLI Reset Off
+    Hold until ( ((QCLI_s & 0x3938) ^ 0x1000) == 0 ) or 2
+    else > QCLI clear errors
+    Hold until ( ((QCLI_s & 0x3938) ^ 0x1000) == 0 ) or 2
+    else Validate DFB_QCLI_Reset;
+    { ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave );
+      Validate DFB_Start;
+    }
+}
+
+State DFB_Stop {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    > SSP Stop
+ +1 > QCLI Stop
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 5
+    else { nl_error( 2, "Not Ready in DFB_Stop" ); }
+    Validate DFB_Idle;
+}
+
+#Running Waveforms
+
+State DFB_HHH {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    > SSP Stop
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 5
+    else { nl_error( 2, "Not Ready in DFB_HHH" ); }
+    > QCLI Stop
+ +2 > Select QCLI Waveform HHH
+ +2 Validate DFB_Start;
+}
+
+Partition
+# -----------------------------------------------------------------------------
+# Partition 9: Realtime File Input
+# -----------------------------------------------------------------------------
+
+State ReadFile_idle {}
+
+State ReadFile "HWV.tmas" {
+  +5 Validate ReadFile_idle;
+}
+
+Partition
+#---------------------------------------------------------------
+# Partition 10: ReadFile Conditions
+#---------------------------------------------------------------
+# Summary:
+#   RFCond_Idle: Nothing
+#   RFCond_TimeWarp: Wait for Time Warp
+#---------------------------------------------------------------
+
+State RFCond_Idle {}
+
+State RFCond_TimeWarp {
+  Hold until ( SWStat == SWS_TIME_WARP );
+  Resume ReadFile;
+  Validate RFCond_Idle;
+}
+
+Partition
+#---------------------------------------------------------------
+# Partition 11: Analog Input Monitoring
+#---------------------------------------------------------------
+%{
+  AI_T30K Last_HPV1T = 0;
+  static int HPV1T_static_count = 0;
+  static int HPV1T_delta_count = 0;
+  static int AI_Reset_count = 0;
+%}
+State AI_Watch {
+    { if ( HPV1T == Last_HPV1T ) {
+	if ( ++HPV1T_static_count >= 15 ) {
+	  msg(2, "HPV1T has not changed in 15 seconds");
+	  HPV1T_delta_count = 0;
+	  Validate AI_Reset;
+	}
+      } else {
+	Last_HPV1T = HPV1T;
+	HPV1T_static_count = 0;
+	if ( ++HPV1T_delta_count > 5 ) {
+	  HPV1T_delta_count = 0;
+	  AI_Reset_count = 0;
+	}
+      }
+    }
+}
+
+State AI_Reset {
+      > AI Reset
+  +1  > AI Double Convert Row Zero
+      { if ( ++AI_Reset_count >= 10 ) {
+	  msg(2,"AI Max Reset Count Reached");
+	  Validate AI_Fail;
+	}
+      }
+      Hold until ( HPV1T != Last_HPV1T ) OR 15
+      else Validate AI_Reset;
+      Validate AI_Watch;
+}
+
+State AI_Fail {}

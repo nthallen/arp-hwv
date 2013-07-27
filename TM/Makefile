@@ -1,4 +1,4 @@
-# Makefile Generated Tue Jul 23 11:14:16 EDT 2013
+# Makefile Generated Sat Jul 27 12:41:19 EDT 2013
 MNC=HWV
 SPECFILE=HWV.spec
 SRC=ptrhm.h dacsmread.txt base.tmc idx64.tmc ssp.tmc qcli.tmc
@@ -10,8 +10,9 @@ SRC+=SWData_col.tmc idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd
 SRC+=ao.cmd soldrv.cmd waves.cmd fail.cmd SWData.cmd qclibits.tmc
 SRC+=sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc
 SRC+=pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl
-SRC+=lab.tbl IWG1.tbl UDP.tmc HWV.tma HWV.sws HWV.doit ly.doit A.sol
-SRC+=B.sol C.sol hwveng.cdf hwvraw.cdf hwv.cdf hhh.cdf lyamr.cdf
+SRC+=lab.tbl IWG1.tbl UDP.tmc HWV.tma HWV.sws HWVcal.tma HWV.doit
+SRC+=HWVcal.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.cdf
+SRC+=hwv.cdf hhh.cdf lyamr.cdf
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF dccc.dccc idx64.idx64 hwv_analysis
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
@@ -26,22 +27,24 @@ OBJ+=HWVdispncoui.o HWVdispnc.o lydisp.cc lydispoui.c lydispoui.o
 OBJ+=lydisp.o lydispnc.cc lydispncoui.c lydispncoui.o lydispnc.o
 OBJ+=lyamrudpext.cc lyamrudpextoui.c lyamrudpextoui.o lyamrudpext.o
 OBJ+=UDP.o HWVsws.tma HWValgoa.tmc HWValgo.cc HWValgooui.c
-OBJ+=HWValgooui.o HWValgo.o doit.dep lydoit.dep hwvengextcdf.oui
-OBJ+=hwvengext.tmc hwvengext.cc hwvengextoui.c hwvengextoui.o
-OBJ+=hwvengext.o hwvrawextcdf.oui hwvrawext.tmc hwvrawext.cc
-OBJ+=hwvrawextoui.c hwvrawextoui.o hwvrawext.o hwvextcdf.oui
-OBJ+=hwvext.tmc hwvext.cc hwvextoui.c hwvextoui.o hwvext.o
-OBJ+=hhhextcdf.oui hhhext.tmc hhhext.cc hhhextoui.c hhhextoui.o
-OBJ+=hhhext.o lyamrextcdf.oui lyamrext.tmc lyamrext.cc lyamrextoui.c
-OBJ+=lyamrextoui.o lyamrext.o HWVclt.o HWVcltoui.c HWVcltoui.o
-OBJ+=HWVcltnc.o HWVcltncoui.c HWVcltncoui.o
+OBJ+=HWValgooui.o HWValgo.o HWVcalalgoa.tmc HWVcalalgo.cc
+OBJ+=HWVcalalgooui.c HWVcalalgooui.o HWVcalalgo.o doit.dep
+OBJ+=caldoit.dep lydoit.dep hwvengextcdf.oui hwvengext.tmc
+OBJ+=hwvengext.cc hwvengextoui.c hwvengextoui.o hwvengext.o
+OBJ+=hwvrawextcdf.oui hwvrawext.tmc hwvrawext.cc hwvrawextoui.c
+OBJ+=hwvrawextoui.o hwvrawext.o hwvextcdf.oui hwvext.tmc hwvext.cc
+OBJ+=hwvextoui.c hwvextoui.o hwvext.o hhhextcdf.oui hhhext.tmc
+OBJ+=hhhext.cc hhhextoui.c hhhextoui.o hhhext.o lyamrextcdf.oui
+OBJ+=lyamrext.tmc lyamrext.cc lyamrextoui.c lyamrextoui.o lyamrext.o
+OBJ+=HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o HWVcltncoui.c
+OBJ+=HWVcltncoui.o
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc lydisp lydispnc lyamrudpext
-TGT+=HWValgo doit lydoit A.sft B.sft C.sft hwvengext hwvrawext hwvext
-TGT+=hhhext lyamrext HWVclt HWVcltnc
+TGT+=HWValgo HWVcalalgo doit caldoit lydoit A.sft B.sft C.sft
+TGT+=hwvengext hwvrawext hwvext hhhext lyamrext HWVclt HWVcltnc
 DISTRIB=waves.out A.sft ../IWG1/IWG1 HWV.pcm tm.dac
-IDISTRIB=Experiment.config VERSION doit lydoit
+IDISTRIB=Experiment.config VERSION doit caldoit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
-SRCDIST+=IWG1.tbl HWV.tma A.sol B.sol C.sol
+SRCDIST+=IWG1.tbl HWV.tma HWVcal.tma A.sol B.sol C.sol
 SRCDIST+=/usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc
 SRCDIST+=ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc
 SRCDIST+=ptrhm.cc vl_temp.tmc pwrmon.tmc
@@ -124,8 +127,13 @@ lyamrudpext : lyamrudpext.o ptrhm.o LyAmrSample.o Circular.o LyAmrAvg.o UDP.o ly
 HWValgo : HWValgo.o ptrhm.o HWValgooui.o
 	$(LINK.normCXX) HWValgo.o ptrhm.o HWValgooui.o -ltmpp -ltm -lnort
 	$(OUIUSE) HWValgooui.c
+HWVcalalgo : HWVcalalgo.o ptrhm.o HWVcalalgooui.o
+	$(LINK.normCXX) HWVcalalgo.o ptrhm.o HWVcalalgooui.o -ltmpp -ltm -lnort
+	$(OUIUSE) HWVcalalgooui.c
 doit : HWV.doit
 	mkdoit3 -o doit  HWV.doit
+caldoit : HWVcal.doit
+	mkdoit3 -o caldoit  HWVcal.doit
 lydoit : ly.doit
 	mkdoit3 -o lydoit  ly.doit
 A.sft : A.sol
@@ -229,9 +237,21 @@ HWValgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWValgooui.o : HWValgooui.c SWData.h
 HWValgo.o : HWValgo.cc SWData.h
+HWVcalalgoa.tmc : HWVcal.tma HWVsws.tma HWVsrvr
+	$(SERVER) ./HWVsrvr
+	$(TMCALGO) -V "`./HWVsrvr -R`" HWVcal.tma HWVsws.tma
+HWVcalalgo.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc HWVcalalgoa.tmc
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc HWVcalalgoa.tmc
+HWVcalalgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+HWVcalalgooui.o : HWVcalalgooui.c SWData.h
+HWVcalalgo.o : HWVcalalgo.cc SWData.h
 doit.dep : HWV.doit
 	mkdoit3 -M -o doit  HWV.doit
 -include doit.dep
+caldoit.dep : HWVcal.doit
+	mkdoit3 -M -o caldoit  HWVcal.doit
+-include caldoit.dep
 lydoit.dep : ly.doit
 	mkdoit3 -M -o lydoit  ly.doit
 -include lydoit.dep

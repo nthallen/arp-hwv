@@ -1,0 +1,5 @@
+display HWVdisp -C $FlightNode
+client HWVclt
+memo
+batchfile runfile_cal
+phrtg

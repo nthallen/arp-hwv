@@ -59,7 +59,13 @@ HWValgo.cc
 HWValgooui.c
 HWValgooui.o
 HWValgo.o
+HWVcalalgoa.tmc
+HWVcalalgo.cc
+HWVcalalgooui.c
+HWVcalalgooui.o
+HWVcalalgo.o
 doit.dep
+caldoit.dep
 lydoit.dep
 hwvengextcdf.oui
 hwvengext.tmc
@@ -106,7 +112,9 @@ lydisp
 lydispnc
 lyamrudpext
 HWValgo
+HWVcalalgo
 doit
+caldoit
 lydoit
 A.sft
 B.sft
