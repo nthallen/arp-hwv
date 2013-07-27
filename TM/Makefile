@@ -1,4 +1,4 @@
-# Makefile Generated Sat Jul 27 12:41:19 EDT 2013
+# Makefile Generated Sat Jul 27 12:47:44 EDT 2013
 MNC=HWV
 SPECFILE=HWV.spec
 SRC=ptrhm.h dacsmread.txt base.tmc idx64.tmc ssp.tmc qcli.tmc
@@ -14,7 +14,8 @@ SRC+=lab.tbl IWG1.tbl UDP.tmc HWV.tma HWV.sws HWVcal.tma HWV.doit
 SRC+=HWVcal.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.cdf
 SRC+=hwv.cdf hhh.cdf lyamr.cdf
 TOOL=HWV.spec Makefile
-SCRIPT=interact runfile.FF dccc.dccc idx64.idx64 hwv_analysis
+SCRIPT=interact runfile.FF runfile_cal dccc.dccc idx64.idx64
+SCRIPT+=hwv_analysis
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
 OBJ+=dacsmread.tmc dacsmread_col.tmc HWVcol.cc HWV.pcm tm.dac
 OBJ+=HWVcoloui.c HWVcoloui.o HWVcol.o ptrhm.o ptrhm_col.o HWVcmd.cc
@@ -78,6 +79,7 @@ SOURCE=$(RCS) $(NONRCS)
 OBJECT=$(OBJ) *.err
 TARGET=$(TGT)
 DSTRB=$(TGT) $(DISTRIB) $(SCRIPT)
+TGTNODE=/net/hwv
 TGTDIR= $(TGTNODE)/home/hwv
 include /usr/local/share/huarp/appgen.mk
 

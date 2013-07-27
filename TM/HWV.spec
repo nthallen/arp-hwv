@@ -48,6 +48,7 @@ swsbase = HWV.sws
 
 SCRIPT = interact
 SCRIPT = runfile.FF
+SCRIPT = runfile_cal
 SCRIPT = dccc.dccc
 SCRIPT = idx64.idx64
 SCRIPT = hwv_analysis
