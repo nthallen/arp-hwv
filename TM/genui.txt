@@ -280,3 +280,38 @@ ROWS 18
   1 PM0V1_S:PM0Stat:1 HK:HK_Power Status
   1 PM0V2_S:PM0Stat:3 HK:HK_Power Status
   1 PM0TO_S:PM0Stat:4 HK:HK_Power Status
+  
+  1 Lat IWG1:IWG1 Lat
+  1 Lon IWG1:IWG1 Lon
+  1 Ambient_Temp IWG1:IWG1 Temp
+  1 Total_Temp IWG1:IWG1 Temp
+  1 Dew_Point IWG1:IWG1 Temp
+  1 Dynamic_Press IWG1:IWG1 Pres
+  1 Static_Press IWG1:IWG1 Pres
+  1 Grnd_Spd IWG1:IWG1 Speed
+  1 Indicated_Airspeed IWG1:IWG1 Speed
+  1 True_Airspeed IWG1:IWG1 Speed
+  1 Mach_Number IWG1:IWG1 Mach
+  1 GPS_MSL_Alt IWG1:IWG1 Alt
+  1 Press_Alt IWG1:IWG1 Alt
+  1 Radar_Alt IWG1:IWG1 Alt
+  1 WGS_84_Alt IWG1:IWG1 Alt
+  1 Angle_of_Attack IWG1:Attitude Attack
+  1 Pitch IWG1:Attitude Pitch
+  1 Roll IWG1:Attitude Roll
+  1 Side_slip IWG1:Attitude Side_Slip
+  1 Drift IWG1:Attitude Drift
+  1 Solar_Zenith IWG1:Attitude SZ
+  1 Sun_Elev_AC IWG1:Attitude SZ
+  1 Sun_Az_AC IWG1:Attitude AZ
+  1 Sun_Az_Grd IWG1:Attitude Az
+  1 Track IWG1:Attitude Track
+  1 True_Hdg IWG1:Attitude Track
+  1 Vert_Velocity IWG1:Wind VertVel
+  1 Vert_Wind_Spd IWG1:Wind VertSpeed
+  1 Wind_Dir IWG1:Wind Dir
+  1 Wind_Speed IWG1:Wind Speed
+  1 Cabin_Press IWG1:IWG1_Stat CabinPress
+  1 TDDrift IWG1:IWG1_Stat TDrift
+  1 TDrift IWG1:IWG1_Stat TDrift
+  1 IWG1_Stale IWG1:IWG1_Stat Stale
