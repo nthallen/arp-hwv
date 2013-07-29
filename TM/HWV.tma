@@ -32,13 +32,6 @@ State Init {
 State Standby {
     depending on (OFF_GROUND) { Validate Record; }
     depending on (AI_Fail)   { Validate Shutdown; }
-
-    ############################
-    ###     FOR CST ONLY     ###
-    ### REMOVE BEFORE FLIGHT ###
-    ############################
-    hold until (SWStat == SWS_TIME_WARP) or 10:00;
-    Validate Shutdown;
 }
 
 # RECORD  
