@@ -457,18 +457,18 @@ Partition
 %}
 State AI_Watch {
     { if ( HPV1T == Last_HPV1T ) {
-	if ( ++HPV1T_static_count >= 15 ) {
-	  msg(2, "HPV1T has not changed in 15 seconds");
-	  HPV1T_delta_count = 0;
-	  Validate AI_Reset;
-	}
+        if ( ++HPV1T_static_count >= 15 ) {
+          msg(2, "HPV1T has not changed in 15 seconds");
+          HPV1T_delta_count = 0;
+          Validate AI_Reset;
+        }
       } else {
-	Last_HPV1T = HPV1T;
-	HPV1T_static_count = 0;
-	if ( ++HPV1T_delta_count > 5 ) {
-	  HPV1T_delta_count = 0;
-	  AI_Reset_count = 0;
-	}
+        Last_HPV1T = HPV1T;
+        HPV1T_static_count = 0;
+        if ( ++HPV1T_delta_count > 5 ) {
+          HPV1T_delta_count = 0;
+          AI_Reset_count = 0;
+        }
       }
     }
 }
@@ -477,9 +477,9 @@ State AI_Reset {
       > AI Reset
   +1  > AI Double Convert Row Zero
       { if ( ++AI_Reset_count >= 10 ) {
-	  msg(2,"AI Max Reset Count Reached");
-	  Validate AI_Fail;
-	}
+          msg(2,"AI Max Reset Count Reached");
+          Validate AI_Fail;
+        }
       }
       Hold until ( HPV1T != Last_HPV1T ) OR 15
       else Validate AI_Reset;
