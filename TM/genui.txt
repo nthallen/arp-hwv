@@ -90,9 +90,9 @@ ROWS 18
   1 HPV2T HHH:HHHPT T
   1 HPV_P HHH:HHHPT P
   1 HPV_RH HHH:HHHPT RH
-  1 HtASt Lyman_Alpha:LampA SetPt
-  1 HtBSt Lyman_Alpha:LampB SetPt
-  1 HtCSt Lyman_Alpha:LampC SetPt
+  1 HtASt Lyman_Alpha:LampA IRV
+  1 HtBSt Lyman_Alpha:LampB IRV
+  1 HtCSt Lyman_Alpha:LampC IRV
   1 IWH1T HK:Flow T
   1 IWH2T HK:Flow T
 
@@ -155,9 +155,9 @@ ROWS 18
   1 QCLI_loc:QCLI_s:3 HHH:QCLI QCLI_s loc
   1 QCLI_present:QCLI_CS:11 HHH:QCLI QCLI_s present
   1 Cmd24DS:DS824:8 HHH:QCLI QCLI_s reset
-  1 RFASt Lyman_Alpha:LampA SetPt
-  1 RFBSt Lyman_Alpha:LampB SetPt
-  1 RFCSt Lyman_Alpha:LampB SetPt
+  1 RFASt Lyman_Alpha:LampA RF
+  1 RFBSt Lyman_Alpha:LampB RF
+  1 RFCSt Lyman_Alpha:LampB RF
   1 SDPDP Lyman_Alpha:SDP DP
   1 SDP_T Lyman_Alpha:SDP T
   8 SD_HP Lyman_Alpha:SDP P
