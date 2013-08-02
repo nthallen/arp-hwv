@@ -179,7 +179,7 @@ State h2o2resetA {
         depending on (Shutdown) { Validate h2o2shutOffA; }
         > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
-        { if ( ++h2o2Anresets >= 10 ) {
+        { if (convert(A_LMT) < 20.0 &&  ++h2o2Anresets >= 10) {
             msg(2,"Lamp A Max Reset Count Reached");
             A_Heat_SP -= 0.2;
             h2o2Anresets = 0;
