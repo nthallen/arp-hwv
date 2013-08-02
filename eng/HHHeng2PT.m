@@ -22,7 +22,7 @@ if strcmp(cfg.ScanDir,'SSPo')
     PT.QCLI_Wave = E.QCLI_Wave;
 else
     PT.TPT = T8;
-    PT.CellP = E8.HHH1P*201.5121-5.6440-2.9; %cell pressure (in Torr) to use for fit 7/2013
+    PT.CellP = E8.HHH1P*201.5121-8.544; %cell pressure (in Torr) to use for fit 7/2013
     % Note 1.5 added to zero on April 6, 2013!
     % PT.Tavg = interp1(T8,273.15 + (E8.HHH1T + E8.HHH2T)/2,T1,'linear'); %gas temp (in K) to use for fit
     % PT.Tavg = 273.15 + E8.HHH1T*0.96228783 + 2.06939487; %gas temp (in K) to use for fit
