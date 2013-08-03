@@ -45,11 +45,12 @@ if [ ! -d $dest ]; then
   cp -r *.log tm.dac VERSION Base LOG $scans $dest
 fi
 if [ -z "$DIRCKSUM" ]; then
-  if [ $runtype = flight ]; then
-    DIRCKSUM=yes
-  else
-    DIRCKSUM=no
-  fi
+  case $runtype in
+    flight) DIRCKSUM=yes;;
+    cal) DIRCKSUM=yes;;
+    preflt) DIRCKSUM=yes;;
+    *) DIRCKSUM=no;;
+  esac
 fi
 if [ $DIRCKSUM = yes -a ! -f $directory/.MD5SUM ]; then
   echo "Performing dircksum on $directory"
