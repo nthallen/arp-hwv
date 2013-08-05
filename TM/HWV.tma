@@ -37,7 +37,7 @@ State Standby {
 # RECORD  
 State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
-        depending on (h2o2failA) { Validate Shutdown; }
+        depending on (h2oA_fail) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
 }
@@ -45,7 +45,7 @@ State Record {
 # SHUTDOWN
 State Shutdown {
   +1  > Soldrv A select mode 0
-      Hold until valid (h2o2shutOffA,h2o2heatOffA,DFB_Shutdown) or 55;
+      Hold until valid (h2oA_shutOff,h2oA_HeatOff,DFB_Shutdown) or 55;
  +10  > Fail Light On
       > quit
 }
@@ -138,62 +138,62 @@ State Throttle_shut {
 Partition
 
 %{
-  int h2o2Anresets = 0;
+  int h2oA_nresets = 0;
 %}
 
 # WAIT UNTIL WB-57 TAKES OFF
 # INITIALIZE HEATER & LAMP
-State h2o2initA {
+State h2oA_init {
   +4  > Set Axis A Heat Set Pt 0
   +1  > Command Lamp Module A off
-      depending on (OFF_GROUND) { Validate h2o2turnOnA; }
+      depending on (OFF_GROUND) { Validate h2oA_turnOn; }
 }
 
 # TURNS ON LAMP
-State h2o2turnOnA {
+State h2oA_turnOn {
        depending on (1 Hz) {
-         if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
+         if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
        }
-       depending on (Shutdown) { Validate h2o2shutOffA; }
+       depending on (Shutdown) { Validate h2oA_shutOff; }
   +2   > Set Axis A RF Set Pt 6.3
   +2   > Command Lamp Module A on
-  +10  Validate h2o2recordA;     
+  +10  Validate h2oA_record;     
 }
 
-# For test purposes, state h2o2record was set for only a few minutes.  For
+# For test purposes, state h2oA_record was set for only a few minutes.  For
 # flight, set to at least one hour, depending on flight plan/duration.
 # WATCHDOG FOR LAMP GOING OFF
-State h2o2recordA {
-        depending on (Shutdown) { Validate h2o2shutOffA; }
+State h2oA_record {
+        depending on (Shutdown) { Validate h2oA_shutOff; }
         depending on (1 Hz) {
-          if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
+          if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
         }
         Hold until (convert(A_IRV) < 0.2);
         Hold until (convert(A_IRV) > 0.2) or 5 else {
           msg(2,"**Lamp turned off!!**");  
-          Validate h2o2resetA; } 
-        Validate h2o2recordA;
+          Validate h2oA_reset; } 
+        Validate h2oA_record;
 }
 
-State h2o2resetA {
-        depending on (Shutdown) { Validate h2o2shutOffA; }
+State h2oA_reset {
+        depending on (Shutdown) { Validate h2oA_shutOff; }
         > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
-        { if (convert(A_LMT) < 20.0 &&  ++h2o2Anresets >= 10) {
+        { if (convert(A_LMT) < 20.0 &&  ++h2oA_nresets >= 10) {
             msg(2,"Lamp A Max Reset Count Reached");
             A_Heat_SP -= 0.2;
-            h2o2Anresets = 0;
+            h2oA_nresets = 0;
           }
         }
-  +4    Validate h2o2turnOnA;
+  +4    Validate h2oA_turnOn;
 }
 
-State h2o2shutOffA {
+State h2oA_shutOff {
   +1    > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
 }
 
-State h2o2failA {}
+State h2oA_fail {}
 
 
 # -----------------------------------------------------------------------------
@@ -203,34 +203,137 @@ State h2o2failA {}
 Partition
 
 %{
-  double A_Heat_SP = 2.0;
+  class digdelay {
+    public:
+      digdelay(int delay);
+      ~digdelay();
+      double delay(double in);
+      double delta(double in);
+    private:
+      double *data;
+      int npts, next;
+  };
+  
+  digdelay::digdelay(int delay) {
+    nl_assert(delay > 0);
+    npts = delay;
+    data = (double *)new_memory(npts * sizeof(double));
+    next = -1;
+  }
+  
+  digdelay::~digdelay() {
+    if (data) {
+      free_memory(data);
+      data = 0;
+    }
+  }
+  
+  double digdelay::delay(double in) {
+    double rv;
+    if (next < 0) {
+      int i;
+      for (i = 0; i < npts; ++i)
+        data[i] = in;
+      next = 0;
+    }
+    rv = data[next];
+    data[next] = in;
+    if (++next >= npts)
+      next = 0;
+    return rv;
+  }
+  
+  double digdelay::delta(double in) {
+    double in0 = delay(in);
+    return in - in0;
+  }
+  
+  digdelay IRV(3);
+  
+  /* A_HT_MAX is the max setpoint we will attempt.
+     A_dHT_DELTA is the size of dIRVdt to consider as going up
+      (or if negative, down)
+     A_HT_DELTA is the nominal distance between the setpoint and
+       the stable A_IRV value.
+  */
+  #define A_HT_MAX 2.0
+  #define A_dHT_DELTA 0.02
+  #define A_HT_DELTA 0.3
+  double A_Heat_SP = A_HT_MAX;
+  bool Falling0, Falling1;
 %}
 
-State h2o2heatinitA {
-        depending on (h2o2recordA) { Validate h2o2heatOnA; }
+{ VOLTS dIRVdt; invalidate dIRVdt;
+  { dIRVdt = IRV.delta(convert(A_IRV)); Validate dIRVdt; }
 }
 
-# TURN ON LAMP HEATER & START SOL CYCLE
-# WATCHDOG FOR LAMP RUNNING DEEP
-State h2o2heatOnA {
-        depending on (Shutdown) { Validate h2o2heatOffA; }
-        depending on (h2o2shutOffA) { Validate h2o2heatOffA; }
-        depending on (h2o2resetA) { Validate h2o2heatOffA; }
-  +1    > Set Axis A RF Set Pt 6.3
-  +8    { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
-  +1    > Soldrv A select mode 3
-        Hold until (convert(A_IRV) > 4.0);
-        { msg(2,"**Too much heat on A - running deep!**");
-          A_Heat_SP -= 0.2;
-        }
-        > Set Axis A Heat Set Pt 0
-        Hold until (convert(A_IRV) < 1.0);
-        { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
-        Validate h2o2heatOnA;       
+State h2oA_heatinit {
+      Hold until valid (h2oA_record);
+  +8  > Soldrv A select mode 3
+      Validate h2oA_HeatOn;
 }
 
-State h2o2heatOffA {
-        depending on (h2o2recordA) { Validate h2o2heatOnA; }
+State h2oA_HeatOn {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  { ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP); }
+  
+  Hold until (dIRVdt > 0) or 40
+  else { msg(1, "Timed out waiting for A_IRV to climb in h2oA_HeatOn"); }
+  Hold until (dIRVdt < 0 || convert(A_IRV) > 2*A_Heat_SP);
+  Validate h2oA_Watch;
+}
+
+State h2oA_Watch {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  { Falling0 = false; }
+  { Falling1 = (dIRVdt < -A_dHT_DELTA) &&
+               (convert(A_IRV) < A_Heat_SP - A_HT_DELTA);
+    if (Falling1 && Falling0) {
+      A_Heat_SP -= 0.1;
+      Validate h2oA_IRV_Falling;
+    }
+    Falling0 = Falling1;
+  }
+  { if (convert(A_IRV) > 2*A_Heat_SP) {
+      setpoint -= 0.1;
+      Validate h2oA_IRV_Rising;
+    }
+  }
+  +5:00 {
+    if (A_Heat_SP < A_HT_MAX && convert(A_LMT) < 20) {
+      A_Heat_SP += 0.05;
+      ci_sendfcmd(2, "Set Axis A Heat Setpoint %.2lf", A_Heat_SP);
+      Validate h2oA_Watch;
+    }
+  }
+}
+
+State h2oA_IRV_Falling {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  > Set Axis A Heat Set Pt 0
+  Hold until (dIRVdt >= 0);
+  Hold until (dIRVdt < 0 || convert(A_IRV) > A_Ht_Setpoint);
+  Validate h2oA_HeatOn;
+}
+
+State h2oA_IRV_Rising {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  > Set Axis A Heat Set Pt 0
+  Hold until (dIRVdt < -A_dHT_DELTA);
+  Hold until (dIRVdt >= 0);
+  Validate h2oA_HeatOn;
+}
+
+State h2oA_HeatOff {
+        depending on (h2oA_record) { Validate h2oA_HeatOn; }
         > Set Axis A Heat Set Pt 0
 }
 
