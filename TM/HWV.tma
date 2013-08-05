@@ -326,6 +326,15 @@ State h2oA_IRV_Rising {
   depending on (Shutdown) { Validate h2oA_HeatOff; }
   depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  Hold until (convert(A_IRV) < A_Heat_SP) or 5
+  else Validate h2oA_IRV_Stuck_High;
+  Validate h2oA_Watch;
+}
+
+State h2oA_IRV_Stuck_High {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   > Set Axis A Heat Set Pt 0
   Hold until (dIRVdt < -A_dHT_DELTA);
   Hold until (dIRVdt >= 0);
