@@ -13,7 +13,7 @@ SW_Variable: <unsigned short,UINT> SWStat SW Status
 
   SWS_H2O_ENABLE 20 Lamp Enable:
     H2O2_Lamp_Enable = 1;
-    depending on (h2o2shutOffA) Validate h2o2initA;
+    depending on (h2oA_shutOff) Validate h2oA_init;
     break;
   SWS_H2O_DISABLE 21 Lamp Disable:
     H2O2_Lamp_Enable = 0; break;

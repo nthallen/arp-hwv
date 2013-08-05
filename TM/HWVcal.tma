@@ -37,7 +37,7 @@ State Standby {
 # RECORD  
 State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
-        depending on (h2o2failA) { Validate Shutdown; }
+        depending on (h2oA_fail) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
 }
@@ -45,7 +45,7 @@ State Record {
 # SHUTDOWN
 State Shutdown {
   +1  > Soldrv A select mode 0
-      Hold until valid (h2o2shutOffA,h2o2heatOffA,DFB_Shutdown) or 55;
+      Hold until valid (h2oA_shutOff,h2oA_heatOff,DFB_Shutdown) or 55;
  +10  > Fail Light On
       > quit
 }
@@ -138,62 +138,62 @@ State Throttle_shut {
 Partition
 
 %{
-  int h2o2Anresets = 0;
+  int h2oA_nresets = 0;
 %}
 
 # WAIT UNTIL WB-57 TAKES OFF
 # INITIALIZE HEATER & LAMP
-State h2o2initA {
+State h2oA_init {
   +4  > Set Axis A Heat Set Pt 0
   +1  > Command Lamp Module A off
-      depending on (OFF_GROUND) { Validate h2o2turnOnA; }
+      depending on (OFF_GROUND) { Validate h2oA_turnOn; }
 }
 
 # TURNS ON LAMP
-State h2o2turnOnA {
+State h2oA_turnOn {
        depending on (1 Hz) {
-         if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
+         if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
        }
-       depending on (Shutdown) { Validate h2o2shutOffA; }
+       depending on (Shutdown) { Validate h2oA_shutOff; }
   +2   > Set Axis A RF Set Pt 6.3
   +2   > Command Lamp Module A on
-  +10  Validate h2o2recordA;     
+  +10  Validate h2oA_record;     
 }
 
-# For test purposes, state h2o2record was set for only a few minutes.  For
+# For test purposes, state h2oA_record was set for only a few minutes.  For
 # flight, set to at least one hour, depending on flight plan/duration.
 # WATCHDOG FOR LAMP GOING OFF
-State h2o2recordA {
-        depending on (Shutdown) { Validate h2o2shutOffA; }
+State h2oA_record {
+        depending on (Shutdown) { Validate h2oA_shutOff; }
         depending on (1 Hz) {
-          if ( !H2O2_Lamp_Enable ) Validate h2o2shutOffA;
+          if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
         }
         Hold until (convert(A_IRV) < 0.2);
         Hold until (convert(A_IRV) > 0.2) or 5 else {
           msg(2,"**Lamp turned off!!**");  
-          Validate h2o2resetA; } 
-        Validate h2o2recordA;
+          Validate h2oA_reset; } 
+        Validate h2oA_record;
 }
 
-State h2o2resetA {
-        depending on (Shutdown) { Validate h2o2shutOffA; }
+State h2oA_reset {
+        depending on (Shutdown) { Validate h2oA_shutOff; }
         > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
-        { if ( ++h2o2Anresets >= 10 ) {
+        { if ( ++h2oA_nresets >= 10 ) {
             msg(2,"Lamp A Max Reset Count Reached");
             A_Heat_SP -= 0.2;
-            h2o2Anresets = 0;
+            h2oA_nresets = 0;
           }
         }
-  +4    Validate h2o2turnOnA;
+  +4    Validate h2oA_turnOn;
 }
 
-State h2o2shutOffA {
+State h2oA_shutOff {
   +1    > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
 }
 
-State h2o2failA {}
+State h2oA_fail {}
 
 
 # -----------------------------------------------------------------------------
@@ -206,16 +206,16 @@ Partition
   double A_Heat_SP = 2.0;
 %}
 
-State h2o2heatinitA {
-        depending on (h2o2recordA) { Validate h2o2heatOnA; }
+State h2oA_heatinit {
+        depending on (h2oA_record) { Validate h2oA_heatOn; }
 }
 
 # TURN ON LAMP HEATER & START SOL CYCLE
 # WATCHDOG FOR LAMP RUNNING DEEP
-State h2o2heatOnA {
-        depending on (Shutdown) { Validate h2o2heatOffA; }
-        depending on (h2o2shutOffA) { Validate h2o2heatOffA; }
-        depending on (h2o2resetA) { Validate h2o2heatOffA; }
+State h2oA_heatOn {
+        depending on (Shutdown) { Validate h2oA_heatOff; }
+        depending on (h2oA_shutOff) { Validate h2oA_heatOff; }
+        depending on (h2oA_reset) { Validate h2oA_heatOff; }
   +1    > Set Axis A RF Set Pt 6.3
   +8    { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
   +1    > Soldrv A select mode 3
@@ -226,11 +226,11 @@ State h2o2heatOnA {
         > Set Axis A Heat Set Pt 0
         Hold until (convert(A_IRV) < 1.0);
         { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
-        Validate h2o2heatOnA;       
+        Validate h2oA_heatOn;       
 }
 
-State h2o2heatOffA {
-        depending on (h2o2recordA) { Validate h2o2heatOnA; }
+State h2oA_heatOff {
+        depending on (h2oA_record) { Validate h2oA_heatOn; }
         > Set Axis A Heat Set Pt 0
 }
 

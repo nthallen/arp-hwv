@@ -299,7 +299,7 @@ State h2oA_Watch {
     Falling0 = Falling1;
   }
   { if (convert(A_IRV) > 2*A_Heat_SP) {
-      setpoint -= 0.1;
+      A_Heat_SP -= 0.1;
       Validate h2oA_IRV_Rising;
     }
   }
@@ -318,7 +318,7 @@ State h2oA_IRV_Falling {
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   > Set Axis A Heat Set Pt 0
   Hold until (dIRVdt >= 0);
-  Hold until (dIRVdt < 0 || convert(A_IRV) > A_Ht_Setpoint);
+  Hold until (dIRVdt < 0 || convert(A_IRV) > A_Heat_SP);
   Validate h2oA_HeatOn;
 }
 
