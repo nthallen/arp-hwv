@@ -256,9 +256,9 @@ Partition
      A_HT_DELTA is the nominal distance between the setpoint and
        the stable A_IRV value.
   */
-  #define A_HT_MAX 2.0
+  #define A_HT_MAX 1.8
   #define A_dHT_DELTA 0.02
-  #define A_HT_DELTA 0.3
+  #define A_HT_DELTA 0.2
   double A_Heat_SP = A_HT_MAX;
   bool Falling0, Falling1;
 %}
@@ -291,7 +291,7 @@ State h2oA_Watch {
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   { Falling0 = false; }
   { Falling1 = (dIRVdt < -A_dHT_DELTA) &&
-               (convert(A_IRV) < A_Heat_SP - A_HT_DELTA);
+               (convert(A_IRV) < A_Heat_SP - 1.5 * A_HT_DELTA);
     if (Falling1 && Falling0) {
       A_Heat_SP -= 0.1;
       Validate h2oA_IRV_Falling;
@@ -319,6 +319,8 @@ State h2oA_IRV_Falling {
   > Set Axis A Heat Set Pt 0
   Hold until (dIRVdt >= 0);
   Hold until (dIRVdt < 0 || convert(A_IRV) > A_Heat_SP);
+  Hold until (convert(A_IRV) < A_Heat_SP);
+  Hold until (convert(A_IRV) < A_Heat_SP - A_HT_DELTA) or 10;
   Validate h2oA_HeatOn;
 }
 
