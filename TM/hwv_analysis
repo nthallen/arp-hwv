@@ -53,10 +53,13 @@ if [ -z "$DIRCKSUM" ]; then
   esac
 fi
 if [ $DIRCKSUM = yes -a ! -f $directory/.MD5SUM ]; then
+  if [ ! -d $directory/anal -a -d $analdir ]; then
+    echo "hwv_analysis: Copying csv files into raw for archiving"
+    cp -r $analdir $directory/anal
+  fi
   echo "Performing dircksum on $directory"
   run=`basename $directory`
   parent=`dirname $directory`
   on -f hwv dircksum -w -C $parent $run
 fi
 echo "hwv_analysis: finished $directory"
-
