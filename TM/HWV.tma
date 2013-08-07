@@ -279,7 +279,7 @@ State h2oA_HeatOn {
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   { ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP); }
   
-  Hold until (dIRVdt > 0) or 40
+  Hold until (dIRVdt > A_HT_DELTA) or 40
   else { msg(1, "Timed out waiting for A_IRV to climb in h2oA_HeatOn"); }
   Hold until (dIRVdt < 0 || convert(A_IRV) > 2*A_Heat_SP);
   Validate h2oA_Watch;
@@ -306,7 +306,7 @@ State h2oA_Watch {
   +5:00 {
     if (A_Heat_SP < A_HT_MAX && convert(A_LMT) < 20) {
       A_Heat_SP += 0.05;
-      ci_sendfcmd(2, "Set Axis A Heat Setpoint %.2lf", A_Heat_SP);
+      ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf", A_Heat_SP);
       Validate h2oA_Watch;
     }
   }
