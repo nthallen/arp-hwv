@@ -13,7 +13,8 @@
   #define H2Osigma (1.57e-17)
   #define L1C 5.24
   double O2sigma_cal[] = { 1.72e-23, 1.13e-20 }; /* as a function of pressure in torr */
-  double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; /* as a function of [M] */
+  /* double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; */ /* as a function of [M] */
+  double Inst1_cal[] = { 63.7210e-10, 0.0459490e10 }; /* as a function of [M] JBS Field cals */
   
   LyAmrAvg Avg(2, 2, 8, 1, 1, 0);
   enum T_t { T_SFB1T, T_HHH1T, T_LFB_T } T_sel = T_SFB1T;
@@ -34,7 +35,7 @@
   }
 %}
 
-TM typedef double PPM { text "%7.1lf"; }
+TM typedef double PPM { text "%8.2lf"; }
 PPM h2o_lya_ppm; Invalidate h2o_lya_ppm;
 double h2o_lya_P, h2o_lya_T, h2o_lya_M;
 
