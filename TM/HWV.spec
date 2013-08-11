@@ -96,7 +96,7 @@ hwvext : hwv.cdf
 hhhext : hhh.cdf
 # PText : PT.cdf
 lyamrext : HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc \
-           LyAmr/LyAmrAvg.cc lyamr.cdf
+           LyAmr/LyAmrAvg.cc lyamr.cdf HWVmr2.oui
 %%
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g

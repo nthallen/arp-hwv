@@ -16,7 +16,8 @@
   /* double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; */ /* as a function of [M] */
   double Inst1_cal[] = { 63.7210e-10, 0.0459490e10 }; /* as a function of [M] JBS Field cals */
   
-  LyAmrAvg Avg(2, 2, 8, 1, 1, 0);
+  LyAmrAvg Avg(2, 2, 8, 2, 1, 0);
+  char *LyAmr_Ofile;
   enum T_t { T_SFB1T, T_HHH1T, T_LFB_T } T_sel = T_SFB1T;
   enum P_t { P_UVB1, P_SD_HP, P_HHH1P, P_LFT_P } P_sel = P_UVB1;
   
@@ -34,6 +35,7 @@
     return Cn;
   }
 %}
+TM INITFUNC if (LyAmr_Ofile) Avg.request_report(LyAmr_Ofile);
 
 TM typedef double PPM { text "%8.2lf"; }
 PPM h2o_lya_ppm; Invalidate h2o_lya_ppm;

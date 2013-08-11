@@ -1,0 +1,9 @@
+<package> HWVmr2
+<defs>
+  extern char *LyAmr_Ofile;
+<opts> "O:"
+<sort>
+	-O output_file (for input point categorization)
+<switch>
+  case 'O': LyAmr_Ofile = optarg; break;
+

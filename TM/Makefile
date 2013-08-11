@@ -1,4 +1,4 @@
-# Makefile Generated Sat Jul 27 12:47:44 EDT 2013
+# Makefile Generated Sat Aug 10 21:53:12 EDT 2013
 MNC=HWV
 SPECFILE=HWV.spec
 SRC=ptrhm.h dacsmread.txt base.tmc idx64.tmc ssp.tmc qcli.tmc
@@ -12,7 +12,7 @@ SRC+=sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc
 SRC+=pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl
 SRC+=lab.tbl IWG1.tbl UDP.tmc HWV.tma HWV.sws HWVcal.tma HWV.doit
 SRC+=HWVcal.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.cdf
-SRC+=hwv.cdf hhh.cdf lyamr.cdf
+SRC+=hwv.cdf hhh.cdf lyamr.cdf HWVmr2.oui
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF runfile_cal dccc.dccc idx64.idx64
 SCRIPT+=hwv_analysis
@@ -79,7 +79,6 @@ SOURCE=$(RCS) $(NONRCS)
 OBJECT=$(OBJ) *.err
 TARGET=$(TGT)
 DSTRB=$(TGT) $(DISTRIB) $(SCRIPT)
-TGTNODE=/net/hwv
 TGTDIR= $(TGTNODE)/home/hwv
 include /usr/local/share/huarp/appgen.mk
 
@@ -303,8 +302,8 @@ lyamrext.tmc : lyamr.cdf
 	$(EDF2EXT) lyamr.cdf
 lyamrext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc HWVmr2.tmc lyamrext.tmc
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc HWVmr2.tmc lyamrext.tmc
-lyamrextoui.c : lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
-	$(OUI) lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+lyamrextoui.c : HWVmr2.oui lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
+	$(OUI) HWVmr2.oui lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 lyamrextoui.o : lyamrextoui.c SWData.h
 lyamrext.o : lyamrext.cc SWData.h
 HWVclt.o : HWVcmd.cc

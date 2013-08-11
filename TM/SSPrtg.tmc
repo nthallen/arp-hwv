@@ -10,7 +10,11 @@ if (last_SSP != SSP_Num) {
 ci_sendfcmd(2, "PhRTG Datum LTE1R4T %lu %s\n", itime(), text(LTE1R4T));
 ci_sendfcmd(2, "PhRTG Datum h2o_lya_ppm %.3lf %s\n", dtime(),
     text(h2o_lya_ppm));
-ci_sendfcmd(2, "PhRTG Datum A_IRV %lu %s\n", itime(), text(A_IRV));
+ci_sendfcmd(2, "PhRTG Datum A_IRV %lu %s %.4lf\n", itime(), text(A_IRV),
+    convert(HtASt));
+ci_sendfcmd(2, "PhRTG Datum A_RF %lu %s %.4lf %.4lf\n", itime(),
+    text(RFASt), convert(ARFFW), convert(ARFBW));
+ci_sendfcmd(2, "PhRTG Datum A_LMT %lu %s\n", itime(), text(A_LMT));
 ci_sendfcmd(2, "PhRTG Datum SD_HP %.3lf %s\n", dtime(), text(SD_HP));
 ci_sendfcmd(2, "PhRTG Datum IWH_T %.3lf %s %.1lf\n", dtime(), text(IWH1T),
   convert(IWH2T));

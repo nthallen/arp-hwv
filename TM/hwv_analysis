@@ -29,11 +29,12 @@ run=`basename $directory`
 runtypedir=`dirname $directory`
 runtype=`basename $runtypedir`
 dest=$PWD/raw/$runtype/$run
-if [ ! -d $dest ]; then
+if [ ! -d $dest -a ! $dest -ef $directory ]; then
   if [ -z "$COPY_SCANS" ]; then
     case $runtype in
       data) COPY_SCANS=yes;;
       junk) COPY_SCANS=yes;;
+      preflt) COPY_SCANS=yes;;
       *) COPY_SCANS=no;;
     esac
   fi
@@ -43,23 +44,24 @@ if [ ! -d $dest ]; then
   cd $directory
   echo "hwv_analysis: Copying engineering data"
   cp -r *.log tm.dac VERSION Base LOG $scans $dest
-fi
-if [ -z "$DIRCKSUM" ]; then
-  case $runtype in
-    flight) DIRCKSUM=yes;;
-    cal) DIRCKSUM=yes;;
-    preflt) DIRCKSUM=yes;;
-    *) DIRCKSUM=no;;
-  esac
-fi
-if [ $DIRCKSUM = yes -a ! -f $directory/.MD5SUM ]; then
-  if [ ! -d $directory/anal -a -d $analdir ]; then
-    echo "hwv_analysis: Copying csv files into raw for archiving"
-    cp -r $analdir $directory/anal
+
+  if [ -z "$DIRCKSUM" ]; then
+    case $runtype in
+      flight) DIRCKSUM=yes;;
+      cal) DIRCKSUM=yes;;
+      preflt) DIRCKSUM=yes;;
+      *) DIRCKSUM=no;;
+    esac
   fi
-  echo "Performing dircksum on $directory"
-  run=`basename $directory`
-  parent=`dirname $directory`
-  on -f hwv dircksum -w -C $parent $run
+  if [ $DIRCKSUM = yes -a ! -f $directory/.MD5SUM ]; then
+    if [ ! -d $directory/anal -a -d $analdir ]; then
+      echo "hwv_analysis: Copying csv files into raw for archiving"
+      cp -r $analdir $directory/anal
+    fi
+    echo "Performing dircksum on $directory"
+    run=`basename $directory`
+    parent=`dirname $directory`
+    on -f hwv dircksum -w -C $parent $run
+  fi
 fi
 echo "hwv_analysis: finished $directory"
