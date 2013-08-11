@@ -204,5 +204,6 @@ bool LyAmrAvg::request_report(const char *filename) {
       nl_error(2, "Unable to open report file '%s'", filename);
     return true;
   }
+  fprintf(report_fp, "Tlyamrcat,cat\n");
   return false;
 }
