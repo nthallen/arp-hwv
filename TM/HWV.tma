@@ -207,11 +207,11 @@ Partition
 
 { VOLTS IRVf; invalidate IRVf;
   VOLTS dIRVdt; invalidate dIRVdt;
-  VOLTS IRV;
-  { IRV = convert(A_IRV);
-    IRVf = IRV/a1(10) + IRVf_z1;
-    IRVf_z1 = IRV/a1(10) - a2(10)*IRVf/a1(10);
-    dIRVdt = IRV.delta(IRVf); Validate dIRVdt; }
+  VOLTS IRVc;
+  { IRVc = convert(A_IRV);
+    IRVf = IRVc/a1(10) + IRVf_z1;
+    IRVf_z1 = IRVc/a1(10) - a2(10)*IRVf/a1(10);
+    dIRVdt = IRV.delta(IRVf);
     Validate IRVf;
     Validate dIRVdt;
   }
