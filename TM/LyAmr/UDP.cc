@@ -60,7 +60,7 @@ int UDPbcast::Broadcast(double utc, unsigned short status, double mr) {
   char buf[80];
   int msglen;
   if (status == (STATUS_Ready | STATUS_Operating)) {
-    msglen = snprintf(buf, 80, "HWV,%s,%d,%.1lf\r\n", ISO8601(utc), status, mr);
+    msglen = snprintf(buf, 80, "HWV,%s,%d,%.2lf\r\n", ISO8601(utc), status, mr);
   } else {
     msglen = snprintf(buf, 80, "HWV,%s,%d,\r\n", ISO8601(utc), status);
   }
