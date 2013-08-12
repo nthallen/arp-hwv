@@ -294,7 +294,7 @@ State h2oA_HeatOn {
   +50 Hold Until (dIRVdt > 0.01) or 3:00;
    +1 Hold Until (dIRVdt < 0.005);
    +1 { A_Heat_SP = IRVf + .05;
-        ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
+        ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
         Validate h2oA_Watch;
       }
 }
@@ -313,10 +313,12 @@ State h2oA_Watch {
   +3:00 {
     A_Heat_SP = convert(HtASt);
     if (A_Heat_SP < A_HT_MAX) {
+      if (A_Heat_SP < IRVf)
+        A_Heat_SP = IRVf;
       A_Heat_SP += 0.05;
       if (A_Heat_SP > A_HT_MAX)
         A_Heat_SP = A_HT_MAX;
-      ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf", A_Heat_SP);
+      ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf", A_Heat_SP);
       Validate h2oA_Watch;
     }
   }
@@ -330,7 +332,7 @@ State h2oA_IRV_Falling {
    +1 Hold until (dIRVdt > 0.01) or 1:00;
    +1 Hold until (dIRVdt < 0 || convert(A_IRV) > A_Heat_SP);
    +1 Hold until (convert(A_IRV) < A_Heat_SP);
-   +1 { ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf", A_Heat_SP);
+   +1 { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf", A_Heat_SP);
         Validate h2oA_Watch;
       }
 }
