@@ -203,7 +203,7 @@ Partition
      A_HT_DELTA is the nominal distance between the setpoint and
        the stable A_IRV value.
   */
-  #define A_HT_MAX_DEFAULT 1.9
+  #define A_HT_MAX_DEFAULT 1.85
   #define A_dHT_DELTA 0.02
   #define A_HT_DELTA 0.2
   double A_Heat_SP = 0;
@@ -236,7 +236,7 @@ State h2oA_turnOn {
          if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
        }
        depending on (Shutdown) { Validate h2oA_shutOff; }
-  +2   > Set Axis A RF Set Pt 6.5
+  +2   > Set Axis A RF Set Pt 6.4
   +2   > Command Lamp Module A on
   +10  Validate h2oA_record;     
 }
@@ -303,6 +303,8 @@ State h2oA_HeatOn {
   +50 Hold Until (dIRVdt > 0.01) or 3:00;
    +1 Hold Until (dIRVdt < 0.005);
    +1 { A_Heat_SP = IRVf + .05;
+        if (A_Heat_SP > A_HT_MAX)
+          A_Heat_SP = A_HT_MAX;
         ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
         Validate h2oA_Watch;
       }
