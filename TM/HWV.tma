@@ -263,7 +263,7 @@ State h2oA_reset {
             h2oA_nresets = 0;
           }
         }
-  +4    Validate h2oA_turnOn;
+  +30   Validate h2oA_turnOn;
 }
 
 State h2oA_shutOff {
@@ -329,10 +329,11 @@ State h2oA_IRV_Falling {
   depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
       > Set Axis A Heat Set Pt 0
-   +1 Hold until (dIRVdt > 0.01) or 1:00;
-   +1 Hold until (dIRVdt < 0 || convert(A_IRV) > A_Heat_SP);
+   +1:00 Hold until (dIRVdt < 0.005) or 1:00;
    +1 Hold until (convert(A_IRV) < A_Heat_SP);
-   +1 { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
+   +1 { if (A_Heat_SP > IRVf+0.05)
+          A_Heat_SP = IRVf+0.05;
+        ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
         Validate h2oA_Watch;
       }
 }
