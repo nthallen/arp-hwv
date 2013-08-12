@@ -37,7 +37,7 @@ State Standby {
 # RECORD  
 State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
-        depending on (h2oA_fail) { Validate Shutdown; }
+       #depending on (h2oA_fail) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
 }
@@ -45,9 +45,10 @@ State Record {
 # SHUTDOWN
 State Shutdown {
   +1  > Soldrv A select mode 0
-      Hold until valid (h2oA_shutOff,h2oA_HeatOff,DFB_Shutdown) or 55;
+      Hold until valid (h2oA_shutOff,h2oA_HeatOff,
+        DFB_Shutdown,Throttle_closed) or 55;
  +10  > Fail Light On
-      > quit
+      > Quit
 }
 
 
@@ -128,7 +129,11 @@ State Throttle_scan {
 State Throttle_shut {
   > drive Throttle Valve in 48000
   > drive Throttle Valve out 20
+  Hold Until (TVStat & 1) or 15;
+  Validate Throttle_closed;
 }
+
+State Throttle_closed {}
 
 
 # -----------------------------------------------------------------------------
@@ -261,6 +266,7 @@ State h2oA_reset {
         { if (convert(A_LMT) < 20.0 &&  ++h2oA_nresets >= 10) {
             msg(2,"Lamp A Max Reset Count Reached");
             h2oA_nresets = 0;
+            Validate h2oA_fail;
           }
         }
   +30   Validate h2oA_turnOn;
@@ -271,7 +277,10 @@ State h2oA_shutOff {
   +1    > Set Axis A RF Set Pt 0
 }
 
-State h2oA_fail {}
+State h2oA_fail {
+  depending on (Shutdown) { Validate h2oA_shutOff; }
+  +30:00 Validate h2oA_init;
+}
 
 
 # -----------------------------------------------------------------------------
