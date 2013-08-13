@@ -41,11 +41,12 @@ class LyAmrAvg {
               unsigned bg_pre_ct, unsigned bg_post_ct, unsigned bg_maxN_ct);
     ~LyAmrAvg();
     int Process(bool isfg_raw, LyAmrSample S);
+    void Discard(double t);
     // void averages(double &PMTA, double &UVA1, double &T, double &P);
     bool request_report(const char *filename);
     LyAmrSample fg, bg;
   private:
-    enum LyAmrCategory { prefg_cat, foreground_cat, background_cat, transition_cat };
+    enum LyAmrCategory { prefg_cat, foreground_cat, background_cat, transition_cat, discard_cat };
     enum LyAmrState { prefg, prebg, prefgcount, foreground, prebgcount, background };
     void report(double t, LyAmrCategory cat);
     void fg_init();

@@ -28,20 +28,15 @@
   implication of this assumption is that we only need to evaluate the
   State once for each point.
   ------------------------------
-  pre is the offset in samples from the first valid sample to the
+  fg_pre_ct is the offset in samples from the first valid sample to the
     first averaged sample.
-  post is the offset in samples from the last valid sample to the
-    last averaged sample.
-  For pre > 0:
-    pre is the number of valid samples that are discarded after valid first comes true
-  For pre < 0:
-    -pre is the number of averaged points before the first valid point.
-    Must queue -pre points, decide their fate on the first valid sample.
-  For post < 0:
-    -post is the number of valid samples that need to be queued.
-    On the first invalid point we can decide the fate of all queued points.
-  For post > 0:
-    we can include post points after the first invalid point in the average
+  fg_postct is the number of samples discarded from the end of the
+    foreground region prior to the first invalid sample.
+  bg_pre_ct is the offset in samples from the first invalid sample to the
+    first averaged sample.
+  bg_postct is the number of samples discarded from the end of the
+    background region prior to the first valid sample.
+  All 4 are unsigned. A more elaborate system would allow post triggering.
  */
 #include "LyAmr.h"
 #include "nortlib.h"
@@ -172,6 +167,10 @@ int LyAmrAvg::Process(bool isfg_raw, LyAmrSample S) {
       nl_error(4, "Invalid PreState");
   }
   return rv;
+}
+
+void LyAmrAvg::Discard(double t) {
+  report(t, discard_cat);
 }
 
 void LyAmrAvg::report(double t, LyAmrCategory cat) {
