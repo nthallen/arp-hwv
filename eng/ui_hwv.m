@@ -2,6 +2,8 @@ function ui_hwv
 f = ne_dialg('Harvard Water Vapor',1);
 f = ne_dialg(f, 'newcol');
 f = ne_dialg(f, 'newtab', 'Lyman Alpha');
+f = ne_dialg(f, 'add', 0, 1, 'ghwvlaho', 'H2O' );
+f = ne_dialg(f, 'add', 1, 0, 'phwvlahoppm', 'PPM' );
 f = ne_dialg(f, 'add', 0, 1, 'ghwvlala', 'Lamp A' );
 f = ne_dialg(f, 'add', 1, 0, 'phwvlalat', 'Temp' );
 f = ne_dialg(f, 'add', 1, 0, 'phwvlalap', 'Pres' );
