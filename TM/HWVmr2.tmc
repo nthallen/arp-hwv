@@ -76,23 +76,28 @@ switch (SWStat) {
       case P_LFT_P:
         P = convert(LFT_P); break;
     }
-    if ( Avg.Process(convert(UVA1_Counts) >= 50,
+    if ( Avg.Process((SolStA%10), /* convert(UVA1_Counts) >= 50, */
             LyAmrSample(dtime(), convert(PMTA_Counts),
               convert(UVA1_Counts), T, P)) ) {
       double dPMTA, dUVA1, XAir, O2sigma, Kcal, H2Oc;
       dPMTA = Avg.fg.C - Avg.bg.C;
       dUVA1 = Avg.fg.U - Avg.bg.U;
-      h2o_lya_P = Avg.fg.P;
-      h2o_lya_T = Avg.fg.T;
-      h2o_lya_M = 0.001 * h2o_lya_P * (1013./760.) * 2.46e19 * 298. /
-        (h2o_lya_T + 273.15);
-      O2sigma = h2o_lya_P*O2sigma_cal[0] + O2sigma_cal[1];
-      XAir = exp(-L1C * h2o_lya_M * (O2mr*O2sigma+CO2mr*CO2sigma+CH4mr*CH4sigma));
-      Kcal = h2o_lya_M*Inst1_cal[0] + Inst1_cal[1];
-      H2Oc = dPMTa * XAir * 10000. * Kcal / dUVA1;
-      H2Oc = Iterate(H2Oc);
-      h2o_lya_ppm = 1e6 * H2Oc / h2o_lya_M;
-      validate h2o_lya_ppm;
+      if (dUVA1 > 40.) {
+        h2o_lya_P = Avg.fg.P;
+        h2o_lya_T = Avg.fg.T;
+        h2o_lya_M = 0.001 * h2o_lya_P * (1013./760.) * 2.46e19 * 298. /
+          (h2o_lya_T + 273.15);
+        O2sigma = h2o_lya_P*O2sigma_cal[0] + O2sigma_cal[1];
+        XAir = exp(-L1C * h2o_lya_M *
+          (O2mr*O2sigma+CO2mr*CO2sigma+CH4mr*CH4sigma));
+        Kcal = h2o_lya_M*Inst1_cal[0] + Inst1_cal[1];
+        H2Oc = dPMTa * XAir * 10000. * Kcal / dUVA1;
+        H2Oc = Iterate(H2Oc);
+        h2o_lya_ppm = 1e6 * H2Oc / h2o_lya_M;
+        validate h2o_lya_ppm;
+      }
     }
+  } else {
+    Avg.Discard(dtime());
   }
 }
