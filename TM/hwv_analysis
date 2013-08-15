@@ -29,6 +29,7 @@ run=`basename $directory`
 runtypedir=`dirname $directory`
 runtype=`basename $runtypedir`
 dest=$PWD/raw/$runtype/$run
+analsrc=`fullpath $analdir`
 if [ ! -d $dest -a ! $dest -ef $directory ]; then
   if [ -z "$COPY_SCANS" ]; then
     case $runtype in
@@ -54,9 +55,9 @@ if [ ! -d $dest -a ! $dest -ef $directory ]; then
     esac
   fi
   if [ $DIRCKSUM = yes -a ! -f $directory/.MD5SUM ]; then
-    if [ ! -d $directory/anal -a -d $analdir ]; then
+    if [ ! -d $directory/anal -a -d $analsrc ]; then
       echo "hwv_analysis: Copying csv files into raw for archiving"
-      cp -r $analdir $directory/anal
+      cp -r $analsrc $directory/anal
     fi
     echo "Performing dircksum on $directory"
     run=`basename $directory`
