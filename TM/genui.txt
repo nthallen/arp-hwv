@@ -7,6 +7,9 @@ ROWS 18
   1 ARFBW Lyman_Alpha:LampA RF BW
   1 ARFFW Lyman_Alpha:LampA RF FW
   1 A_IRV Lyman_Alpha:LampA IRV
+  1 A_IRV Lyman_Alpha:A_IRV IRV
+  1 IRVf  Lyman_Alpha:A_IRV IRV
+  1 dIRVdt Lyman_Alpha:A_IRV dIRVdt
   1 LMA_I Lyman_Alpha:LampA Current
   1 A_RgT HK:GasDeck Temp
   1 AirHP HK:GasDeck Pres

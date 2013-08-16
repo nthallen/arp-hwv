@@ -47,18 +47,18 @@
   digdelay IRV(10);
   #define a1(samples) (1+samples/3.14159)
   #define a2(samples) (1-samples/3.14159)
-  VOLTS IRVf_z1;
   
 %}
 
-{ VOLTS IRVf; invalidate IRVf;
-  VOLTS dIRVdt; invalidate dIRVdt;
-  VOLTS IRVc;
-  { IRVc = convert(A_IRV);
-    IRVf = IRVc/a1(10) + IRVf_z1;
-    IRVf_z1 = IRVc/a1(10) - a2(10)*IRVf/a1(10);
-    dIRVdt = IRV.delta(IRVf);
-    Validate IRVf;
-    Validate dIRVdt;
-  }
+TM typedef double IRV_VOLTS { text "%7.3lf"; }
+IRV_VOLTS IRVf_z1;
+IRV_VOLTS IRVf; invalidate IRVf;
+IRV_VOLTS dIRVdt; invalidate dIRVdt;
+IRV_VOLTS IRVc;
+{ IRVc = convert(A_IRV);
+  IRVf = IRVc/a1(10) + IRVf_z1;
+  IRVf_z1 = IRVc/a1(10) - a2(10)*IRVf/a1(10);
+  dIRVdt = IRV.delta(IRVf);
+  Validate IRVf;
+  Validate dIRVdt;
 }

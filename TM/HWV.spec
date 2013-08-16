@@ -90,7 +90,7 @@ A.sft : A.sol
 B.sft : B.sol
 C.sft : C.sol
 
-hwvengext : ptrh_conv.tmc hwveng.cdf
+hwvengext : ptrh_conv.tmc IRVf.tmc hwveng.cdf
 hwvrawext : ptrh_conv.tmc hwvraw.cdf
 hwvext : hwv.cdf
 hhhext : hhh.cdf
