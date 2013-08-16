@@ -125,7 +125,7 @@ if ischar(varargin{1})
     collect = win2cyg(which('rt_collect.sh'));
     cmd = sprintf('start %s ''%s'' %s %s', ...
         cwp, collect, data.hdr, data.url);
-    fprintf(1,'Command is %s\n', cmd);
+    % fprintf(1,'Command is %s\n', cmd);
     [s,w] = unix(cmd);
     if s ~= 0
         error('Failed to start rt_collect: "%s"', w);
