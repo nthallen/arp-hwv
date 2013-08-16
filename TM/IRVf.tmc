@@ -1,0 +1,64 @@
+%{
+  class digdelay {
+    public:
+      digdelay(int delay);
+      ~digdelay();
+      double delay(double in);
+      double delta(double in);
+    private:
+      double *data;
+      int npts, next;
+  };
+  
+  digdelay::digdelay(int delay) {
+    nl_assert(delay > 0);
+    npts = delay;
+    data = (double *)new_memory(npts * sizeof(double));
+    next = -1;
+  }
+  
+  digdelay::~digdelay() {
+    if (data) {
+      free_memory(data);
+      data = 0;
+    }
+  }
+  
+  double digdelay::delay(double in) {
+    double rv;
+    if (next < 0) {
+      int i;
+      for (i = 0; i < npts; ++i)
+        data[i] = in;
+      next = 0;
+    }
+    rv = data[next];
+    data[next] = in;
+    if (++next >= npts)
+      next = 0;
+    return rv;
+  }
+  
+  double digdelay::delta(double in) {
+    double in0 = delay(in);
+    return in - in0;
+  }
+  
+  digdelay IRV(10);
+  #define a1(samples) (1+samples/3.14159)
+  #define a2(samples) (1-samples/3.14159)
+  VOLTS IRVf_z1;
+  
+%}
+
+{ VOLTS IRVf; invalidate IRVf;
+  VOLTS dIRVdt; invalidate dIRVdt;
+  VOLTS IRVc;
+  { IRVc = convert(A_IRV);
+    IRVf = IRVc/a1(10) + IRVf_z1;
+    IRVf_z1 = IRVc/a1(10) - a2(10)*IRVf/a1(10);
+    dIRVdt = IRV.delta(IRVf);
+    Validate IRVf;
+    Validate dIRVdt;
+  }
+}
