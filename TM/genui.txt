@@ -2,6 +2,7 @@ HEADER Harvard Water Vapor
 MNEMONIC hwv
 HOMEDIR HWV_Data_Dir
 ROWS 18
+  1 h2o_lya_ppm Lyman_Alpha:H2O PPM %-
   1 A_LMT Lyman_Alpha:LampA Temp LMT
   1 AModP Lyman_Alpha:LampA Pres
   1 ARFBW Lyman_Alpha:LampA RF BW
