@@ -51,30 +51,13 @@ Engineering Graphs in Matlab
 		Extract engineering data on QNX:
 			extract raw/flight/120504.2 HWVengext
 		Copy extract .csv files into HWV_Data_Dir
-			I have a script called 'getrun' that I place in the HWV_Data_Dir:
-			
-				#! /bin/bash
-				flt=''
-				gse=herc_a
-				HomeDir=/home/hwv
-				Exp=HWV
-				for run in $*; do
-					if [ $run = "-f" ]; then
-						flt=F
-					else
-						echo $run
-						[ -d $run$flt ] || mkdir $run$flt
-						scp $gse:$HomeDir/anal/$run/*.csv $run$flt
-						[ -n "$flt" ] && scp $gse:$HomeDir/raw/flight/$run/$Exp.log $run$flt/$Exp.log
-					fi
-				done
-
-			Then 'getrun -f 120504.2' will collect the necessary files. You will need to edit
-			this as appropriate.
+			I have a script called 'getrun' that I place in the HWV_Data_Dir.
+      See below for details on installing and running getrun.
 		
 		Convert the .csv files to .mat files:
 			In Matlab, cd to the run directory and run csv2mat. You can delete the .csv files
-			after the .mat files are created.
+			after the .mat files are created. Note that when properly configured, getrun will
+      handle this step for you.
 			
 		Now you have completed the setup for this run. Hereafter, this run's data will be
 		readily accessible to the GUI.
@@ -130,4 +113,116 @@ Engineering Graphs in Matlab
 		the modifications, but if they are checked in, it is possible to
 		reconstruct them. [Ideally I would come up with a system whereby
 		modifications would persist...]
-		
+
+==========================================
+Instructions for setting up getrun for HWV
+==========================================
+
+First of all, make sure to run cvs update in:
+
+  - Matlab/nort
+  - HWVeng
+
+Your local directory names may be somewhat different, but I think 
+you should be able to figure out what I'm talking about. 
+
+One caveat: If you used the anonymous CVS instructions, cvs will 
+not work from the hangar unless you use the VPN. From the hotel, 
+it should be fine.
+
+Now there is a shell script in the HWVeng directory called 'getrun'.
+Copy this into C:/Data/HWV or whatever folder you use for data.
+You should also copy the Matlab script HWV_startup.m into that
+directory and rename it startup.m.
+
+You will probably want to edit getrun to customize where it will
+put the files it downloads. I have it set up to create run
+directories undir SEAC4RS/RAW, and then I create analysis
+directories under SEAC4RS. (This was motivated mostly by Carbon,
+where we needed three separate analysis directories for each
+flight, so I created separate analysis dirs under CO2, MINI
+and ISO) You can change this organization by changing the
+following definitions near the top of getrun:
+
+  HHH_Dir=SEAC4RS
+  RAW_Dir=SEAC4RS/RAW
+
+For example, if you want to just dump everything in C:/Data/HWV,
+you could define these as:
+
+  HHH_Dir=.
+  RAW_Dir=.
+
+There is also a definition for the hostname of the GSE:
+
+  gse=hwvgse.arp.harvard.edu
+
+This will work if you have a customized ~/.ssh/config file
+that will map that name to an IP address. Mine includes:
+
+  host hwvgse.arp.harvard.edu
+  hostname 10.16.16.3
+
+Another reason for using this file is if your windows username
+is different from your QNX username. You can add a 'user' line
+if necessary so ssh will use the correct one. You can test your
+ssh configuration by issuing the command:
+
+  ssh hwvgse.arp.harvard.edu
+  
+If you get an error about not being able to resolve the name or
+not being able to reach the host, you probably need to configure
+~/.ssh/config (or connect the ethernet!) If you get a prompt
+for your QNX password, you'll want to setup an ssh key.
+getrun will work without doing this, but it will prompt you
+several times for each run.
+
+  cd ~
+  pwd
+  # if pwd does not show something reasonable like /home/mracine,
+  # let me know. We may need to clean up a few things
+  mkdir .ssh # which may complain if the directory already exists
+  ssh-keygen -t rsa
+  # When prompted for passphrase, just hit enter and again when
+  # asked to confirm
+  # When prompted for the filename, the default should be something
+  # like ~/.ssh/id_rsa. If so, accept it.
+  # This actually creates two files: id_rsa and id_rsa.pub
+  scp id_rsa.pub hwvgse.arp.harvard.edu:.
+
+Now go to the GSE, log in (or make sure it's you who is logged in):
+
+  cd
+  mkdir .ssh # which may complain if the directory already exists
+  cat id_rsa.pub >>.ssh/authorized_keys
+
+Now back on your windows machine:
+
+  ssh hwvgse.arp.harvard.edu
+
+Ideally this will log you in without a password prompt. If you are
+still getting a prompt for a password, you'll need to double check
+the permissions on your home directory and the .ssh directory. Neither
+can allow group write permissions.
+
+===============
+Running getrun:
+===============
+
+The basic command is:
+
+  ./getrun <runtype> <run>
+  
+where of course you have replaced <runtype> with flight, preflt, cal,
+data or junk, and you have replaced <run> with the run number. You
+can omit the <runtype>, but if you include it, getrun will copy HWV.log
+and saverun.log in addition to the .csv files. If you are dealing with
+a data run that isn't archived onto the removable drives, you can add
+the keyword 'HHH' before the <run> argument to ask getrun to also copy
+the SSP directory. (You must include the <runtype> arg if you include
+HHH)
+
+Also, you can list more than one run on the ./getrun command line,
+so it's possible to download the data for all the flights in one
+shot.
+
