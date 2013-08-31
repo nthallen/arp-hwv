@@ -1,4 +1,4 @@
-csv hwveng_1 176
+csv hwveng_1 178
   0 Thwveng_1 %.3lf
   1 AIStat 
   2 AModP 
@@ -130,51 +130,53 @@ csv hwveng_1 176
   128 QCLI_s 
   129 RFASt 
   130 RFBSt 
-  131 RFCSt 
-  132 Radar_Alt 
-  133 Roll 
-  134 SDPDP 
-  135 SDP_T 
-  136 SFB2T 
-  137 SFB3T 
-  138 SPV1T 
-  139 SPV2T 
-  140 SPV_P 
-  141 SPV_PTRHS 
-  142 SPV_RHC 
-  143 SPV_T1C 
-  144 SPV_T2C 
-  145 SSP_Flags 
-  146 SSP_Num 
-  147 SSP_SN 
-  148 SSP_Stale 
-  149 SSP_Status %.0lf
-  150 SSP_TS 
-  151 SSP_T_FPGA 
-  152 SSP_T_HtSink 
-  153 SWStat 
-  154 Side_slip 
-  155 Solar_Zenith 
-  156 Static_Press 
-  157 Sun_Az_AC 
-  158 Sun_Az_Grd 
-  159 Sun_Elev_AC 
-  160 TDDrift 
-  161 TDrift 
-  162 TVPos 
-  163 Total_Temp 
-  164 Track 
-  165 True_Airspeed 
-  166 True_Hdg 
-  167 Vert_Velocity 
-  168 Vert_Wind_Spd 
-  169 WGS_84_Alt 
-  170 Wind_Dir 
-  171 Wind_Speed 
-  172 dIRVdt 
-  173 freemem 
-  174 vl_bdT 
-  175 vl_cpuT 
+  131 RFBWf 
+  132 RFCSt 
+  133 Radar_Alt 
+  134 Roll 
+  135 SDPDP 
+  136 SDP_T 
+  137 SFB2T 
+  138 SFB3T 
+  139 SPV1T 
+  140 SPV2T 
+  141 SPV_P 
+  142 SPV_PTRHS 
+  143 SPV_RHC 
+  144 SPV_T1C 
+  145 SPV_T2C 
+  146 SSP_Flags 
+  147 SSP_Num 
+  148 SSP_SN 
+  149 SSP_Stale 
+  150 SSP_Status %.0lf
+  151 SSP_TS 
+  152 SSP_T_FPGA 
+  153 SSP_T_HtSink 
+  154 SWStat 
+  155 Side_slip 
+  156 Solar_Zenith 
+  157 Static_Press 
+  158 Sun_Az_AC 
+  159 Sun_Az_Grd 
+  160 Sun_Elev_AC 
+  161 TDDrift 
+  162 TDrift 
+  163 TVPos 
+  164 Total_Temp 
+  165 Track 
+  166 True_Airspeed 
+  167 True_Hdg 
+  168 Vert_Velocity 
+  169 Vert_Wind_Spd 
+  170 WGS_84_Alt 
+  171 Wind_Dir 
+  172 Wind_Speed 
+  173 dIRVdt 
+  174 dRFBW 
+  175 freemem 
+  176 vl_bdT 
+  177 vl_cpuT 
 csv hwveng_4 4
   0 Thwveng_4 %.3lf
   1 IXStt 

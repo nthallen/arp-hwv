@@ -8,6 +8,9 @@ ROWS 18
   1 ARFBW Lyman_Alpha:LampA RF BW
   1 ARFFW Lyman_Alpha:LampA RF FW
   1 A_IRV Lyman_Alpha:LampA IRV
+  1 ARFBW Lyman_Alpha:A_IRV RF BW
+  1 RFBWf Lyman_Alpha:A_IRV RF BWf
+  1 dRFBW Lyman_Alpha:A_IRV dRFBWdt
   1 A_IRV Lyman_Alpha:A_IRV IRV
   1 IRVf  Lyman_Alpha:A_IRV IRV
   1 dIRVdt Lyman_Alpha:A_IRV dIRVdt

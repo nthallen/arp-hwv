@@ -47,7 +47,7 @@
   class digfilter {
     public:
       digfilter(double samples);
-      ~digfilter();
+      // ~digfilter();
       double filter(double in);
     private:
       double z1, a1, a2;
