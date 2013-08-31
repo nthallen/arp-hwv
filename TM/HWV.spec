@@ -80,8 +80,8 @@ lyamrudpext : /usr/local/share/huarp/flttime.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   LyAmr/UDP.cc UDP.tmc -lsocket
 
-HWValgo : ptrh_conv.tmc HWV.tma HWV.sws
-HWVcalalgo : ptrh_conv.tmc HWVcal.tma HWV.sws
+HWValgo : ptrh_conv.tmc IRVf.tmc HWV.tma HWV.sws
+HWVcalalgo : ptrh_conv.tmc IRVf.tmc HWVcal.tma HWV.sws
 
 doit : HWV.doit
 caldoit : HWVcal.doit

@@ -44,21 +44,44 @@
     return in - in0;
   }
   
-  digdelay IRV(10);
-  #define a1(samples) (1+samples/3.14159)
-  #define a2(samples) (1-samples/3.14159)
+  class digfilter {
+    public:
+      digfilter(double samples);
+      ~digfilter();
+      double filter(double in);
+    private:
+      double z1, a1, a2;
+  };
   
+  digfilter::digfilter(double samples) {
+    z1 = 0.;
+    a1 = 1+samples/3.14159;
+    a2 = 1-samples/3.14159;
+  }
+  
+  double digfilter::filter(double in) {
+    double out = in/a1 + z1;
+    z1 = in/a1 - a2*out/a1;
+    return out;
+  }
+  
+  digfilter IRVfilt(10);
+  digdelay IRV(10);
+  digfilter RFBWfilt(10);
+  digdelay RFBWdly(30);
 %}
 
 TM typedef double IRV_VOLTS { text "%7.3lf"; }
-IRV_VOLTS IRVf_z1;
 IRV_VOLTS IRVf; invalidate IRVf;
 IRV_VOLTS dIRVdt; invalidate dIRVdt;
-IRV_VOLTS IRVc;
-{ IRVc = convert(A_IRV);
-  IRVf = IRVc/a1(10) + IRVf_z1;
-  IRVf_z1 = IRVc/a1(10) - a2(10)*IRVf/a1(10);
+IRV_VOLTS RFBWf; invalidate RFBWf;
+IRV_VOLTS dRFBW; invalidate dRFBW;
+{ IRVf = IRVfilt.filter(convert(A_IRV));
   dIRVdt = IRV.delta(IRVf);
+  RFBWf = RFBWfilt.filter(convert(ARFBW));
+  dRFBW = RFBWdly.delta(RFBWf);
   Validate IRVf;
   Validate dIRVdt;
+  Validate RFBWf;
+  Validate dRFBW;
 }
