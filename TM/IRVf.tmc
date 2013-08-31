@@ -67,7 +67,7 @@
   
   digfilter IRVfilt(10);
   digdelay IRV(10);
-  digfilter RFBWfilt(10);
+  digfilter RFBWfilt(20);
   digdelay RFBWdly(30);
 %}
 

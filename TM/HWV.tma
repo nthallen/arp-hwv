@@ -146,21 +146,6 @@ Partition
   int h2oA_nresets = 0;
 %}
 
-%{
-  
-  /* A_HT_MAX is the max setpoint we will attempt.
-     A_dHT_DELTA is the size of dIRVdt to consider as going up
-      (or if negative, down)
-     A_HT_DELTA is the nominal distance between the setpoint and
-       the stable A_IRV value.
-  */
-  #define A_HT_MAX_DEFAULT 1.85
-  #define A_dHT_DELTA 0.02
-  #define A_HT_DELTA 0.2
-  double A_Heat_SP = 0;
-  double A_HT_MAX = A_HT_MAX_DEFAULT;
-%}
-
 # WAIT UNTIL ER-2 TAKES OFF
 # INITIALIZE HEATER & LAMP
 State h2oA_init {
@@ -175,7 +160,9 @@ State h2oA_turnOn {
          if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
        }
        depending on (Shutdown) { Validate h2oA_shutOff; }
-  +2   > Set Axis A RF Set Pt 6.4
+       # 095: 6.1
+       # Before: 6.4
+  +2   > Set Axis A RF Set Pt 6.1
   +2   > Command Lamp Module A on
   +10  Validate h2oA_record;     
 }
@@ -228,6 +215,32 @@ State h2oA_fail {
 
 Partition
 
+%{
+  /* A_HT_MAX_DEFAULT is the max setpoint we will attempt.
+     A_HT_MAX is the current limit
+     A_dHT_DELTA is the size of dIRVdt to consider as going up
+        (or if negative, down)
+     A_MAX_STABLE_IR_DELTA is the nominal distance between the setpoint and
+        the stable A_IRV value.
+     A_ABS_MAX_IR_DELTA is the absolute maximum difference tolerated between
+        setpoint and A_IRV
+     A_HT_STEP_UP is the amount by which we increment the setpoint
+     A_HT_STEP_BACK is the amount by which we reduce the setpoint after
+        cycling heat
+     A_dRFBW_FALLING the threshold value of dRFBW to indicate falling.
+        Could be set to a high value to disable.
+  */
+  #define A_HT_MAX_DEFAULT 2.05 /* 095. Was 1.85 */
+  #define A_dHT_DELTA 0.01
+  #define A_MAX_STABLE_IR_DELTA 0.5 /* 095. Was 0.3 */
+  #define A_ABS_MAX_IR_DELTA 1.0
+  #define A_HT_STEP_UP 0.05
+  #define A_HT_STEP_BACK 0.1
+  #define A_dRFBW_FALLING (-0.02)
+  double A_Heat_SP = 0;
+  double A_HT_MAX = A_HT_MAX_DEFAULT;
+%}
+
 State h2oA_heatinit {
       Hold until valid (h2oA_record);
   +8  > Soldrv A select mode 3
@@ -239,9 +252,9 @@ State h2oA_HeatOn {
   depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   
-  +50 Hold Until (dIRVdt > 0.01) or 3:00;
-   +1 Hold Until (dIRVdt < 0.005);
-   +1 { A_Heat_SP = IRVf + .05;
+  +50 Hold Until (dIRVdt > A_dHT_DELTA) or 3:00;
+   +1 Hold Until (dIRVdt < A_dHT_DELTA/2);
+   +1 { A_Heat_SP = IRVf + A_HT_STEP_UP;
         if (A_Heat_SP > A_HT_MAX)
           A_Heat_SP = A_HT_MAX;
         ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
@@ -253,9 +266,11 @@ State h2oA_Watch {
   depending on (Shutdown) { Validate h2oA_HeatOff; }
   depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
-  { if ((dIRVdt < -0.01 && IRVf < convert(HtASt) - 0.3) ||
-        (IRVf < convert(HtASt) - 1.0)) {
-      A_Heat_SP -= 0.1;
+  { if ((dIRVdt < -A_dHT_DELTA &&
+         IRVf < convert(HtASt) - A_MAX_STABLE_IR_DELTA &&
+         dRFBW > A_dRFBW_FALLING ) ||
+        (IRVf < convert(HtASt) - A_ABS_MAX_IR_DELTA)) {
+      A_Heat_SP -= A_HT_STEP_BACK;
       A_HT_MAX = A_Heat_SP;
       Validate h2oA_IRV_Falling;
     }
@@ -265,7 +280,7 @@ State h2oA_Watch {
     if (A_Heat_SP < A_HT_MAX) {
       if (A_Heat_SP < IRVf)
         A_Heat_SP = IRVf;
-      A_Heat_SP += 0.05;
+      A_Heat_SP += A_HT_STEP_UP;
       if (A_Heat_SP > A_HT_MAX)
         A_Heat_SP = A_HT_MAX;
       ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
@@ -281,8 +296,8 @@ State h2oA_IRV_Falling {
       > Set Axis A Heat Set Pt 0
    +1:00 Hold until (dIRVdt < 0.005) or 1:00;
    +1 Hold until (convert(A_IRV) < A_Heat_SP);
-   +1 { if (A_Heat_SP > IRVf+0.05)
-          A_Heat_SP = IRVf+0.05;
+   +1 { if (A_Heat_SP > IRVf+A_HT_STEP_UP)
+          A_Heat_SP = IRVf+A_HT_STEP_UP;
         ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
         Validate h2oA_Watch;
       }
