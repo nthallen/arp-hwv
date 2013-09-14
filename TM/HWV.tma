@@ -40,6 +40,10 @@ State Record {
        #depending on (h2oA_fail) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
+        Hold until (SWStat == SWS_TIMEWARP) or 2:00:00;
+    +1  Validate h2oA_StartHeatRamp;
+        Hold until (SWStat == SWS_TIMEWARP) or 2:00:00;
+    +1  Validate h2oA_StartHeatRamp;
 }
 
 # SHUTDOWN
@@ -254,6 +258,22 @@ State h2oA_HeatOn {
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   
   +50 Hold Until (dIRVdt > A_dHT_DELTA) or 3:00;
+   +1 Hold Until (dIRVdt < A_dHT_DELTA/2);
+   +1 { A_Heat_SP = IRVf + A_HT_STEP_UP;
+        if (A_Heat_SP > A_HT_MAX)
+          A_Heat_SP = A_HT_MAX;
+        ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
+        Validate h2oA_Watch;
+      }
+}
+
+State h2oA_StartHeatRamp {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  
+      > Set Axis A Heat Set Pt 0
+      Hold Until (dIRVdt < A_dHT_DELTA) or 30;
    +1 Hold Until (dIRVdt < A_dHT_DELTA/2);
    +1 { A_Heat_SP = IRVf + A_HT_STEP_UP;
         if (A_Heat_SP > A_HT_MAX)
