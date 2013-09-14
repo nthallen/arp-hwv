@@ -40,9 +40,9 @@ State Record {
        #depending on (h2oA_fail) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
-        Hold until (SWStat == SWS_TIMEWARP) or 2:00:00;
+        Hold until (SWStat == SWS_TIME_WARP) or 2:00:00;
     +1  Validate h2oA_StartHeatRamp;
-        Hold until (SWStat == SWS_TIMEWARP) or 2:00:00;
+        Hold until (SWStat == SWS_TIME_WARP) or 2:00:00;
     +1  Validate h2oA_StartHeatRamp;
 }
 
