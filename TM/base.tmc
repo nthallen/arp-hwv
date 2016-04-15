@@ -55,9 +55,9 @@ TM typedef AI_X1 AI_P1000Torr { text "%5.1lf"; convert TORR; }
     0, 0,
     32000, 1000
   }
-/* Lab 1000 Torr 0-5 V with 0.4053 divider
+/* Lab 1000 Torr 0-5 V with 0.4053 divider */
 TM typedef AI_X2 AI_LP1000Torr { text "%6.1lf"; convert TORR; }
-  Calibration (AI_SDPDP, VOLTS) {
+  Calibration (AI_LP1000Torr, TORR) {
     0, 0,
     32768, 1010.6
   }
