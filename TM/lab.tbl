@@ -28,7 +28,7 @@ HK {
   HBox { +-; Title: Housekeeping; -+ };
   LFB_T: (LFB_T,6) C;
   LFB1P: (LFB1P,7) V;
-  LFB2P: (LFB2P,7) V;
+  LFB2P: (LFB2P,6) Torr;
   LFT_P: (LFT_P,7) Torr;
   SD_HP: (SD_HP,5) Torr;
   VGlue 1+0;

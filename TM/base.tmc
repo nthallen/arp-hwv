@@ -55,6 +55,12 @@ TM typedef AI_X1 AI_P1000Torr { text "%5.1lf"; convert TORR; }
     0, 0,
     32000, 1000
   }
+/* Lab 1000 Torr 0-5 V with 0.4053 divider
+TM typedef AI_X2 AI_LP1000Torr { text "%6.1lf"; convert TORR; }
+  Calibration (AI_SDPDP, VOLTS) {
+    0, 0,
+    32768, 1010.6
+  }
 
 TM typedef AI_X1 AI_SDPDP { text "%5.2lf"; convert VOLTS; }
   Calibration (AI_SDPDP, VOLTS) {
@@ -156,7 +162,7 @@ TM 1 Hz AI_XP768 L4Flw; Address L4Flw 0xCD4; /* Lab Flow #4 */
 TM 1 Hz AI_X1 Las_I; Address Las_I 0xCF2; /* HHH Laser Current */
 TM 8 Hz AI_T30K LFB_T; Address LFB_T 0xC36; /* Lab Bubbler Temp */
 TM 1 Hz AI_XP384 LFB1P; Address LFB1P 0xCF4; /* Lab Bubbler Prs #1 */
-TM 1 Hz AI_XP384 LFB2P; Address LFB2P 0xC16; /* Lab Bubbler Prs #2 0xC16 0xC5A */
+TM 1 Hz AI_LP1000Torr LFB2P; Address LFB2P 0xC16; /* Lab Bubbler Prs #2 0xC16 0xC5A */
 TM typedef AI_XP384 LFT_P_t { text "%7.2lf"; convert TORR; }
   /* Calibration: TORR = 246.747615*Volts + 0.13 */
   Calibration ( LFT_P_t, TORR ) {
