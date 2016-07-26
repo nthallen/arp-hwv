@@ -1,0 +1,124 @@
+Proposed approach:
+%{
+  class digdelay {
+    public:
+      digdelay(int delay);
+      ~digdelay();
+      double delay(double in);
+      double delta(double in);
+    private:
+      double *data;
+      int npts, next;
+  };
+  
+  digdelay::digdelay(int delay) {
+    nl_assert(delay > 0);
+    npts = delay;
+    data = (double *)new_memory(npts * sizeof(double));
+    next = -1;
+  }
+  
+  digdelay::~digdelay() {
+    if (data) {
+      free_memory(data);
+      data = 0;
+    }
+  }
+  
+  double digdelay::delay(double in) {
+    double rv;
+    if (next < 0) {
+      int i;
+      for (i = 0; i < npts; ++i)
+        data[i] = in;
+      next = 0;
+    }
+    rv = data[next];
+    data[next] = in;
+    if (++next >= npts)
+      next = 0;
+    return rv;
+  }
+  
+  double digdelay::delta(double in) {
+    double in0 = delay(in);
+    return in - in0;
+  }
+  
+  digdelay IRV(3);
+  
+  /* A_HT_MAX is the max setpoint we will attempt.
+     A_dHT_DELTA is the size of dIRVdt to consider as going up
+      (or if negative, down)
+     A_HT_DELTA is the nominal distance between the setpoint and
+       the stable A_IRV value.
+  */
+  #define A_HT_MAX 2.0
+  #define A_dHT_DELTA 0.02
+  #define A_HT_DELTA 0.3
+  double A_Heat_SP = A_HT_MAX;
+  bool Falling0, Falling1;
+%}
+
+{ VOLTS dIRVdt; invalidate dIRVdt;
+  { dIRVdt = IRV.delta(convert(A_IRV)); Validate dIRVdt; }
+}
+
+State h2oA_HeatOn {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  { ci_sendfcmd(2, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP); }
+  
+  Hold until (dIRVdt > 0) or 40
+  else { msg(1, "Timed out waiting for A_IRV to climb in h2oA_HeatOn"); }
+  Hold until (dIRVdt < 0 || convert(A_IRV) > 2*A_Heat_SP);
+  Validate h2oA_Watch;
+}
+
+State h2oA_Watch {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  { Falling0 = false; }
+  { Falling1 = (dIRVdt < -A_dHT_DELTA) &&
+               (convert(A_IRV) < A_Heat_SP - A_HT_DELTA);
+    if (Falling1 && Falling0) {
+      A_Heat_SP -= 0.1;
+      Validate h2oA_IRV_Falling;
+    }
+    Falling0 = Falling1;
+  }
+  { if (convert(A_IRV) > 2*A_Heat_SP) {
+      setpoint -= 0.1;
+      Validate h2oA_IRV_Rising;
+    }
+  }
+  +5:00 {
+    if (A_Heat_SP < A_HT_MAX && convert(A_LMT) < 20) {
+      A_Heat_SP += 0.05;
+      ci_sendfcmd(2, "Set Axis A Heat Setpoint %.2lf", A_Heat_SP);
+      Validate h2oA_Watch;
+    }
+  }
+}
+
+State h2oA_IRV_Falling {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  > Set Axis A Heat Set Pt 0
+  Hold until (dIRVdt >= 0);
+  Hold until (dIRVdt < 0 || convert(A_IRV) > A_Ht_Setpoint);
+  Validate h2oA_HeatOn;
+}
+
+State h2oA_IRV_Rising {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  > Set Axis A Heat Set Pt 0
+  Hold until (dIRVdt < -A_dHT_DELTA);
+  Hold until (dIRVdt >= 0);
+  Validate h2oA_HeatOn;
+}
