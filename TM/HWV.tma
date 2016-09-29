@@ -527,23 +527,23 @@ Partition
 # Partition 11: Analog Input Monitoring
 #---------------------------------------------------------------
 %{
-  AI_T30K Last_A_LMT = 0;
-  static int A_LMT_static_count = 0;
-  static int A_LMT_delta_count = 0;
+  AI_T30K Last_LFB_T = 0;
+  static int LFB_T_static_count = 0;
+  static int LFB_T_delta_count = 0;
   static int AI_Reset_count = 0;
 %}
 State AI_Watch {
-    { if ( A_LMT == Last_A_LMT ) {
-        if ( ++A_LMT_static_count >= 15 ) {
-          msg(2, "A_LMT has not changed in 15 seconds");
-          A_LMT_delta_count = 0;
+    { if ( LFB_T == Last_LFB_T ) {
+        if ( ++LFB_T_static_count >= 15 ) {
+          msg(2, "LFB_T has not changed in 15 seconds");
+          LFB_T_delta_count = 0;
           Validate AI_Reset;
         }
       } else {
-        Last_A_LMT = A_LMT;
-        A_LMT_static_count = 0;
-        if ( ++A_LMT_delta_count > 5 ) {
-          A_LMT_delta_count = 0;
+        Last_LFB_T = LFB_T;
+        LFB_T_static_count = 0;
+        if ( ++LFB_T_delta_count > 5 ) {
+          LFB_T_delta_count = 0;
           AI_Reset_count = 0;
         }
       }
@@ -558,7 +558,7 @@ State AI_Reset {
           Validate AI_Fail;
         }
       }
-      Hold until ( A_LMT != Last_A_LMT ) OR 15
+      Hold until ( LFB_T != Last_LFB_T ) OR 15
       else Validate AI_Reset;
       Validate AI_Watch;
 }
