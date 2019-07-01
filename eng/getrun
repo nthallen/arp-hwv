@@ -6,8 +6,8 @@ function nl_error {
 
 flt=''
 gse=hwvgse.arp.harvard.edu
-HHH_Dir=SEAC4RS
-RAW_Dir=SEAC4RS/RAW
+HHH_Dir=HHH
+RAW_Dir=HHH/RAW
 HomeDir=/home/hwv
 Exp=HWV
 RunType=''
