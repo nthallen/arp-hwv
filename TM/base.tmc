@@ -97,7 +97,7 @@ TM typedef unsigned char PwrMon_S {
 }
 
 TM typedef AI_X2 HPV_P_t { text "%6.1lf"; convert TORR; }
-Calibration (HPV_P_t, TORR) { 0, 104.0610, 960, 877.6465 }
+Calibration (HPV_P_t, TORR) { 0, 104.0610, 960, 1085.8 }
 
 TM 8 Hz UINT MFCtr, Synch;
 
