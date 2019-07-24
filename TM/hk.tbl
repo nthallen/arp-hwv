@@ -55,7 +55,7 @@ D1 {
   HBox { +-; Title: HPV; -+ };
   "1T:" (HPV1T,6) C;
   "2T:" (HPV2T,6) C;
-  P: (HPV_P,7) V;
+  P: (HPV_P,6) Torr;
   RH: (HPV_RH,7) V;
 }
 D2 {

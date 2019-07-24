@@ -95,6 +95,9 @@ TM typedef unsigned char PwrMon_S {
   collect x = sbrba(x.address);
 }
 
+TM typedef AI_X1 HPV_P_t { text "%6.1lf"; convert TORR; }
+Calibration (HPV_P_t, TORR) { 0, 104.0610, 480, 877.6465 }
+
 TM 8 Hz UINT MFCtr, Synch;
 
 /* AI */
@@ -149,7 +152,7 @@ TM 8 Hz AI_X1 HHH2P; Address HHH2P 0xC10; /* HHH Cell Prs #2 0xC10 0xC9C */
 TM 8 Hz AI_T10K HHH2T; Address HHH2T 0xCAE; /* HHH Cell T #2 */
 TM 8 Hz AI_X1 HHHDP; Address HHHDP 0xC30; /* HHH Cell Diff Prs */
 TM 1 Hz AI_T30K HHHPT; Address HHHPT 0xCCE; /* HHH Cell Prs Assy Temp */
-TM 1 Hz AI_X1 HPV_P; Address HPV_P 0xC90; /* HHH Prs Vessel Prs */
+TM 1 Hz HPV_P_t HPV_P; Address HPV_P 0xC90; /* HHH Prs Vessel Prs */
 TM 1 Hz AI_X1 HPV_RH; Address HPV_RH 0xCB0; /* HHH Prs Vessel RH */
 TM 1 Hz AI_T30K HPV1T; Address HPV1T 0xC50; /* HHH Prs Vessel T #1 */
 TM 1 Hz AI_T30K HPV2T; Address HPV2T 0xC70; /* HHH Prs Vessel T #2 */
