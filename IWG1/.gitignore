@@ -1,3 +1,4 @@
+*.o
 IWG1
 IWG1oui.c
 UserPkts

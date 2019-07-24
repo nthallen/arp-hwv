@@ -45,4 +45,4 @@ TM INITFUNC sbwr(LFB2P.address, AI_CFG_X1);
 TM INITFUNC sbwr(LFT_P.address, AI_CFG_XP384);
 TM INITFUNC sbwr(AirHP.address, AI_CFG_XP384);
 TM INITFUNC sbwr(AirLP.address, AI_CFG_XP384);
-TM INITFUNC sbwr(HVP_P.address, AI_CFG_X2);
+TM INITFUNC sbwr(HPV_P.address, AI_CFG_X2);
