@@ -564,3 +564,119 @@ State AI_Reset {
 }
 
 State AI_Fail {}
+
+Partition
+#----------------------------------------------
+# Partition 12: Lab Calibration Partition
+#----------------------------------------------
+
+State Calibrate_Init {
+ +10  > AI Increment Row By 7
+}
+
+State Calibrate {
+# +30 > Set Lab Flow Air Set Pt 0
+ +4 > Set Lab Flow Bubbler Set Pt 0
+ +1 > Set Lab Flow Air Set Pt 0.8 
+ +2:30 > Set Lab Flow Bubbler Set Pt 1 
+ +2:30 > Set Lab Flow Bubbler Set Pt 2
+ +2:30 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 4.5
+ +4:00 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 2
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 0
+# +4:00 > Set Lab Flow Air Set Pt 1
+# +4:00 > Set Lab Flow Bubbler Set Pt 1
+# +4:00 > Set Lab Flow Bubbler Set Pt 2
+# +4:00 > Set Lab Flow Bubbler Set Pt 3
+# +4:00 > Set Lab Flow Bubbler Set Pt 4
+# +6:00 > Set Lab Flow Bubbler Set Pt 3
+# +4:00 > Set Lab Flow Bubbler Set Pt 2
+# +4:00 > Set Lab Flow Bubbler Set Pt 1
+# +4:00 > Set Lab Flow Bubbler Set Pt 0
+# +4:00 > Set Lab Flow Air Set Pt 0
+}
+
+State PCalibrate_Start {
+  +1   > sw Status laser Select HHH and Start
+ +2:00 > Set Lab Flow Air Set Pt .4
+       > Set Lab Flow Bubbler Set Pt .4
+  +40  > Set Lab Flow Air Set Pt .5
+       > Set Lab Flow Bubbler Set Pt .5
+  +40  > Set Lab Flow Air Set Pt .6
+       > Set Lab Flow Bubbler Set Pt .6
+  +40  > Set Lab Flow Air Set Pt .7
+       > Set Lab Flow Bubbler Set Pt .7
+  +40  > Set Lab Flow Air Set Pt .8
+       > Set Lab Flow Bubbler Set Pt .8
+  +40  > Set Lab Flow Air Set Pt .9
+       > Set Lab Flow Bubbler Set Pt .9
+  +40  > Set Lab Flow Air Set Pt 1
+       > Set Lab Flow Bubbler Set Pt 1
+  +40  > Set Lab Flow Air Set Pt 1.1
+       > Set Lab Flow Bubbler Set Pt 1.1
+  +40  > Set Lab Flow Air Set Pt 1.2
+       > Set Lab Flow Bubbler Set Pt 1.2
+  +40  > Set Lab Flow Air Set Pt 1.3
+       > Set Lab Flow Bubbler Set Pt 1.3
+  +40  > Set Lab Flow Air Set Pt 1.4
+       > Set Lab Flow Bubbler Set Pt 1.4 
+  +40  > Set Lab Flow Air Set Pt 1.5
+       > Set Lab Flow Bubbler Set Pt 1.5
+  +40  > Set Lab Flow Air Set Pt 1.6
+       > Set Lab Flow Bubbler Set Pt 1.6
+  +40  > Set Lab Flow Air Set Pt 1.7
+       > Set Lab Flow Bubbler Set Pt 1.7
+  +40  > Set Lab Flow Air Set Pt 1.8
+       > Set Lab Flow Bubbler Set Pt 1.8
+  +40  > Set Lab Flow Air Set Pt 1.9
+       > Set Lab Flow Bubbler Set Pt 1.9
+  +40  > Set Lab Flow Air Set Pt 2
+       > Set Lab Flow Bubbler Set Pt 2
+  +40  > Set Lab Flow Air Set Pt 2.1
+       > Set Lab Flow Bubbler Set Pt 2.1
+  +40  > Set Lab Flow Air Set Pt 2.2
+       > Set Lab Flow Bubbler Set Pt 2.2
+  +40  > Set Lab Flow Air Set Pt 2.3
+       > Set Lab Flow Bubbler Set Pt 2.3
+  +40  > Set Lab Flow Air Set Pt 2.4
+       > Set Lab Flow Bubbler Set Pt 2.4 
+  +40  > Set Lab Flow Air Set Pt 2.5
+       > Set Lab Flow Bubbler Set Pt 2.5
+  +40  > Set Lab Flow Air Set Pt 2.6
+       > Set Lab Flow Bubbler Set Pt 2.6
+  +40  > Set Lab Flow Air Set Pt 2.7
+       > Set Lab Flow Bubbler Set Pt 2.7
+  +40  > Set Lab Flow Air Set Pt 2.8
+       > Set Lab Flow Bubbler Set Pt 2.8
+  +40  > Set Lab Flow Air Set Pt 2.9
+       > Set Lab Flow Bubbler Set Pt 2.9
+  +40  > Set Lab Flow Air Set Pt 3
+       > Set Lab Flow Bubbler Set Pt 3
+  +40  > Set Lab Flow Air Set Pt 3.1
+       > Set Lab Flow Bubbler Set Pt 3.1
+  +40  > Set Lab Flow Air Set Pt 3.2
+       > Set Lab Flow Bubbler Set Pt 3.2
+  +40  > Set Lab Flow Air Set Pt 3.3
+       > Set Lab Flow Bubbler Set Pt 3.3
+  +40  > Set Lab Flow Air Set Pt 3.4
+       > Set Lab Flow Bubbler Set Pt 3.4 
+  +40  > Set Lab Flow Air Set Pt 3.5
+       > Set Lab Flow Bubbler Set Pt 3.5
+  +40  > Set Lab Flow Air Set Pt 3.6
+       > Set Lab Flow Bubbler Set Pt 3.6
+  +40  > Set Lab Flow Air Set Pt 3.7
+       > Set Lab Flow Bubbler Set Pt 3.7
+  +40  > Set Lab Flow Air Set Pt 3.8
+       > Set Lab Flow Bubbler Set Pt 3.8
+  +40  > Set Lab Flow Air Set Pt 3.9
+       > Set Lab Flow Bubbler Set Pt 3.9
+  +40  > Set Lab Flow Air Set Pt 4
+       > Set Lab Flow Bubbler Set Pt 4
+  +40  > Set Lab Flow Air Set Pt 0.4
+       > Set Lab Flow Bubbler Set Pt 0
+}
+
+State Calibrate_Stop {}
+

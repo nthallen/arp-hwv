@@ -20,6 +20,9 @@
   : Laser Start { $0 = SWS_DFB_START; }
   : Laser Stop { $0 = SWS_DFB_STOP; }
   : Laser Select HHH and Start { $0 = SWS_DFB_HHH; }
+  : Calibrate Start { $0 = SWS_CALIBRATE_START; }
+  : Calibrate Stop { $0 = SWS_CALIBRATE_STOP; }
+  : PCalibrate Start { $0 = SWS_PCALIBRATE_START; }
   : Lamp Enable { $0 = SWS_H2O_ENABLE; }
   : Lamp Disable { $0 = SWS_H2O_DISABLE; }
   : LyA Use T_SFB1T { $0 = SWS_T_SFB1T; }

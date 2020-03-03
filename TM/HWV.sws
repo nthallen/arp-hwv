@@ -10,6 +10,12 @@ SW_Variable: <unsigned short,UINT> SWStat SW Status
     Validate DFB_Stop; break;
   SWS_DFB_HHH   12 Laser Select HHH and Start:
     Validate DFB_HHH; break;
+  SWS_CALIBRATE_START 15 Calibrate Start: 
+    Validate Calibrate; break;
+  SWS_CALIBRATE_STOP 16 Calibrate Stop: 
+    Validate Calibrate_Stop; break;
+  SWS_PCALIBRATE_START 17 PCalibrate Start:
+    Validate PCalibrate_Start; break;
 
   SWS_H2O_ENABLE 20 Lamp Enable:
     H2O2_Lamp_Enable = 1;
@@ -25,6 +31,7 @@ SW_Variable: <unsigned short,UINT> SWStat SW Status
   SWS_P_SD_HP 34 LyA Use P_SD_HP: break;
   SWS_P_HHH1P 35 LyA Use P_HHH1P: break;
   SWS_P_LFT_P 36 LyA Use P_LFT_P: break;
+
 
   SWS_TIME_WARP 253 Time Warp: break;
   SWS_READFILE 254 ReadFile: Validate ReadFile; break;

@@ -12,6 +12,9 @@ extern SWData_t SWData;
 #define SWS_DFB_START 10
 #define SWS_DFB_STOP 11
 #define SWS_DFB_HHH 12
+#define SWS_CALIBRATE_START 15
+#define SWS_CALIBRATE_STOP 16
+#define SWS_PCALIBRATE_START 17
 #define SWS_H2O_ENABLE 20
 #define SWS_H2O_DISABLE 21
 #define SWS_T_SFB1T 30

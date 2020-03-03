@@ -1,47 +1,65 @@
-# Makefile Generated Sat Aug 31 11:09:42 EDT 2013
+# Makefile Generated Tue Jul 02 15:01:02 EDT 2019
 MNC=HWV
 SPECFILE=HWV.spec
-SRC=ptrhm.h dacsmread.txt base.tmc idx64.tmc ssp.tmc qcli.tmc
-SRC+=waves.tmc T30K75KU.tmc T10K75KU.tmc ptrhm.cc vl_temp.tmc
-SRC+=pwrmon.tmc dacsmread.tmc IWG1.tmc SWData.tmc SWData.h
-SRC+=ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc
-SRC+=vl_temp_col.tmc ptrhm_col.cc dacsmread_col.tmc IWG1_col.tmc
-SRC+=SWData_col.tmc idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd
-SRC+=ao.cmd soldrv.cmd waves.cmd fail.cmd SWData.cmd qclibits.tmc
-SRC+=sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc
-SRC+=pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl
-SRC+=lab.tbl IWG1.tbl UDP.tmc IRVf.tmc HWV.tma HWV.sws HWVcal.tma
-SRC+=HWV.doit HWVcal.doit ly.doit A.sol B.sol C.sol hwveng.cdf
-SRC+=hwvraw.cdf hwv.cdf hhh.cdf lyamr.cdf HWVmr2.oui
+PCMFILE=HWV.pcm
+SRC=ptrhm.h dacsmread.txt /usr/local/share/huarp/freemem.tmc
+SRC+=base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc
+SRC+=T10K75KU.tmc ptrhm.cc vl_temp.tmc pwrmon.tmc
+SRC+=/usr/local/share/huarp/cpu_usage.tmc
+SRC+=/usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc
+SRC+=SWData.tmc SWData.h ai_init.tmc ptrh_chk.tmc cnt_init.tmc
+SRC+=idx64col.tmc sspcol.tmc vl_temp_col.tmc ptrhm_col.cc
+SRC+=/usr/local/share/huarp/freemem_col.tmc
+SRC+=/usr/local/share/huarp/DACS_ID.tmc
+SRC+=/usr/local/share/huarp/cpu_usage_col.tmc
+SRC+=/usr/local/share/huarp/tmdf_col.tmc dacsmread_col.tmc
+SRC+=IWG1_col.tmc SWData_col.tmc -lsubbus
+SRC+=/usr/local/share/huarp/root.cmd
+SRC+=/usr/local/share/huarp/getcon.cmd
+SRC+=/usr/local/share/huarp/idx64.cmd
+SRC+=/usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd
+SRC+=ssp.cmd ai.cmd ao.cmd soldrv.cmd waves.cmd fail.cmd SWData.cmd
+SRC+=/usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc
+SRC+=idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc
+SRC+=LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc
+SRC+=SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl
+SRC+=/usr/local/share/oui/cic.oui IWG1.tbl LyAmr/UDP.cc UDP.tmc
+SRC+=-lsocket IRVf.tmc HWV.tma HWV.sws HWVcal.tma HWV.doit
+SRC+=HWVcal.doit ly.doit A.sol B.sol C.sol hwveng.cdf hwvraw.cdf
+SRC+=hwv.cdf hhh.cdf lyamr.cdf HWVmr2.oui HWV.pcm
 TOOL=HWV.spec Makefile
 SCRIPT=interact runfile.FF runfile_cal dccc.dccc idx64.idx64
 SCRIPT+=hwv_analysis
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log address.h
-OBJ+=dacsmread.tmc dacsmread_col.tmc HWVcol.cc HWV.pcm tm.dac
-OBJ+=HWVcoloui.c HWVcoloui.o HWVcol.o ptrhm.o ptrhm_col.o HWVcmd.cc
-OBJ+=HWVcmd.dat HWVsrvr.o HWVsrvroui.c HWVsrvroui.o HWVtbl.tmc
-OBJ+=lyalphatbl.tmc hktbl.tmc labtbl.tmc IWG1tbl.tmc HWVdisp.cc
-OBJ+=HWVdispoui.c HWVdispoui.o HWVdisp.o LyAmrSample.o Circular.o
-OBJ+=LyAmrAvg.o HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc
-OBJ+=labtblnc.tmc IWG1tblnc.tmc HWVdispnc.cc HWVdispncoui.c
-OBJ+=HWVdispncoui.o HWVdispnc.o lydisp.cc lydispoui.c lydispoui.o
-OBJ+=lydisp.o lydispnc.cc lydispncoui.c lydispncoui.o lydispnc.o
+OBJ+=dacsmread.tmc dacsmread_col.tmc HWVcol.cc tm.dac HWVcoloui.c
+OBJ+=HWVcoloui.o HWVcol.o ptrhm.o ptrhm_col.o HWVcmd.cc HWVcmd.dat
+OBJ+=HWVsrvr.o HWVsrvroui.c HWVsrvroui.o HWVtbl.tmc lyalphatbl.tmc
+OBJ+=hktbl.tmc labtbl.tmc IWG1tbl.tmc HWVdisp.cc HWVdispoui.c
+OBJ+=HWVdispoui.o HWVdisp.o LyAmrSample.o Circular.o LyAmrAvg.o
+OBJ+=HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc
+OBJ+=IWG1tblnc.tmc HWVdispnc.cc HWVdispncoui.c HWVdispncoui.o
+OBJ+=HWVdispnc.o lydisp.cc lydispoui.c lydispoui.o lydisp.o
+OBJ+=lydispnc.cc lydispncoui.c lydispncoui.o lydispnc.o
 OBJ+=lyamrudpext.cc lyamrudpextoui.c lyamrudpextoui.o lyamrudpext.o
 OBJ+=UDP.o HWVsws.tma HWValgoa.tmc HWValgo.cc HWValgooui.c
 OBJ+=HWValgooui.o HWValgo.o HWVcalalgoa.tmc HWVcalalgo.cc
 OBJ+=HWVcalalgooui.c HWVcalalgooui.o HWVcalalgo.o doit.dep
-OBJ+=caldoit.dep lydoit.dep hwvengextcdf.oui hwvengext.tmc
+OBJ+=caldoit.dep lydoit.dep hwvengextcdf.oui hwvengextcdf.tmc
 OBJ+=hwvengext.cc hwvengextoui.c hwvengextoui.o hwvengext.o
-OBJ+=hwvrawextcdf.oui hwvrawext.tmc hwvrawext.cc hwvrawextoui.c
-OBJ+=hwvrawextoui.o hwvrawext.o hwvextcdf.oui hwvext.tmc hwvext.cc
-OBJ+=hwvextoui.c hwvextoui.o hwvext.o hhhextcdf.oui hhhext.tmc
+OBJ+=hwvrawextcdf.oui hwvrawextcdf.tmc hwvrawext.cc hwvrawextoui.c
+OBJ+=hwvrawextoui.o hwvrawext.o hwvextcdf.oui hwvextcdf.tmc hwvext.cc
+OBJ+=hwvextoui.c hwvextoui.o hwvext.o hhhextcdf.oui hhhextcdf.tmc
 OBJ+=hhhext.cc hhhextoui.c hhhextoui.o hhhext.o lyamrextcdf.oui
-OBJ+=lyamrext.tmc lyamrext.cc lyamrextoui.c lyamrextoui.o lyamrext.o
-OBJ+=HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o HWVcltncoui.c
-OBJ+=HWVcltncoui.o
+OBJ+=lyamrextcdf.tmc lyamrext.cc lyamrextoui.c lyamrextoui.o
+OBJ+=lyamrext.o HWVclt.o HWVcltoui.c HWVcltoui.o HWVcltnc.o
+OBJ+=HWVcltncoui.c HWVcltncoui.o HWVtbl.tmc.dep lyalphatbl.tmc.dep
+OBJ+=hktbl.tmc.dep labtbl.tmc.dep IWG1tbl.tmc.dep HWVtblnc.tmc.dep
+OBJ+=lyalphatblnc.tmc.dep hktblnc.tmc.dep labtblnc.tmc.dep
+OBJ+=IWG1tblnc.tmc.dep
 TGT=HWVcol HWVsrvr HWVdisp HWVdispnc lydisp lydispnc lyamrudpext
 TGT+=HWValgo HWVcalalgo doit caldoit lydoit A.sft B.sft C.sft
 TGT+=hwvengext hwvrawext hwvext hhhext lyamrext HWVclt HWVcltnc
+IGNORE=
 DISTRIB=waves.out A.sft ../IWG1/IWG1 HWV.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit caldoit lydoit
 SRCDIST=waves.qcli waves.m HWV.tbl lyalpha.tbl hk.tbl lab.tbl
@@ -63,7 +81,7 @@ CMDBASE+=/usr/local/share/huarp/getcon.cmd
 CMDBASE+=/usr/local/share/huarp/idx64.cmd
 CMDBASE+=/usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd
 CMDBASE+=qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd waves.cmd fail.cmd
-CMDBASE+=SWData.cmd
+CMDBASE+=SWData.cmd SWData.h
 COLBASE=ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc
 COLBASE+=sspcol.tmc vl_temp_col.tmc ptrhm_col.cc
 COLBASE+=/usr/local/share/huarp/freemem_col.tmc
@@ -73,25 +91,35 @@ COLBASE+=/usr/local/share/huarp/tmdf_col.tmc dacsmread_col.tmc
 COLBASE+=IWG1_col.tmc SWData_col.tmc
 SWSBASE=HWV.sws
 QCLIBASE=
+GENUIBASE=
+EXTBASE=
+SPECDEPBASE=
+SPECTGTBASE=
+SPECTGTMISS:=$(foreach file,$(SPECTGTBASE),$(if $(wildcard $(file)),,$(file)))
+AG_CPPFLAGS=
 PHTGT=HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc IWG1tbl.tmc
-RCS=$(SRC) $(TOOL) $(SCRIPT)
-SOURCE=$(RCS) $(NONRCS)
+SOURCE=$(SRC) $(TOOL) $(SCRIPT)
 OBJECT=$(OBJ) *.err
 TARGET=$(TGT)
 DSTRB=$(TGT) $(DISTRIB) $(SCRIPT)
 TGTDIR= $(TGTNODE)/home/hwv
 include /usr/local/share/huarp/appgen.mk
 
-.PHONY : all extdistribution distribution clean check_photon
+.PHONY : all all-dist extdistribution distribution clean clean-dist check_photon
 
-all : Makefile check_photon $(TGT) .cvsignore
-Makefile : HWV.spec
+IGNOREFILE=.gitignore
+all : check_photon $(TGT) $(IGNOREFILE)
+all-dist : all $(DSTRB) $(SRCDIST) VERSION
+Makefile $(SPECTGTMISS) : HWV.spec $(SPECDEPBASE)
 	appgen HWV.spec
 VERSION=`cat VERSION`
-extdistribution : $(DSTRB) $(SRCDIST) VERSION
+extdistribution : all-dist
 	@[ -d $(TGTDIR)/bin ] || mkdir $(TGTDIR)/bin
 	@[ -d $(TGTDIR)/bin/$(VERSION) ] || mkdir $(TGTDIR)/bin/$(VERSION)
-	@[ -d  $(TGTDIR)/bin/$(VERSION)/Base ] || mkdir $(TGTDIR)/bin/$(VERSION)/Base
+	@[ -d $(TGTDIR)/bin/$(VERSION)/Base ] || mkdir $(TGTDIR)/bin/$(VERSION)/Base
+	@[ ! -f $(TGTDIR)/bin/$(VERSION)/$(PCMFILE) ] || \
+	  cmp -s $(TGTDIR)/bin/$(VERSION)/$(PCMFILE) $(PCMFILE) || \
+	  ( echo "$(PCMFILE) changed without VERSION update"; false )
 	@distribute $(FORCE) $(TGTDIR)/bin/$(VERSION) $(DSTRB)
 	@distribute $(FORCE) $(TGTDIR)/bin/$(VERSION)/Base $(SRCDIST)
 distribution : extdistribution
@@ -164,7 +192,7 @@ HWVclt : HWVclt.o HWVcltoui.o
 HWVcltnc : HWVcltnc.o HWVcltncoui.o
 	$(LINK.normCXX) HWVcltnc.o HWVcltncoui.o -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) HWVcltncoui.c
-HWVcol.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc vl_temp_col.tmc /usr/local/share/huarp/freemem_col.tmc /usr/local/share/huarp/DACS_ID.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc dacsmread_col.tmc IWG1_col.tmc SWData_col.tmc
+HWVcol.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc vl_temp_col.tmc /usr/local/share/huarp/freemem_col.tmc /usr/local/share/huarp/DACS_ID.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc dacsmread_col.tmc IWG1_col.tmc SWData_col.tmc VERSION
 	$(TMC.col) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ai_init.tmc ptrh_chk.tmc cnt_init.tmc idx64col.tmc sspcol.tmc vl_temp_col.tmc /usr/local/share/huarp/freemem_col.tmc /usr/local/share/huarp/DACS_ID.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc dacsmread_col.tmc IWG1_col.tmc SWData_col.tmc
 HWVcoloui.c : $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
@@ -174,17 +202,22 @@ ptrhm.o : ptrhm.cc SWData.h
 ptrhm_col.o : ptrhm_col.cc SWData.h
 HWVcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd /usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd waves.cmd fail.cmd SWData.cmd
 	$(CMDGEN) -d HWVcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/idx64.cmd /usr/local/share/huarp/phrtg.cmd idx64drv.cmd dccc.cmd qcli.cmd ssp.cmd ai.cmd ao.cmd soldrv.cmd waves.cmd fail.cmd SWData.cmd
-HWVsrvr.o : HWVcmd.cc
+HWVsrvr.o : HWVcmd.cc SWData.h
 	$(COMPILE.srvr) HWVcmd.cc
 HWVsrvroui.c : $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
-HWVsrvroui.o : HWVsrvroui.c
+HWVsrvroui.o : HWVsrvroui.c SWData.h
 HWVtbl.tmc : HWV.tbl
+-include HWVtbl.tmc.dep
 lyalphatbl.tmc : lyalpha.tbl
+-include lyalphatbl.tmc.dep
 hktbl.tmc : hk.tbl
+-include hktbl.tmc.dep
 labtbl.tmc : lab.tbl
+-include labtbl.tmc.dep
 IWG1tbl.tmc : IWG1.tbl
-HWVdisp.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc IWG1tbl.tmc
+-include IWG1tbl.tmc.dep
+HWVdisp.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc IWG1tbl.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWVtbl.tmc lyalphatbl.tmc hktbl.tmc labtbl.tmc IWG1tbl.tmc
 HWVdispoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -197,29 +230,34 @@ Circular.o : LyAmr/Circular.cc SWData.h
 LyAmrAvg.o : LyAmr/LyAmrAvg.cc SWData.h
 	$(COMPILE.cc) LyAmr/LyAmrAvg.cc
 HWVtblnc.tmc : HWV.tbl
+-include HWVtblnc.tmc.dep
 lyalphatblnc.tmc : lyalpha.tbl
+-include lyalphatblnc.tmc.dep
 hktblnc.tmc : hk.tbl
+-include hktblnc.tmc.dep
 labtblnc.tmc : lab.tbl
+-include labtblnc.tmc.dep
 IWG1tblnc.tmc : IWG1.tbl
-HWVdispnc.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc IWG1tblnc.tmc
+-include IWG1tblnc.tmc.dep
+HWVdispnc.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc IWG1tblnc.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc HWVmr2.tmc SSPrtg.tmc HWVtblnc.tmc lyalphatblnc.tmc hktblnc.tmc labtblnc.tmc IWG1tblnc.tmc
 HWVdispncoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HWVdispncoui.o : HWVdispncoui.c SWData.h
 HWVdispnc.o : HWVdispnc.cc SWData.h
-lydisp.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc digio.tmc HWVmr2.tmc lyalphatbl.tmc
+lydisp.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc digio.tmc HWVmr2.tmc lyalphatbl.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc digio.tmc HWVmr2.tmc lyalphatbl.tmc
 lydispoui.c : $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 lydispoui.o : lydispoui.c SWData.h
 lydisp.o : lydisp.cc SWData.h
-lydispnc.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc digio.tmc HWVmr2.tmc lyalphatblnc.tmc
+lydispnc.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc digio.tmc HWVmr2.tmc lyalphatblnc.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc digio.tmc HWVmr2.tmc lyalphatblnc.tmc
 lydispncoui.c : $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 lydispncoui.o : lydispncoui.c SWData.h
 lydispnc.o : lydispnc.cc SWData.h
-lyamrudpext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc HWVmr2.tmc UDP.tmc
+lyamrudpext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc HWVmr2.tmc UDP.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc /usr/local/share/huarp/flttime.tmc HWVmr2.tmc UDP.tmc
 lyamrudpextoui.c : $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -232,7 +270,7 @@ HWVsws.tma : HWV.sws
 HWValgoa.tmc : HWV.tma HWVsws.tma HWVsrvr
 	$(SERVER) ./HWVsrvr
 	$(TMCALGO) -V "`./HWVsrvr -R`" HWV.tma HWVsws.tma
-HWValgo.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc HWValgoa.tmc
+HWValgo.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc HWValgoa.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc HWValgoa.tmc
 HWValgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -241,7 +279,7 @@ HWValgo.o : HWValgo.cc SWData.h
 HWVcalalgoa.tmc : HWVcal.tma HWVsws.tma HWVsrvr
 	$(SERVER) ./HWVsrvr
 	$(TMCALGO) -V "`./HWVsrvr -R`" HWVcal.tma HWVsws.tma
-HWVcalalgo.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc HWVcalalgoa.tmc
+HWVcalalgo.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc HWVcalalgoa.tmc VERSION
 	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc HWVcalalgoa.tmc
 HWVcalalgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
@@ -258,64 +296,64 @@ lydoit.dep : ly.doit
 -include lydoit.dep
 hwvengextcdf.oui : hwveng.cdf
 	$(EDF2OUI) hwveng.cdf
-hwvengext.tmc : hwveng.cdf
+hwvengextcdf.tmc : hwveng.cdf
 	$(EDF2EXT) hwveng.cdf
-hwvengext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc hwvengext.tmc
-	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc hwvengext.tmc
+hwvengext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc hwvengextcdf.tmc VERSION
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc IRVf.tmc hwvengextcdf.tmc
 hwvengextoui.c : hwvengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvengextoui.o : hwvengextoui.c SWData.h
 hwvengext.o : hwvengext.cc SWData.h
 hwvrawextcdf.oui : hwvraw.cdf
 	$(EDF2OUI) hwvraw.cdf
-hwvrawext.tmc : hwvraw.cdf
+hwvrawextcdf.tmc : hwvraw.cdf
 	$(EDF2EXT) hwvraw.cdf
-hwvrawext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc hwvrawext.tmc
-	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc hwvrawext.tmc
+hwvrawext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc hwvrawextcdf.tmc VERSION
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc ptrh_conv.tmc hwvrawextcdf.tmc
 hwvrawextoui.c : hwvrawextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvrawextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvrawextoui.o : hwvrawextoui.c SWData.h
 hwvrawext.o : hwvrawext.cc SWData.h
 hwvextcdf.oui : hwv.cdf
 	$(EDF2OUI) hwv.cdf
-hwvext.tmc : hwv.cdf
+hwvextcdf.tmc : hwv.cdf
 	$(EDF2EXT) hwv.cdf
-hwvext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hwvext.tmc
-	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hwvext.tmc
+hwvext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hwvextcdf.tmc VERSION
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hwvextcdf.tmc
 hwvextoui.c : hwvextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hwvextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hwvextoui.o : hwvextoui.c SWData.h
 hwvext.o : hwvext.cc SWData.h
 hhhextcdf.oui : hhh.cdf
 	$(EDF2OUI) hhh.cdf
-hhhext.tmc : hhh.cdf
+hhhextcdf.tmc : hhh.cdf
 	$(EDF2EXT) hhh.cdf
-hhhext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hhhext.tmc
-	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hhhext.tmc
+hhhext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hhhextcdf.tmc VERSION
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc hhhextcdf.tmc
 hhhextoui.c : hhhextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) hhhextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 hhhextoui.o : hhhextoui.c SWData.h
 hhhext.o : hhhext.cc SWData.h
 lyamrextcdf.oui : lyamr.cdf
 	$(EDF2OUI) lyamr.cdf
-lyamrext.tmc : lyamr.cdf
+lyamrextcdf.tmc : lyamr.cdf
 	$(EDF2EXT) lyamr.cdf
-lyamrext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc HWVmr2.tmc lyamrext.tmc
-	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc HWVmr2.tmc lyamrext.tmc
+lyamrext.cc : /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc HWVmr2.tmc lyamrextcdf.tmc VERSION
+	$(TMC) /usr/local/share/huarp/freemem.tmc base.tmc idx64.tmc ssp.tmc qcli.tmc waves.tmc T30K75KU.tmc T10K75KU.tmc vl_temp.tmc pwrmon.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc dacsmread.tmc IWG1.tmc SWData.tmc HWVmr2.tmc lyamrextcdf.tmc
 lyamrextoui.c : HWVmr2.oui lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) HWVmr2.oui lyamrextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 lyamrextoui.o : lyamrextoui.c SWData.h
 lyamrext.o : lyamrext.cc SWData.h
-HWVclt.o : HWVcmd.cc
+HWVclt.o : HWVcmd.cc SWData.h
 	$(COMPILE.clt) HWVcmd.cc
 HWVcltoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui
-HWVcltoui.o : HWVcltoui.c
-HWVcltnc.o : HWVcmd.cc
+HWVcltoui.o : HWVcltoui.c SWData.h
+HWVcltnc.o : HWVcmd.cc SWData.h
 	$(COMPILE.cltnc) HWVcmd.cc
 HWVcltncoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/nctable.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/kbdclt.oui $(OUIDIR)/nctable.oui $(OUIDIR)/msg.oui
-HWVcltncoui.o : HWVcltncoui.c
+HWVcltncoui.o : HWVcltncoui.c SWData.h
 SWData.h SWData.tmc SWData_col.tmc SWData.cmd :  HWV.sws
 	swscomp -o SWData  HWV.sws
 
@@ -323,8 +361,9 @@ tidy :
 	rm -f $(OBJECT)
 clean : tidy
 	rm -f $(TARGET)
-.cvsignore : Makefile
-	@for i in $(OBJECT) $(TARGET); do echo "$$i"; done >.cvsignore
+clean-dist : clean
+$(IGNOREFILE) : Makefile
+	@for i in $(OBJECT) $(IGNORE) $(TARGET); do echo "$$i"; done >$(IGNOREFILE)
 COLFLAGS=-Haddress.h
 CXXFLAGS=-g
 CPPFLAGS+=-I ../IWG1

@@ -37,7 +37,7 @@ State Standby {
 # RECORD  
 State Record {
         depending on (ON_GROUND) { Validate Shutdown; }
-        depending on (h2oA_fail) { Validate Shutdown; }
+       #depending on (h2oA_fail) { Validate Shutdown; }
         depending on (AI_Fail)   { Validate Shutdown; }
         "In Record";
 }
@@ -45,9 +45,10 @@ State Record {
 # SHUTDOWN
 State Shutdown {
   +1  > Soldrv A select mode 0
-      Hold until valid (h2oA_shutOff,h2oA_heatOff,DFB_Shutdown) or 55;
+      Hold until valid (h2oA_shutOff,h2oA_HeatOff,
+        DFB_Shutdown,Throttle_closed) or 55;
  +10  > Fail Light On
-      > quit
+      > Quit
 }
 
 
@@ -67,8 +68,8 @@ Partition
 # REF: 650 torr ~5000 ft
 
 %{ /* Altitude definitions */
-    double P_ground_up = 525.;
-    double P_ground_dn = 575.;
+    double P_ground_up = 5.;
+    double P_ground_dn = 7.;
     // double P_clouds_up = 280.;
     // double P_clouds_dn = 370.;
     int using_swp = 0;
@@ -128,7 +129,11 @@ State Throttle_scan {
 State Throttle_shut {
   > drive Throttle Valve in 48000
   > drive Throttle Valve out 20
+  Hold Until (TVStat & 1) or 15;
+  Validate Throttle_closed;
 }
+
+State Throttle_closed {}
 
 
 # -----------------------------------------------------------------------------
@@ -141,7 +146,7 @@ Partition
   int h2oA_nresets = 0;
 %}
 
-# WAIT UNTIL WB-57 TAKES OFF
+# WAIT UNTIL ER-2 TAKES OFF
 # INITIALIZE HEATER & LAMP
 State h2oA_init {
   +4  > Set Axis A Heat Set Pt 0
@@ -155,7 +160,9 @@ State h2oA_turnOn {
          if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
        }
        depending on (Shutdown) { Validate h2oA_shutOff; }
-  +2   > Set Axis A RF Set Pt 6.3
+       # 095: 6.1
+       # Before: 6.4
+  +2   > Set Axis A RF Set Pt 6.4
   +2   > Command Lamp Module A on
   +10  Validate h2oA_record;     
 }
@@ -168,24 +175,27 @@ State h2oA_record {
         depending on (1 Hz) {
           if ( !H2O2_Lamp_Enable ) Validate h2oA_shutOff;
         }
+        { if (IRVf > 4.0) Validate h2oA_reset; }
+        
         Hold until (convert(A_IRV) < 0.2);
-        Hold until (convert(A_IRV) > 0.2) or 5 else {
+    +1  Hold until (convert(A_IRV) > 0.2) or 5 else {
           msg(2,"**Lamp turned off!!**");  
-          Validate h2oA_reset; } 
-        Validate h2oA_record;
+          Validate h2oA_reset;
+        } 
+    +1  Validate h2oA_record;
 }
 
 State h2oA_reset {
         depending on (Shutdown) { Validate h2oA_shutOff; }
         > Command Lamp Module A off
   +1    > Set Axis A RF Set Pt 0
-        { if ( ++h2oA_nresets >= 10 ) {
+        { if (convert(A_LMT) < 20.0 &&  ++h2oA_nresets >= 10) {
             msg(2,"Lamp A Max Reset Count Reached");
-            A_Heat_SP -= 0.2;
             h2oA_nresets = 0;
+            Validate h2oA_fail;
           }
         }
-  +4    Validate h2oA_turnOn;
+  +30   Validate h2oA_turnOn;
 }
 
 State h2oA_shutOff {
@@ -193,7 +203,10 @@ State h2oA_shutOff {
   +1    > Set Axis A RF Set Pt 0
 }
 
-State h2oA_fail {}
+State h2oA_fail {
+  depending on (Shutdown) { Validate h2oA_shutOff; }
+  +30:00 Validate h2oA_init;
+}
 
 
 # -----------------------------------------------------------------------------
@@ -203,35 +216,99 @@ State h2oA_fail {}
 Partition
 
 %{
-  double A_Heat_SP = 2.0;
+  /* A_HT_MAX_DEFAULT is the max setpoint we will attempt.
+     A_HT_MAX is the current limit
+     A_dHT_DELTA is the size of dIRVdt to consider as going up
+        (or if negative, down)
+     A_MAX_STABLE_IR_DELTA is the nominal distance between the setpoint and
+        the stable A_IRV value.
+     A_ABS_MAX_IR_DELTA is the absolute maximum difference tolerated between
+        setpoint and A_IRV
+     A_HT_STEP_UP is the amount by which we increment the setpoint
+     A_HT_STEP_BACK is the amount by which we reduce the setpoint after
+        cycling heat
+     A_dRFBW_FALLING the threshold value of dRFBW to indicate falling.
+        Could be set to a high value to disable.
+  */
+  #define A_HT_MAX_DEFAULT 1.95 /* 095 was 2.05. Flight 1.85.  */
+  #define A_dHT_DELTA 0.01
+  #define A_MAX_STABLE_IR_DELTA 0.5 /* 095. Was 0.3 */
+  #define A_ABS_MAX_IR_DELTA 1.0
+  #define A_HT_STEP_UP 0.05
+  #define A_HT_STEP_BACK 0.1
+  #define A_dRFBW_FALLING (-0.02)
+  double A_Heat_SP = 0;
+  double A_HT_MAX = A_HT_MAX_DEFAULT;
+  int A_Heat_Reset_Count = 0;
 %}
 
 State h2oA_heatinit {
-        depending on (h2oA_record) { Validate h2oA_heatOn; }
+      Hold until valid (h2oA_record);
+  +8  > Soldrv A select mode 3
+      Validate h2oA_HeatOn;
 }
 
-# TURN ON LAMP HEATER & START SOL CYCLE
-# WATCHDOG FOR LAMP RUNNING DEEP
-State h2oA_heatOn {
-        depending on (Shutdown) { Validate h2oA_heatOff; }
-        depending on (h2oA_shutOff) { Validate h2oA_heatOff; }
-        depending on (h2oA_reset) { Validate h2oA_heatOff; }
-  +1    > Set Axis A RF Set Pt 6.3
-  +8    { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
-  +1    > Soldrv A select mode 3
-        Hold until (convert(A_IRV) > 4.0);
-        { msg(2,"**Too much heat on A - running deep!**");
-          A_Heat_SP -= 0.2;
-        }
-        > Set Axis A Heat Set Pt 0
-        Hold until (convert(A_IRV) < 1.0);
-        { ci_sendfcmd(0, "Set Axis A Heat Set Pt %.1lf\n", A_Heat_SP); }
-        Validate h2oA_heatOn;       
+State h2oA_HeatOn {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  
+  +50 Hold Until (dIRVdt > A_dHT_DELTA) or 3:00;
+   +1 Hold Until (dIRVdt < A_dHT_DELTA/2);
+   +1 { A_Heat_SP = IRVf + A_HT_STEP_UP;
+        if (A_Heat_SP > A_HT_MAX)
+          A_Heat_SP = A_HT_MAX;
+        ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
+        Validate h2oA_Watch;
+      }
 }
 
-State h2oA_heatOff {
-        depending on (h2oA_record) { Validate h2oA_heatOn; }
-        > Set Axis A Heat Set Pt 0
+State h2oA_Watch {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+  { if ((dIRVdt < -A_dHT_DELTA &&
+         IRVf < convert(HtASt) - A_MAX_STABLE_IR_DELTA &&
+         dRFBW > A_dRFBW_FALLING ) ||
+        (IRVf < convert(HtASt) - A_ABS_MAX_IR_DELTA)) {
+      if (++A_Heat_Reset_Count > 10) {
+        A_Heat_SP -= A_HT_STEP_BACK;
+        A_HT_MAX = A_Heat_SP;
+      }
+      Validate h2oA_IRV_Falling;
+    }
+  }
+  +3:00 {
+    A_Heat_SP = convert(HtASt);
+    if (A_Heat_SP < A_HT_MAX) {
+      if (A_Heat_SP < IRVf)
+        A_Heat_SP = IRVf;
+      A_Heat_SP += A_HT_STEP_UP;
+      if (A_Heat_SP > A_HT_MAX)
+        A_Heat_SP = A_HT_MAX;
+      ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
+      Validate h2oA_Watch;
+    }
+  }
+}
+
+State h2oA_IRV_Falling {
+  depending on (Shutdown) { Validate h2oA_HeatOff; }
+  depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
+  depending on (h2oA_reset) { Validate h2oA_HeatOff; }
+      > Set Axis A Heat Set Pt 0
+   +1:00 Hold until (dIRVdt < 0.005) or 1:00;
+   +1 Hold until (convert(A_IRV) < A_Heat_SP);
+   +1 { if (A_Heat_SP > IRVf+A_HT_STEP_UP)
+          A_Heat_SP = IRVf+A_HT_STEP_UP;
+        ci_sendfcmd(0, "Set Axis A Heat Set Pt %.2lf\n", A_Heat_SP);
+        Validate h2oA_Watch;
+      }
+}
+
+State h2oA_HeatOff {
+    depending on (h2oA_record) { Validate h2oA_HeatOn; }
+    > Set Axis A Heat Set Pt 0
 }
 
 
@@ -450,25 +527,25 @@ Partition
 # Partition 11: Analog Input Monitoring
 #---------------------------------------------------------------
 %{
-  AI_T30K Last_HPV1T = 0;
-  static int HPV1T_static_count = 0;
-  static int HPV1T_delta_count = 0;
+  AI_T30K Last_LFB_T = 0;
+  static int LFB_T_static_count = 0;
+  static int LFB_T_delta_count = 0;
   static int AI_Reset_count = 0;
 %}
 State AI_Watch {
-    { if ( HPV1T == Last_HPV1T ) {
-	if ( ++HPV1T_static_count >= 15 ) {
-	  msg(2, "HPV1T has not changed in 15 seconds");
-	  HPV1T_delta_count = 0;
-	  Validate AI_Reset;
-	}
+    { if ( LFB_T == Last_LFB_T ) {
+        if ( ++LFB_T_static_count >= 15 ) {
+          msg(2, "LFB_T has not changed in 15 seconds");
+          LFB_T_delta_count = 0;
+          Validate AI_Reset;
+        }
       } else {
-	Last_HPV1T = HPV1T;
-	HPV1T_static_count = 0;
-	if ( ++HPV1T_delta_count > 5 ) {
-	  HPV1T_delta_count = 0;
-	  AI_Reset_count = 0;
-	}
+        Last_LFB_T = LFB_T;
+        LFB_T_static_count = 0;
+        if ( ++LFB_T_delta_count > 5 ) {
+          LFB_T_delta_count = 0;
+          AI_Reset_count = 0;
+        }
       }
     }
 }
@@ -477,13 +554,129 @@ State AI_Reset {
       > AI Reset
   +1  > AI Double Convert Row Zero
       { if ( ++AI_Reset_count >= 10 ) {
-	  msg(2,"AI Max Reset Count Reached");
-	  Validate AI_Fail;
-	}
+          msg(2,"AI Max Reset Count Reached");
+          Validate AI_Fail;
+        }
       }
-      Hold until ( HPV1T != Last_HPV1T ) OR 15
+      Hold until ( LFB_T != Last_LFB_T ) OR 15
       else Validate AI_Reset;
       Validate AI_Watch;
 }
 
 State AI_Fail {}
+
+Partition
+#----------------------------------------------
+# Partition 12: Lab Calibration Partition
+#----------------------------------------------
+
+State Calibrate_Init {
+ +10  > AI Increment Row By 7
+}
+
+State Calibrate {
+# +30 > Set Lab Flow Air Set Pt 0
+ +4 > Set Lab Flow Bubbler Set Pt 0
+ +1 > Set Lab Flow Air Set Pt 0.8 
+ +2:30 > Set Lab Flow Bubbler Set Pt 1 
+ +2:30 > Set Lab Flow Bubbler Set Pt 2
+ +2:30 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 4.5
+ +4:00 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 2
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 0
+# +4:00 > Set Lab Flow Air Set Pt 1
+# +4:00 > Set Lab Flow Bubbler Set Pt 1
+# +4:00 > Set Lab Flow Bubbler Set Pt 2
+# +4:00 > Set Lab Flow Bubbler Set Pt 3
+# +4:00 > Set Lab Flow Bubbler Set Pt 4
+# +6:00 > Set Lab Flow Bubbler Set Pt 3
+# +4:00 > Set Lab Flow Bubbler Set Pt 2
+# +4:00 > Set Lab Flow Bubbler Set Pt 1
+# +4:00 > Set Lab Flow Bubbler Set Pt 0
+# +4:00 > Set Lab Flow Air Set Pt 0
+}
+
+State PCalibrate_Start {
+  +1   > sw Status laser Select HHH and Start
+ +2:00 > Set Lab Flow Air Set Pt .4
+       > Set Lab Flow Bubbler Set Pt .4
+  +40  > Set Lab Flow Air Set Pt .5
+       > Set Lab Flow Bubbler Set Pt .5
+  +40  > Set Lab Flow Air Set Pt .6
+       > Set Lab Flow Bubbler Set Pt .6
+  +40  > Set Lab Flow Air Set Pt .7
+       > Set Lab Flow Bubbler Set Pt .7
+  +40  > Set Lab Flow Air Set Pt .8
+       > Set Lab Flow Bubbler Set Pt .8
+  +40  > Set Lab Flow Air Set Pt .9
+       > Set Lab Flow Bubbler Set Pt .9
+  +40  > Set Lab Flow Air Set Pt 1
+       > Set Lab Flow Bubbler Set Pt 1
+  +40  > Set Lab Flow Air Set Pt 1.1
+       > Set Lab Flow Bubbler Set Pt 1.1
+  +40  > Set Lab Flow Air Set Pt 1.2
+       > Set Lab Flow Bubbler Set Pt 1.2
+  +40  > Set Lab Flow Air Set Pt 1.3
+       > Set Lab Flow Bubbler Set Pt 1.3
+  +40  > Set Lab Flow Air Set Pt 1.4
+       > Set Lab Flow Bubbler Set Pt 1.4 
+  +40  > Set Lab Flow Air Set Pt 1.5
+       > Set Lab Flow Bubbler Set Pt 1.5
+  +40  > Set Lab Flow Air Set Pt 1.6
+       > Set Lab Flow Bubbler Set Pt 1.6
+  +40  > Set Lab Flow Air Set Pt 1.7
+       > Set Lab Flow Bubbler Set Pt 1.7
+  +40  > Set Lab Flow Air Set Pt 1.8
+       > Set Lab Flow Bubbler Set Pt 1.8
+  +40  > Set Lab Flow Air Set Pt 1.9
+       > Set Lab Flow Bubbler Set Pt 1.9
+  +40  > Set Lab Flow Air Set Pt 2
+       > Set Lab Flow Bubbler Set Pt 2
+  +40  > Set Lab Flow Air Set Pt 2.1
+       > Set Lab Flow Bubbler Set Pt 2.1
+  +40  > Set Lab Flow Air Set Pt 2.2
+       > Set Lab Flow Bubbler Set Pt 2.2
+  +40  > Set Lab Flow Air Set Pt 2.3
+       > Set Lab Flow Bubbler Set Pt 2.3
+  +40  > Set Lab Flow Air Set Pt 2.4
+       > Set Lab Flow Bubbler Set Pt 2.4 
+  +40  > Set Lab Flow Air Set Pt 2.5
+       > Set Lab Flow Bubbler Set Pt 2.5
+  +40  > Set Lab Flow Air Set Pt 2.6
+       > Set Lab Flow Bubbler Set Pt 2.6
+  +40  > Set Lab Flow Air Set Pt 2.7
+       > Set Lab Flow Bubbler Set Pt 2.7
+  +40  > Set Lab Flow Air Set Pt 2.8
+       > Set Lab Flow Bubbler Set Pt 2.8
+  +40  > Set Lab Flow Air Set Pt 2.9
+       > Set Lab Flow Bubbler Set Pt 2.9
+  +40  > Set Lab Flow Air Set Pt 3
+       > Set Lab Flow Bubbler Set Pt 3
+  +40  > Set Lab Flow Air Set Pt 3.1
+       > Set Lab Flow Bubbler Set Pt 3.1
+  +40  > Set Lab Flow Air Set Pt 3.2
+       > Set Lab Flow Bubbler Set Pt 3.2
+  +40  > Set Lab Flow Air Set Pt 3.3
+       > Set Lab Flow Bubbler Set Pt 3.3
+  +40  > Set Lab Flow Air Set Pt 3.4
+       > Set Lab Flow Bubbler Set Pt 3.4 
+  +40  > Set Lab Flow Air Set Pt 3.5
+       > Set Lab Flow Bubbler Set Pt 3.5
+  +40  > Set Lab Flow Air Set Pt 3.6
+       > Set Lab Flow Bubbler Set Pt 3.6
+  +40  > Set Lab Flow Air Set Pt 3.7
+       > Set Lab Flow Bubbler Set Pt 3.7
+  +40  > Set Lab Flow Air Set Pt 3.8
+       > Set Lab Flow Bubbler Set Pt 3.8
+  +40  > Set Lab Flow Air Set Pt 3.9
+       > Set Lab Flow Bubbler Set Pt 3.9
+  +40  > Set Lab Flow Air Set Pt 4
+       > Set Lab Flow Bubbler Set Pt 4
+  +40  > Set Lab Flow Air Set Pt 0.4
+       > Set Lab Flow Bubbler Set Pt 0
+}
+
+State Calibrate_Stop {}
+
