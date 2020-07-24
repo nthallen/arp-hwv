@@ -87,7 +87,7 @@ ICOSfit_cfg.ScanDir = 'SSP';
 EOF
 
 srcdir=/usr/share/icosfit/setup/hwv
-for file in Cell_Config.m fitline.dat sbase.3p.ptb sbase.5p.ptb; do
+for file in Cell_Config.m fitline.dat; do
   cp $srcdir/$file Data/HWV/HHH/
 done
   

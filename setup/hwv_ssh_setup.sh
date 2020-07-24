@@ -30,12 +30,12 @@ host $short $short.arp.harvard.edu
 hostname $short.arp.harvard.edu
 user $username
 ForwardAgent yes
+ProxyJump ishi.arp.harvard.edu
 
-host $short.proxy
+host $short.direct
 hostname $short.arp.harvard.edu
 user $username
 ForwardAgent yes
-ProxyJump ishi.arp.harvard.edu
 
 EOF
   done
@@ -52,5 +52,6 @@ EOF
 done
 
 for host in ishi $hosts; do
-  cat $sshdir/id_rsa.pub | ssh $host.arp.harvard.edu /usr/local/sbin/add_auth_key.sh
+  ssh-copy-id $host.arp.harvard.edu
+  # cat $sshdir/id_rsa.pub | ssh $host.arp.harvard.edu /usr/local/sbin/add_auth_key.sh
 done
