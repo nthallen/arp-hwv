@@ -25,6 +25,7 @@ State Init {
   +1   > AI Double Convert Row Zero
   +1   > Soldrv A select mode 2
   +5   > Soldrv A select mode 0
+  +2   > Set Axis A Heat Set Pt 0
   +4   Validate Standby;
 }
 
@@ -162,7 +163,7 @@ State h2oA_turnOn {
        depending on (Shutdown) { Validate h2oA_shutOff; }
        # 095: 6.1
        # Before: 6.4
-  +2   > Set Axis A RF Set Pt 6.4
+  +2   > Set Axis A RF Set Pt 7
   +2   > Command Lamp Module A on
   +10  Validate h2oA_record;     
 }
@@ -571,27 +572,28 @@ Partition
 #----------------------------------------------
 
 State Calibrate_Init {
- +10  > AI Increment Row By 7
+# +10  > AI Increment Row By 7
 }
 
 State Calibrate {
-# +30 > Set Lab Flow Air Set Pt 0
- +4 > Set Lab Flow Bubbler Set Pt 0
- +1 > Set Lab Flow Air Set Pt 0.8 
- +2:30 > Set Lab Flow Bubbler Set Pt 1 
- +2:30 > Set Lab Flow Bubbler Set Pt 2
- +2:30 > Set Lab Flow Bubbler Set Pt 3
- +2:30 > Set Lab Flow Bubbler Set Pt 4.5
- +4:00 > Set Lab Flow Bubbler Set Pt 3
- +2:30 > Set Lab Flow Bubbler Set Pt 2
- +2:30 > Set Lab Flow Bubbler Set Pt 1
- +2:30 > Set Lab Flow Bubbler Set Pt 0
-# +4:00 > Set Lab Flow Air Set Pt 1
+ +10   > Set Lab Flow Bubbler Set Pt 0
+ +10   > Set Lab Flow Air Set Pt 0
+ +2:00 > Set Lab Flow Bubbler Set Pt 0
+ +2    > Set Lab Flow Air Set Pt 0.6
+ +3:30 > Set Lab Flow Bubbler Set Pt 1
+ +3:30 > Set Lab Flow Bubbler Set Pt 2 
+ +3:30 > Set Lab Flow Bubbler Set Pt 3
+ +3:30 > Set Lab Flow Bubbler Set Pt 4.5
+ +7:00 > Set Lab Flow Bubbler Set Pt 3
+ +3:30 > Set Lab Flow Bubbler Set Pt 2
+ +3:30 > Set Lab Flow Bubbler Set Pt 1
+ +3:30 > Set Lab Flow Bubbler Set Pt 0
+ +3:30 > Set Lab Flow Air Set Pt 0 
 # +4:00 > Set Lab Flow Bubbler Set Pt 1
 # +4:00 > Set Lab Flow Bubbler Set Pt 2
 # +4:00 > Set Lab Flow Bubbler Set Pt 3
 # +4:00 > Set Lab Flow Bubbler Set Pt 4
-# +6:00 > Set Lab Flow Bubbler Set Pt 3
+
 # +4:00 > Set Lab Flow Bubbler Set Pt 2
 # +4:00 > Set Lab Flow Bubbler Set Pt 1
 # +4:00 > Set Lab Flow Bubbler Set Pt 0
