@@ -177,8 +177,8 @@ State h2oA_record {
         }
         { if (IRVf > 4.0) Validate h2oA_reset; }
         
-        Hold until (convert(A_IRV) < 0.2);
-    +1  Hold until (convert(A_IRV) > 0.2) or 5 else {
+        Hold until (convert(A_IRV) < 0.02);
+    +1  Hold until (convert(A_IRV) > 0.02) or 5 else {
           msg(2,"**Lamp turned off!!**");  
           Validate h2oA_reset;
         } 
@@ -232,7 +232,7 @@ Partition
   */
   #define A_HT_MAX_DEFAULT 1.95 /* 095 was 2.05. Flight 1.85.  */
   #define A_dHT_DELTA 0.01
-  #define A_MAX_STABLE_IR_DELTA 0.5 /* 095. Was 0.3 */
+  #define A_MAX_STABLE_IR_DELTA 0.2 /* 095. Was 0.3 */
   #define A_ABS_MAX_IR_DELTA 1.0
   #define A_HT_STEP_UP 0.05
   #define A_HT_STEP_BACK 0.1
@@ -253,7 +253,7 @@ State h2oA_HeatOn {
   depending on (h2oA_shutOff) { Validate h2oA_HeatOff; }
   depending on (h2oA_reset) { Validate h2oA_HeatOff; }
   
-  +50 Hold Until (dIRVdt > A_dHT_DELTA) or 3:00;
+  +50 Hold Until (dIRVdt > A_dHT_DELTA) or 1:00;
    +1 Hold Until (dIRVdt < A_dHT_DELTA/2);
    +1 { A_Heat_SP = IRVf + A_HT_STEP_UP;
         if (A_Heat_SP > A_HT_MAX)

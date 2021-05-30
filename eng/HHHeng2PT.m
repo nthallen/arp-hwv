@@ -1,6 +1,9 @@
-function HHHeng2PT
+function HHHeng2PT(lab)
 %This is a customized eng to PT file conversion program for HCI and HHH.
 %This creates the PT.mat file required by the ICOSfit programs.
+if nargin < 1
+  lab = 0;
+end
 cfg = load_ICOSfit_cfg;
 runs = ne_load_runsdir('HWV_Data_Dir');
 run = getrun(1);
@@ -22,7 +25,11 @@ if strcmp(cfg.ScanDir,'SSPo')
     PT.QCLI_Wave = E1.QCLI_Wave;
 else
     PT.TPT = T8;
-    PT.CellP = E8.HHH1P*201.5121-8.544; %cell pressure (in Torr) to use for fit 7/2013
+    if lab
+      PT.CellP = E8.LFT_P/2;
+    else
+      PT.CellP = E8.HHH1P*201.5121-8.544; %cell pressure (in Torr) to use for fit 7/2013
+    end
     % Note 1.5 added to zero on April 6, 2013!
     % PT.Tavg = interp1(T8,273.15 + (E8.HHH1T + E8.HHH2T)/2,T1,'linear'); %gas temp (in K) to use for fit
     % PT.Tavg = 273.15 + E8.HHH1T*0.96228783 + 2.06939487; %gas temp (in K) to use for fit
