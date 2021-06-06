@@ -1,0 +1,2 @@
+setconf LIBPATH $(getconf LIBPATH):/usr/pkg/lib
+/sbin/devc-serusb -d vid=0x0403,did=0x6010,module=ftdi
