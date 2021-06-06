@@ -232,7 +232,7 @@ Partition
      A_dRFBW_FALLING the threshold value of dRFBW to indicate falling.
         Could be set to a high value to disable.
   */
-  #define A_HT_MAX_DEFAULT 2.00 /* 095 was 2.05. Flight 1.85.  */
+  #define A_HT_MAX_DEFAULT 1.00 /* 095 was 2.05. Flight 1.85.  */
   #define A_dHT_DELTA 0.01
   #define A_MAX_STABLE_IR_DELTA 0.3 /* 095. Was 0.3 */
   #define A_ABS_MAX_IR_DELTA 1.0
@@ -274,10 +274,8 @@ State h2oA_Watch {
          IRVf < convert(HtASt) - A_MAX_STABLE_IR_DELTA &&
          dRFBW > A_dRFBW_FALLING ) ||
         (IRVf < convert(HtASt) - A_ABS_MAX_IR_DELTA)) {
-      if (++A_Heat_Reset_Count > 10) {
-        A_Heat_SP -= A_HT_STEP_BACK;
-        A_HT_MAX = A_Heat_SP;
-      }
+      A_Heat_SP -= A_HT_STEP_BACK;
+      A_HT_MAX = A_Heat_SP;
       Validate h2oA_IRV_Falling;
     }
   }
