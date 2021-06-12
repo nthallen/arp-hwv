@@ -1,2 +1,4 @@
+# Path needed for ncurses library
 setconf LIBPATH $(getconf LIBPATH):/usr/pkg/lib
+# Driver for BMM
 /sbin/devc-serusb -d vid=0x0403,did=0x6010,module=ftdi
