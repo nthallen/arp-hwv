@@ -70,8 +70,8 @@ Partition
 # REF: 650 torr ~5000 ft
 
 %{ /* Altitude definitions */
-    double P_clouds_up = 280.;
-    double P_clouds_dn = 370.;
+    double P_ground_up = 280.;
+    double P_ground_dn = 370.;
     int using_swp = 0;
 %}
 
