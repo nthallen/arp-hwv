@@ -15,7 +15,7 @@
   double O2sigma_cal[] = { 1.72e-23, 1.13e-20 }; /* as a function of pressure in torr */
   /* double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; */ /* as a function of [M] */
   /* double Inst1_cal[] = { 63.7210e-10, 0.0459490e10 }; */ /* as a function of [M] JBS Field cals */
-  double Inst1_cal[] = { 55.6669e-10 0.0843e10 }; /* Final HHH Composite SEAC4RS Second Half. */
+  double Inst1_cal[] = { 55.6669e-10, 0.0843e10 }; /* Final HHH Composite SEAC4RS Second Half. */
   
   LyAmrAvg Avg(2, 2, 8, 2, 1, 0);
   char *LyAmr_Ofile;
