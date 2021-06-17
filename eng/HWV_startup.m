@@ -5,7 +5,7 @@ if fd > 0
         fprintf(1,'Processing: "%s"\n', tline);
         if exist(tline,'dir') == 7
             oldfolder = cd(tline);
-            csv2mat('hwveng*.csv');
+            csv2mat('*.csv');
             delete *.csv
             cd(oldfolder);
         end
