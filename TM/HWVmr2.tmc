@@ -14,7 +14,8 @@
   #define L1C 5.24
   double O2sigma_cal[] = { 1.72e-23, 1.13e-20 }; /* as a function of pressure in torr */
   /* double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; */ /* as a function of [M] */
-  double Inst1_cal[] = { 63.7210e-10, 0.0459490e10 }; /* as a function of [M] JBS Field cals */
+  /* double Inst1_cal[] = { 63.7210e-10, 0.0459490e10 }; */ /* as a function of [M] JBS Field cals */
+  double Inst1_cal[] = { 55.6669e-10 0.0843e10 }; /* Final HHH Composite SEAC4RS Second Half. */
   
   LyAmrAvg Avg(2, 2, 8, 2, 1, 0);
   char *LyAmr_Ofile;
@@ -93,7 +94,8 @@ switch (SWStat) {
         Kcal = h2o_lya_M*Inst1_cal[0] + Inst1_cal[1];
         H2Oc = dPMTa * XAir * 10000. * Kcal / dUVA1;
         H2Oc = Iterate(H2Oc);
-        h2o_lya_ppm = 1e6 * H2Oc / h2o_lya_M;
+         /* 11% reduction based on comparison to HHH: */
+        h2o_lya_ppm = 0.89 * 1e6 * H2Oc / h2o_lya_M;
         validate h2o_lya_ppm;
       }
     }
