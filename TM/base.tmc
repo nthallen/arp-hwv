@@ -99,7 +99,7 @@ TM typedef unsigned char PwrMon_S {
 TM typedef AI_X2 HPV_P_t { text "%6.1lf"; convert TORR; }
 Calibration (HPV_P_t, TORR) { 0, 104.0610, 960, 1085.8 }
 
-TM 8 Hz UINT MFCtr, Synch;
+TM 10 Hz UINT MFCtr, Synch;
 
 /* AI */
 TM 1 Hz AI_XP384 A_IRV; Address A_IRV 0xC0E; /* Axis A IR Voltage 0xC0E 0xCB6 */
@@ -147,11 +147,11 @@ TM 1 Hz AI_XP384 CRFFW; Address CRFFW 0xCE8; /* Axis C RF Forward Pwr */
 TM 1 Hz AI_T30K FAA_T; Address FAA_T 0xC64; /* Axis A Filter Assy Temp */
 TM 1 Hz AI_T30K FAB_T; Address FAB_T 0xC66; /* Axis B Filter Assy Temp */
 TM 1 Hz AI_T30K FAC_T; Address FAC_T 0xC68; /* Axis C Filter Assy Temp */
-TM 8 Hz AI_X1 HHH1P; Address HHH1P 0xCEE; /* HHH Cell Prs #1 */
-TM 8 Hz AI_T10K HHH1T; Address HHH1T 0xC8E; /* HHH Cell T #1 */
-TM 8 Hz AI_X1 HHH2P; Address HHH2P 0xC10; /* HHH Cell Prs #2 0xC10 0xC9C */
-TM 8 Hz AI_T10K HHH2T; Address HHH2T 0xCAE; /* HHH Cell T #2 */
-TM 8 Hz AI_X1 HHHDP; Address HHHDP 0xC30; /* HHH Cell Diff Prs */
+TM 10 Hz AI_X1 HHH1P; Address HHH1P 0xCEE; /* HHH Cell Prs #1 */
+TM 10 Hz AI_T10K HHH1T; Address HHH1T 0xC8E; /* HHH Cell T #1 */
+TM 10 Hz AI_X1 HHH2P; Address HHH2P 0xC10; /* HHH Cell Prs #2 0xC10 0xC9C */
+TM 10 Hz AI_T10K HHH2T; Address HHH2T 0xCAE; /* HHH Cell T #2 */
+TM 10 Hz AI_X1 HHHDP; Address HHHDP 0xC30; /* HHH Cell Diff Prs */
 TM 1 Hz AI_T30K HHHPT; Address HHHPT 0xCCE; /* HHH Cell Prs Assy Temp */
 TM 1 Hz HPV_P_t HPV_P; Address HPV_P 0xC90; /* HHH Prs Vessel Prs */
 TM 1 Hz AI_X1 HPV_RH; Address HPV_RH 0xCB0; /* HHH Prs Vessel RH */
@@ -164,7 +164,7 @@ TM 1 Hz AI_XP768 L2Flw; Address L2Flw 0xC94; /* Lab Flow #2 */
 TM 1 Hz AI_XP768 L3Flw; Address L3Flw 0xCB4; /* Lab Flow #3 */
 TM 1 Hz AI_XP768 L4Flw; Address L4Flw 0xCD4; /* Lab Flow #4 */
 TM 1 Hz AI_X1 Las_I; Address Las_I 0xCF2; /* HHH Laser Current */
-TM 8 Hz AI_T30K LFB_T; Address LFB_T 0xC36; /* Lab Bubbler Temp */
+TM 10 Hz AI_T30K LFB_T; Address LFB_T 0xC36; /* Lab Bubbler Temp */
 TM 1 Hz AI_XP384 LFB1P; Address LFB1P 0xCF4; /* Lab Bubbler Prs #1 */
 TM 1 Hz AI_LP1000Torr LFB2P; Address LFB2P 0xC16; /* Lab Bubbler Prs #2 0xC16 0xC5A */
 TM typedef AI_XP384 LFT_P_t { text "%7.2lf"; convert TORR; }
@@ -173,7 +173,7 @@ TM typedef AI_XP384 LFT_P_t { text "%7.2lf"; convert TORR; }
     0, 0.13,
     32768, 2632.105
   }
-TM 8 Hz LFT_P_t LFT_P; Address LFT_P 0xC56; /* Lab Flow Tube3 Prs */
+TM 10 Hz LFT_P_t LFT_P; Address LFT_P 0xC56; /* Lab Flow Tube3 Prs */
 TM 1 Hz AI_X1 LTE1R4T; Address LTE1R4T 0xCD2; /* Laser TEC Temp */
 TM 1 Hz AI_T30K MM_1T; Address MM_1T 0xC52; /* Mirror Mount Diagnostic T */
 TM 1 Hz AI_T30K MM_2T; Address MM_2T 0xC72; /* Mirror Mount Diagnostic T */
@@ -203,11 +203,11 @@ TM 1 Hz AI_T10K PIF4T; Address PIF4T 0xC60; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF5T; Address PIF5T 0xC80; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF6T; Address PIF6T 0xCA0; /* Primary Inlet Fwd Therm Ring */
 TM 1 Hz AI_T10K PIF7T; Address PIF7T 0xCC0; /* Primary Inlet Fwd Therm Ring */
-TM 8 Hz AI_P1000Torr SD_HP; Address SD_HP 0xC6C; /* Secondary Duct High Prs (1000 torr) */
-TM 8 Hz AI_P100Torr SD_LP; Address SD_LP 0xC4C; /* Secondary Duct Low Prs (100 torr) */
+TM 10 Hz AI_P1000Torr SD_HP; Address SD_HP 0xC6C; /* Secondary Duct High Prs (1000 torr) */
+TM 10 Hz AI_P100Torr SD_LP; Address SD_LP 0xC4C; /* Secondary Duct Low Prs (100 torr) */
 TM 1 Hz AI_T30K SDP_T; Address SDP_T 0xC8C; /* Secondary Duct Prs Guage Temp */
 TM 1 Hz AI_SDPDP SDPDP; Address SDPDP 0xC2C; /* Secondary Duct Pitot Diff Prs */
-TM 8 Hz AI_T10K SFB1T; Address SFB1T 0xC4A; /* Secondary Inlet Therm Ring */
+TM 10 Hz AI_T10K SFB1T; Address SFB1T 0xC4A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB2T; Address SFB2T 0xC6A; /* Secondary Inlet Therm Ring */
 TM 1 Hz AI_T10K SFB3T; Address SFB3T 0xC8A; /* Secondary Inlet Therm Ring */
 /* TM 1 Hz AI_T10K SFB4T; Address SFB4T 0xCAA; */ /* Secondary Inlet Therm Ring */
@@ -260,7 +260,7 @@ Status
 	F == 1 Hz
 	7 == 2 Hz
 	3 == 4 Hz
-	1 == 8 Hz
+	1 == 10 Hz
 	0 == 16 Hz
   D14 L2Stat
   D15 Resynch
@@ -291,18 +291,18 @@ TM typedef struct {
   convert L20 CT24long();
 }
 
-TM 8 Hz CT24 PMTA_Counts; Address PMTA_Counts 0x610; /* Axis A PMT Counts */
-TM 8 Hz CT24 PMTB_Counts; Address PMTB_Counts 0x614; /* Axis B PMT Counts */
-TM 8 Hz CT24 PMTC_Counts; Address PMTC_Counts 0x618; /* Axis C PMT Counts */
-TM 8 Hz CT24 UVA1_Counts; Address UVA1_Counts 0x634; /* Axis A UV1 counts */
-TM 8 Hz CT24 UVA2_Counts; Address UVA2_Counts 0x638; /* Axis A UV2 counts */
-TM 8 Hz CT24 UVB1_Counts; Address UVB1_Counts 0x63C; /* Axis B UV1 counts */
-TM 8 Hz CT24 UVB2_Counts; Address UVB2_Counts 0x650; /* Axis B UV2 counts */
-TM 8 Hz CT24 UVC1_Counts; Address UVC1_Counts 0x654; /* Axis C UV1 counts */
-TM 8 Hz CT24 UVC2_Counts; Address UVC2_Counts 0x658; /* Axis C UV2 counts */
-TM 8 Hz Ctstat Ct0Stat; Address Ct0Stat 0x600; /* Counter 0 Stat */
-TM 8 Hz Ctstat Ct1Stat; Address Ct1Stat 0x620; /* Counter 1 Stat */
-TM 8 Hz Ctstat Ct2Stat; Address Ct2Stat 0x640; /* Counter 2 Stat */
+TM 10 Hz CT24 PMTA_Counts; Address PMTA_Counts 0x610; /* Axis A PMT Counts */
+TM 10 Hz CT24 PMTB_Counts; Address PMTB_Counts 0x614; /* Axis B PMT Counts */
+TM 10 Hz CT24 PMTC_Counts; Address PMTC_Counts 0x618; /* Axis C PMT Counts */
+TM 10 Hz CT24 UVA1_Counts; Address UVA1_Counts 0x634; /* Axis A UV1 counts */
+TM 10 Hz CT24 UVA2_Counts; Address UVA2_Counts 0x638; /* Axis A UV2 counts */
+TM 10 Hz CT24 UVB1_Counts; Address UVB1_Counts 0x63C; /* Axis B UV1 counts */
+TM 10 Hz CT24 UVB2_Counts; Address UVB2_Counts 0x650; /* Axis B UV2 counts */
+TM 10 Hz CT24 UVC1_Counts; Address UVC1_Counts 0x654; /* Axis C UV1 counts */
+TM 10 Hz CT24 UVC2_Counts; Address UVC2_Counts 0x658; /* Axis C UV2 counts */
+TM 10 Hz Ctstat Ct0Stat; Address Ct0Stat 0x600; /* Counter 0 Stat */
+TM 10 Hz Ctstat Ct1Stat; Address Ct1Stat 0x620; /* Counter 1 Stat */
+TM 10 Hz Ctstat Ct2Stat; Address Ct2Stat 0x640; /* Counter 2 Stat */
 
 Group Cts (
     Ct0Stat, PMTA_Counts, PMTB_Counts, PMTC_Counts,
@@ -407,11 +407,11 @@ TM typedef unsigned char SolStat_t { text "%3d"; }
   unsigned int SolStatA, SolStatB, SolStatC;
 %}
 TM "Receive" SolStatA 0;
-TM 8 Hz SolStat_t SolStA; Collect SolStA = SolStatA;
+TM 10 Hz SolStat_t SolStA; Collect SolStA = SolStatA;
 TM "Receive" SolStatB 0;
-TM 8 Hz SolStat_t SolStB; Collect SolStB = SolStatB;
+TM 10 Hz SolStat_t SolStB; Collect SolStB = SolStatB;
 TM "Receive" SolStatC 0;
-TM 8 Hz SolStat_t SolStC; Collect SolStC = SolStatC;
+TM 10 Hz SolStat_t SolStC; Collect SolStC = SolStatC;
 
 TM typedef unsigned short AIStat_i {
   text "%012b";
