@@ -337,7 +337,7 @@ State HHH_Startup {
   +1 Validate DFB_HHH_10Hz;
 }
 
-Stat HHH_Disk_Filling {
+State HHH_Disk_Filling {
      Depending on (Shutdown) { Validate HHH_Shutdown; }
      Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
      Depending on (ON_GROUND) { Validate HHH_Shutdown; }
