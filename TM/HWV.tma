@@ -330,6 +330,17 @@ State HHH_Startup {
      Depending on (Shutdown) { Validate HHH_Shutdown; }
      Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
      Depending on (ON_GROUND) { Validate HHH_Shutdown; }
+     { if (convert(Disk) >= 80. || SWStat == SWS_TIME_WARP) {
+         Validate HHH_Disk_Filling;
+       }
+     }
+  +1 Validate DFB_HHH_10Hz;
+}
+
+Stat HHH_Disk_Filling {
+     Depending on (Shutdown) { Validate HHH_Shutdown; }
+     Depending on (DFB_Shutdown) { Validate HHH_Shutdown; }
+     Depending on (ON_GROUND) { Validate HHH_Shutdown; }
      Validate DFB_HHH;
 }
 
@@ -490,6 +501,16 @@ State DFB_HHH {
     else { nl_error( 2, "Not Ready in DFB_HHH" ); }
     > QCLI Stop
  +2 > Select QCLI Waveform HHH
+ +2 Validate DFB_Start;
+}
+
+State DFB_HHH_10Hz {
+    Depending on (HHH_Shutdown) { Validate DFB_Shutdown; }
+    > SSP Stop
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 5
+    else { nl_error( 2, "Not Ready in DFB_HHH" ); }
+    > QCLI Stop
+ +2 > Select QCLI Waveform HHH_10Hz
  +2 Validate DFB_Start;
 }
 
