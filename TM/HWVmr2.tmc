@@ -11,13 +11,17 @@
   #define CH4mr (1.5e-6)
   #define CH4sigma (500*3.72e-20)
   #define H2Osigma (1.57e-17)
+
+  #define TMRATE 10
+  /* TMRATESCALE is the counter rate divided by 8Hz */
+  #define TMRATESCALE (TMRATE/8.0)
   #define L1C 5.24
   double O2sigma_cal[] = { 1.72e-23, 1.13e-20 }; /* as a function of pressure in torr */
   /* double Inst1_cal[] = { 66.3873e-10, 0.12193e10 }; */ /* as a function of [M] */
   /* double Inst1_cal[] = { 63.7210e-10, 0.0459490e10 }; */ /* as a function of [M] JBS Field cals */
   double Inst1_cal[] = { 55.6669e-10, 0.0843e10 }; /* Final HHH Composite SEAC4RS Second Half. */
   
-  LyAmrAvg Avg(2, 2, 8, 2, 1, 0);
+  LyAmrAvg Avg(2, 2, (8*TMRATE/8), 2, 1, 0);
   char *LyAmr_Ofile;
   enum T_t { T_SFB1T, T_HHH1T, T_LFB_T } T_sel = T_SFB1T;
   enum P_t { P_UVB1, P_SD_HP, P_HHH1P, P_LFT_P } P_sel = P_UVB1;
@@ -69,7 +73,7 @@ switch (SWStat) {
     switch (P_sel) {
       default:
       case P_UVB1:
-        P = convert(UVB1_Counts) * 0.079376 - 4.98674; break;
+        P = convert(UVB1_Counts) * TMRATESCALE * 0.079376 - 4.98674; break;
       case P_SD_HP:
         P = convert(SD_HP) * 0.998543 - 5.1434; break;
       case P_HHH1P:
