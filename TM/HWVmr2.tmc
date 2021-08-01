@@ -83,7 +83,7 @@ switch (SWStat) {
       double dPMTA, dUVA1, XAir, O2sigma, Kcal, H2Oc;
       dPMTA = Avg.fg.C - Avg.bg.C;
       dUVA1 = Avg.fg.U - Avg.bg.U;
-      if (dUVA1 > 40.) {
+      if (dUVA1 > 8.) {
         h2o_lya_P = Avg.fg.P;
         h2o_lya_T = Avg.fg.T;
         h2o_lya_M = 0.001 * h2o_lya_P * (1013./760.) * 2.46e19 * 298. /
