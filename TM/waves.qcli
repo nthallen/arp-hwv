@@ -17,7 +17,16 @@ ICOS Waveform HHH {
   Ncoadd = 799;
   SampleRate = 50 MHz/50;
   Tz = 5%;
-#  Ramp from 45 mA to 75 mA in 1 msec;
+# Ramp from 45 mA to 75 mA in 1 msec;
+  Ramp from 60 mA to 90 mA in 1 msec;
+}
+
+ICOS Waveform HHH_10Hz  {
+  # Nsample = 900;
+  Ncoadd = 80;
+  SampleRate = 100 MHz/100;
+  Tz = 5%;
+# Ramp from 45 mA to 75 mA in 1 msec;
   Ramp from 60 mA to 90 mA in 1 msec;
 }
 
