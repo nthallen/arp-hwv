@@ -231,8 +231,8 @@ Partition
         Could be set to a high value to disable.
   */
   #define A_HT_MAX_DEFAULT 1.40 /* 095 was 2.05. Flight 1.85.  */
-  #define A_dHT_DELTA 0.01
-  #define A_MAX_STABLE_IR_DELTA 0.3 /* 095. Was 0.3 */
+  #define A_dHT_DELTA 0.04
+  #define A_MAX_STABLE_IR_DELTA 0.5 /* 095. Was 0.3 */
   #define A_ABS_MAX_IR_DELTA 1.0
   #define A_HT_STEP0_UP 0.30
   #define A_HT_STEP_UP 0.15
