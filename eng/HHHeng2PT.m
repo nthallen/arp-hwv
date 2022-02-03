@@ -24,18 +24,22 @@ if strcmp(cfg.ScanDir,'SSPo')
     PT.ScanNum = E1.SSP_Num;
     PT.QCLI_Wave = E1.QCLI_Wave;
 else
-    PT.TPT = T8;
+    PT.TPT = T1;
+    T8m = movmean(T8,8);
     if lab
-      PT.CellP = E8.LFT_P/2;
+      PT.CellP = intermp1(T8m, movmean(E8.LFT_P,8)/2, T1,'nearest');
     else
-      PT.CellP = E8.HHH1P*201.5121-8.544; %cell pressure (in Torr) to use for fit 7/2013
+      % PT.CellP = E8.HHH1P*201.5121-8.544; %cell pressure (in Torr) to use for fit 7/2013
+      P = (E8.HHH1P + 0.0086).*248.7302;
+      PT.CellP = interp1(T8m,movmean(P,8),T1,'nearest');
     end
     % Note 1.5 added to zero on April 6, 2013!
     % PT.Tavg = interp1(T8,273.15 + (E8.HHH1T + E8.HHH2T)/2,T1,'linear'); %gas temp (in K) to use for fit
     % PT.Tavg = 273.15 + E8.HHH1T*0.96228783 + 2.06939487; %gas temp (in K) to use for fit
-    PT.Tavg = 273.15 + (E8.HHH1T+E8.HHH2T)/2; % Uncalibrated 7/2013
-    PT.ScanNum = interp1(T1,E1.SSP_Num,T8,'nearest','extrap');
-    PT.QCLI_Wave = interp1(T1,E1.QCLI_Wave,T8,'nearest','extrap');
+    T = 273.15 + (E8.HHH1T+E8.HHH2T)/2; % Uncalibrated 7/2013
+    PT.Tavg = interp1(T8m, movmean(T,8), T1, 'nearest');
+    PT.ScanNum = E1.SSP_Num;
+    PT.QCLI_Wave = E1.QCLI_Wave;
 end
 save PT.mat -STRUCT PT
 
