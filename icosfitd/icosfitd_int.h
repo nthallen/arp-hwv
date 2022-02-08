@@ -1,6 +1,8 @@
 #ifndef ICOSFITD_H_INCLUDED
 #define ICOSFITD_H_INCLUDED
 
+#include <stdio.h>
+#include <fcntl.h>
 #include "icosfitd.h"
 #include "SerSelector.h"
 
@@ -22,12 +24,18 @@ class fitd : public Ser_Sel {
      * and stderr to log files.
      */
     void launch_icosfit();
-    
+    /**
+     * Creates named FIFO at the specified path.
+     * Removes any existing file or FIFO beforehand.
+     */
+    void setup_fifo(const char *path);
     
     uint16_t fitting_scannum;
     uint16_t cur_scannum;
     double cur_P;
     double cur_T;
+    FILE *PTEfp;
+    FILE *SUMfp;
 };
 
 class icos_cmd : public Cmd_Selectee {
@@ -36,6 +44,11 @@ class icos_cmd : public Cmd_Selectee {
     int ProcessData(int flag);
   private:
     fitd *fit;
+    char *PTparams;
+    int PTparams_len;
 };
+
+extern void set_icosfit_file(const char *path);
+extern bool log_icossum;
 
 #endif

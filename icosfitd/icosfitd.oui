@@ -1,0 +1,18 @@
+<package> icosfitd
+<include> msg oui
+<follow> msg
+<include> <stdlib.h>
+<include> "icosfitd_int.h"
+
+<opts> "L"
+<sort>
+  -L : Copy ICOSsum.fifo data to ICOSsum.log
+<switch>
+  case 'L': log_icossum = true; break;
+
+<args>
+  set_icosfit_file(optarg);
+
+<package> msghdr_init
+<init>
+  msg_hdr_default = "ICOSd";
