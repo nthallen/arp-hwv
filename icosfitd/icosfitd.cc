@@ -55,7 +55,39 @@ void fitd::setup_fifo(const char *path) {
   mkfifo(path, 0664);
 }
 
+void fitd::cleanup() {
+  if (PTEfp) {
+    fclose(PTEfp);
+    PTEfp = 0;
+  }
+  if (SUMfp) {
+    fclose(SUMfp);
+    SUMfp = 0;
+  }
+  close();
+  // wait for icosfit to terminate and/or send it a signal
+  unline(PTE_FIFO_PATH);
+  unlink(ICOSsum_FIFO_PATH);
+}
+
 void fitd::scan_data(uint32_t scannum, float P, float T) {
+}
+
+int fitd::ProcessData(int flag) {
+  cp = 0;
+  if (flag & Selector::Sel_Read) {
+    if (fillbuf()) return 1;
+    // Handle read data from ICOSsum.fifo
+    consume(nc);
+    report_ok();
+    return 0;
+  }
+  if (flag & Selector::Sel_Timeout) {
+    // Do we have a timeout on fitting? Perhaps to complain if
+    // icosfit dies without a signal.
+    // Are we shutting down? Do we need to signal icosfit?
+    TO.Clear();
+  }
 }
 
 

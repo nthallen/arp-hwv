@@ -16,6 +16,8 @@ class fitd : public Ser_Sel {
      * @param T Cell temperature in Kelvin
      */
     void scan_data(int scannum, float P, float T);
+    int ProcessData(int flag);
+    inline Timeout *GetTimeout() { return &TO; }
   protected:
   private:
     /**
@@ -30,12 +32,14 @@ class fitd : public Ser_Sel {
      */
     void setup_fifo(const char *path);
     
+    Timeout TO;
     uint16_t fitting_scannum;
     uint16_t cur_scannum;
     double cur_P;
     double cur_T;
     FILE *PTEfp;
     FILE *SUMfp;
+    int icosfit_pid;
 };
 
 class icos_cmd : public Cmd_Selectee {
