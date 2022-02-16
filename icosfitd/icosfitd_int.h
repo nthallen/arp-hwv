@@ -6,7 +6,27 @@
 #include "icosfitd.h"
 #include "SerSelector.h"
 
-class fitd : public Ser_Sel {
+class fitd;
+
+class icos_pipe : public Ser_Sel {
+  public:
+    icos_pipe(bool input, int bufsize,
+      const char *path, const char *logfile,
+      fitd *fit = 0);
+    ~icos_pipe();
+    int ProcessData(int flag);
+    int output(const char *line);
+  protected:
+    void cleanup();
+    void setup_pipe();
+    void close();
+    bool is_input;
+    const char *path;
+    File *logfp;
+    fitd *fit;
+};
+
+class fitd {
   public:
     fitd();
     ~fitd();
@@ -15,9 +35,9 @@ class fitd : public Ser_Sel {
      * @param P Cell pressure in torr
      * @param T Cell temperature in Kelvin
      */
-    void scan_data(int scannum, float P, float T);
-    int ProcessData(int flag);
-    inline Timeout *GetTimeout() { return &TO; }
+    void scan_data(int scannum, float P, float T,
+      const char *PTparams);
+    void results(const char *res);
   protected:
   private:
     /**
@@ -26,15 +46,11 @@ class fitd : public Ser_Sel {
      * and stderr to log files.
      */
     void launch_icosfit();
-    /**
-     * Creates named FIFO at the specified path.
-     * Removes any existing file or FIFO beforehand.
-     */
-    void setup_fifo(const char *path);
-    
-    Timeout TO;
-    uint16_t fitting_scannum;
-    uint16_t cur_scannum;
+    icos_pipe PTE(false, 80, "PTE.fifo", "PTE.log");
+    icos_pipe SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this);
+    icos_cmd CMD(this);
+    uint32_t fitting_scannum;
+    uint32_t cur_scannum;
     double cur_P;
     double cur_T;
     FILE *PTEfp;

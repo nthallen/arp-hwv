@@ -29,6 +29,103 @@ void set_icosfit_file(const char *path) {
   icosfit_file = path;
 }
 
+icos_pipe::icos_pipe(bool input, int bufsize,
+        const char *path, const char *logfile, fitd *fit)
+    : Ser_Sel(),
+      is_input(input),
+      path(path),
+      logfp(0),
+      fit(fit)
+{
+  if (logfile) {
+    logfp = fopen(logfile, "a");
+    if (logfp) {
+      fprintf(logfp, "# icosfitd %s log file\n",
+        is_input ? "input" : "output");
+    } else {
+      msg(MSG_ERROR, "Unable to write to %s log file %s",
+        is_input ? "input" : "output", logfile);
+    }
+  }
+  if (bufsize) {
+    buf = (unsigned char *)new_memory(bufsize);
+    this->bufsize = bufsize;
+  }
+}
+
+icos_pipe::~icos_pipe() {
+  cleanup();
+}
+
+int icos_pipe::ProcessData(int flag) {
+  if (flag & Selector::Sel_Write) {
+    msg(MSG, "Pipe %s ready for output", path);
+    flags &= ~Selector::Sel_Write;
+  }
+  if (flag & Selector::Sel_Read) {
+    if (is_input) {
+      int onc = nc;
+      cp = 0;
+      fillbuf();
+      if (onc == nc) {
+        close();
+        msg(MSG, "%s closed on read", path);
+      } else {
+        if (fit) fit->results(buf);
+        if (logfp) {
+          fprintf(logfp, "%s", buf);
+        }
+      }
+      consume(nc);
+      report_ok();
+    } else {
+      msg(MSG_WARN,"Unexpected input on output pipe %s", path);
+      flags &= ~Selector::Sel_Read;
+    }
+  }
+}
+
+int output(const char *line) {
+  int nbline = strlen(line);
+  int rc = write(fd, line, nbline);
+  if (rc < 0) {
+    msg(MSG_ERROR, "Error %d writing to %s: %s",
+      errno, path, strerror(errno));
+  } else if (rc < nbline) {
+    msg(MSG_ERROR, "Partial line output to %s", path);
+  }
+}
+
+void icos_pipe::cleanup() {
+  close();
+  unlink(path);
+}
+
+void setup_pipe() {
+  cleanup();
+  if (mkfifo(path, 0664) != 0) {
+    msg(MSG_ERROR, "%s: mkfifo error %d: %s",
+      path, errno, strerror(errno));
+  }
+  // could use init() here, but it can only be called once
+  // without creating a memory leak on buf
+  fd = open(path, (is_input?O_RDONLY:O_WRONLY)|O_NONBLOCK);
+  if (fd < 0) {
+    msg(MSG_ERROR, "%s: open error %d: %s",
+      path, errno, strerror(errno));
+  }
+  flags = 
+    Selector::Sel_Read |
+    Selector::Sel_Write;
+}
+
+void close() {
+  if (fd < 0) {
+    close(fd);
+    fd = -1;
+    flags = 0;
+  }
+}
 
 fitd::fitd()
   : Ser_Sel(),
@@ -70,7 +167,9 @@ void fitd::cleanup() {
   unlink(ICOSsum_FIFO_PATH);
 }
 
-void fitd::scan_data(uint32_t scannum, float P, float T) {
+void fitd::scan_data(uint32_t scannum, float P, float T,
+      const char *PTparams) {
+  
 }
 
 int fitd::ProcessData(int flag) {
@@ -128,7 +227,7 @@ int icos_cmd::ProcessData(int flag) {
       consume(nc);
       return 0;
     }
-    fit->scan_data(scannum, P, T);
+    fit->scan_data(scannum, P, T, PTparams);
     consume(nc);
     report_ok();
     return false;
