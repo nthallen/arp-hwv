@@ -1,18 +1,29 @@
 %%
-PTEref = '../210807.1F/PTE_fit.txt';
+PTEref = '../PTEref.txt';
 PTEref_row = 15;
 PTE = load(PTEref);
 PTE_params = PTE(PTEref_row,4:end);
 clear PTE;
 %%
-waves_used;
+waves_used
 % Then set scans and run scanview(scans) to decide where to start
 %%
-scans = 1490:204299;
+% For 1Hz
+scans = 5:11903;
+PTEfile = 'PTE_gen.txt';
+PTE_gen(scans,PTEfile,PTE_params);
+%%
+PTE = load(PTEfile);
+fitline('update_regions','R1',PTE([1 end],1));
+clear PTE
+%%
+% For 10Hz
+scans = 5:11903;
 PTEfile = 'PTE_gen_10Hz.txt';
 PTE_gen(scans,PTEfile,PTE_params);
 fprintf(1,'Now average\n');
 average_spectra2(1,PTEfile);
+PTEfile = 'PTE_gen_10Hz.average1.txt';
 %%
 edit_ICOSfit_cfg; % to switch to the averaged scans
 %%
