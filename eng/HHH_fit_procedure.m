@@ -4,7 +4,7 @@ PTEref_row = 15;
 PTE = load(PTEref);
 PTE_params = PTE(PTEref_row,4:end);
 clear PTE;
-%%
+%
 % First revert to the default
 switch_scansdir('SSP');
 [wvs,ranges] = waves_used;
@@ -21,11 +21,11 @@ for i=1:length(ranges)
   end
 end
 r = [ranges.ranges];
-r = r([1 3]);
+r = r(1:2:end);
 [~,I] = sort(r);
 for region = 1:length(I)
   wvno = ranges(I(region)).wvno;
-  wvname = wvs(wvno).Name;
+  wvname = wvs(I(region)).Name;
   range = ranges(I(region)).ranges;
   fprintf(1,'Region %d: %s %d-%d\n', region, wvname, range);
   if strcmp(wvname,'HHH_10Hz')
@@ -33,11 +33,11 @@ for region = 1:length(I)
   else
     Rnum = region;
   end
-  range = get_starting_scan(Rnum, range);
   PTEfile = sprintf('PTE_gen_R%d.txt',Rnum);
   if exist(PTEfile,'file')
-    fprintf(1,'Skipping PTE_gen %s over %d-%d\n', PTEfile, range);
+    fprintf(1,'Skipping PTE_gen %s\n', PTEfile);
   else
+    range = get_starting_scan(Rnum, range);
     fprintf(1,'Generate %s over %d-%d\n', PTEfile, range);
     scans = range(1):range(2);
     PTE_gen(scans, PTEfile,PTE_params);
@@ -72,35 +72,16 @@ end
 % setup_icosfit() with the added tweak that PTEfile gets '+ nu_F0'
 % 
 %%
-waves_used
-% Then set scans and run scanview(scans) to decide where to start
-%%
-edit_ICOSfit_cfg; % to switch to the averaged scans
-%%
-% define R1A that covers all the average data
-PTE = load('PTE_gen_10Hz.average1.txt');
-fitline('update_regions','R1A',PTE([1 end],1));
-clear PTE
-%%
-fitline % to initialize icosfit file
-%%
-% Update the fitfile name
-suffixes = 'R1.1Hz5p3er';
-fitfile = [ 'icosfit.' suffixes ];
-base = ['ICOSout.' suffixes ];
-%%
-% Update fitfile with standard tweaks:
-icosfit_reconfig(fitfile, '', ...
-  'Verbosity', '2', ...
-  'MaxEnsembleDriftPerScan', '5e-3 cm-1', ...
-  'MaxIterations', '20');
-%%
-% Now run icosfit outside Matlab
-%%
 % Take a first look to see how things went
 mixlines(base);
+f = gcf;
+f.Position(1) = 1400-f.Position(3);
 S = ICOS_setup(base);
 figure; plot(S.scannum, S.nu_F0);
+%%
+PTE_add_nu_F0('ICOSout.R1.5p3er','ifile','PTE_gen_R11.txt');
+%
+setup_icosfit('R11','PTE_gen_R11_nu.txt');
 %%
 % Do whatever we have to to fixup the 1 Hz fit, starting with:
 PTE_add_nu_F0(base);
@@ -150,6 +131,7 @@ function setup_icosfit(region, PTEfile)
   fitfile = '';
   while isempty(files)
     f = fitline;
+    f.Position(1) = 1300-f.Position(3);
     waitfor(f);
     files = dir(sprintf('icosfit.%s.*', region));
     if isempty(files)
@@ -174,10 +156,16 @@ function setup_icosfit(region, PTEfile)
   end
   % Update fitfile with standard tweaks:
   fprintf(1,'Tweak %s\n', fitfile);
+  if endsWith(PTEfile, '_nu.txt')
+    PTEarg = [ PTEfile ' + nu_F0' ];
+  else
+    PTEarg = PTEfile;
+  end
   icosfit_reconfig(fitfile, '', ...
     'Verbosity', '2', ...
     'MaxEnsembleDriftPerScan', '5e-3 cm-1', ...
-    'MaxIterations', '20');
+    'MaxIterations', '20', ...
+    'PTEFile', PTEarg);
 
   icosfit_slurm(fitfile);
 end
