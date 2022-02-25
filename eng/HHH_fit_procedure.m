@@ -79,6 +79,14 @@ f.Position(1) = 1400-f.Position(3);
 S = ICOS_setup(base);
 figure; plot(S.scannum, S.nu_F0);
 %%
+% Closer look: Want to see Chi, nu_F0 and floating: nu_F0
+figure;
+ax = [nsubplot(3,1,1) nsubplot(3,1,2) nsubplot(3,1,3)];
+plot(ax(1),S.scannum,S.Chi);
+plot(ax(2),S.scannum,S.nu_F0);
+plot(ax(3),S.scannum,S.fitdata(:,S.float_cols(1+1)));
+linkaxes(ax,'x');
+%%
 PTE_add_nu_F0('ICOSout.R1.5p3er','ifile','PTE_gen_R11.txt');
 %
 setup_icosfit('R11','PTE_gen_R11_nu.txt');
