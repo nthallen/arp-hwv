@@ -1,8 +1,8 @@
 %%
+regen_PTE = false;
 PTEref = '../PTEref.txt';
-PTEref_row = 15;
 PTE = load(PTEref);
-PTE_params = PTE(PTEref_row,4:end);
+PTE_params = PTE(1,4:end);
 clear PTE;
 %
 % First revert to the default
@@ -34,10 +34,15 @@ for region = 1:length(I)
     Rnum = region;
   end
   PTEfile = sprintf('PTE_gen_R%d.txt',Rnum);
-  if exist(PTEfile,'file')
+  if ~regen_PTE && exist(PTEfile,'file')
     fprintf(1,'Skipping PTE_gen %s\n', PTEfile);
   else
-    range = get_starting_scan(Rnum, range);
+    if exist(PTEfile,'file')
+      PTE = load(PTEfile);
+      range = PTE([1 end],1);
+    else
+      range = get_starting_scan(Rnum, range);
+    end
     fprintf(1,'Generate %s over %d-%d\n', PTEfile, range);
     scans = range(1):range(2);
     PTE_gen(scans, PTEfile,PTE_params);
@@ -46,7 +51,7 @@ for region = 1:length(I)
     Rnum = region;
     Rtxt = sprintf('R%d',Rnum);
     oPTEfile = sprintf('PTE_gen_%s.txt', Rtxt);
-    if exist(oPTEfile,'file')
+    if ~regen_PTE && exist(oPTEfile,'file')
       fprintf(1,'Skipping average_spectra\n');
     else
       fprintf(1,'average_spectra2(1,''%s'',''%s'')\n',PTEfile,oPTEfile);
@@ -114,14 +119,27 @@ icosfit_reconfig(fitfile, '', ...
 % No fit at 10 Hz
 %%
 function new_range = get_starting_scan(Rnum, range)
-  h = scanview(range(1):range(2));
-  waitfor(h);
-  result = inputdlg( ...
-    { sprintf('Region R%d Starting Scan', Rnum) }, ...
-    sprintf('Region R%d', Rnum), ...
-    [1 30], ...
-    { sprintf('%d', range(1)) });
-  newval = str2double(result{1});
+  ScansFile = sprintf('Scans_R%d.txt', Rnum);
+  if exist(ScansFile,'file')
+    SF_range = load(ScansFile);
+    if length(SF_range) ~= 2
+      error('ScansFile %s apparently corrupted', ScansFile);
+    end
+    if SF_range(2) ~= range(2)
+      warning('ScansFile %s range %d-%d differs from input %d-%d', ...
+        ScansFile, SF_range, range);
+    end
+    newval = SF_range(1);
+  else
+    h = scanview(range(1):range(2));
+    waitfor(h);
+    result = inputdlg( ...
+      { sprintf('Region R%d Starting Scan', Rnum) }, ...
+      sprintf('Region R%d', Rnum), ...
+      [1 30], ...
+      { sprintf('%d', range(1)) });
+    newval = str2double(result{1});
+  end
   if isnan(newval) || newval < range(1) || newval > range(2)
     error('Invalid Entry: "%s"', result{1});
   end
