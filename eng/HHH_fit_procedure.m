@@ -78,21 +78,38 @@ end
 % 
 %%
 % Take a first look to see how things went
-mixlines(base);
-f = gcf;
-f.Position(1) = 1400-f.Position(3);
+%mixlines(base);
+%f = gcf;
+%f.Position(1) = 1400-f.Position(3);
 S = ICOS_setup(base);
-figure; plot(S.scannum, S.nu_F0);
+figure; 
+ax = [ nsubplot(2,1,1) nsubplot(2,1,2) ];
+plot(ax(1),S.scannum, S.Chi*1e6);
+ax(1).YLim = [0 25];
+ylabel(ax(1),'H_2O ppm');
+ax(1).YAxisLocation = 'right';
+ax(1).XTickLabel = [];
+title(ax(1), getrun);
+plot(ax(2),S.scannum, S.nu_F0);
+ylabel(ax(2),'\nu_{F0}');
+linkaxes(ax,'x');
 %%
 % Closer look: Want to see Chi, nu_F0 and floating: nu_F0
+S = ICOS_setup(base);
 figure;
 ax = [nsubplot(3,1,1) nsubplot(3,1,2) nsubplot(3,1,3)];
-plot(ax(1),S.scannum,S.Chi);
+plot(ax(1),S.scannum,S.Chi * 1e6);
+ax(1).YLim = [ 0 25 ];
+ylabel(ax(1),'H_2O ppm');
+ax(1).YAxisLocation = 'right';
+ax(1).XTickLabel = [];
+title(ax(1),getrun);
 plot(ax(2),S.scannum,S.nu_F0);
+ylabel(ax(2),'\nu_{F0}');
 plot(ax(3),S.scannum,S.fitdata(:,S.float_cols(1+1)));
 linkaxes(ax,'x');
 %%
-PTE_add_nu_F0('ICOSout.R1.5p3er','ifile','PTE_gen_R11.txt');
+PTE_add_nu_F0(base,'ifile','PTE_gen_R11.txt');
 %
 setup_icosfit('R11','PTE_gen_R11_nu.txt');
 %%
