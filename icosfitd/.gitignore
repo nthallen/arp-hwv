@@ -1,0 +1,5 @@
+*.exe
+*.o
+*oui.cc
+icosfitd
+test_spawn

@@ -28,7 +28,7 @@ class icos_pipe : public Ser_Sel {
 
 class fitd {
   public:
-    fitd();
+    fitd(Selector *S);
     ~fitd();
     /**
      * @param scannum The current scan number
@@ -46,15 +46,18 @@ class fitd {
      * and stderr to log files.
      */
     void launch_icosfit();
+    Selector *S;
     icos_pipe PTE(false, 80, "PTE.fifo", "PTE.log");
     icos_pipe SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this);
     icos_cmd CMD(this);
+    TM_Selectee TM("icosfitd", &icosfitd, sizeof(icosfitd));
     uint32_t fitting_scannum;
     uint32_t cur_scannum;
     double cur_P;
     double cur_T;
     FILE *PTEfp;
     FILE *SUMfp;
+    icosfitd_status icosfit_status;
     int icosfit_pid;
 };
 

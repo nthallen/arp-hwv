@@ -71,10 +71,10 @@ int icos_pipe::ProcessData(int flag) {
         close();
         msg(MSG, "%s closed on read", path);
       } else {
-        if (fit) fit->results(buf);
         if (logfp) {
           fprintf(logfp, "%s", buf);
         }
+        if (fit) fit->results(buf);
       }
       consume(nc);
       report_ok();
@@ -85,8 +85,11 @@ int icos_pipe::ProcessData(int flag) {
   }
 }
 
-int output(const char *line) {
+int icos_pipe::output(const char *line) {
   int nbline = strlen(line);
+  if (logfp) {
+    fprintf(logfp, "%s", line);
+  }
   int rc = write(fd, line, nbline);
   if (rc < 0) {
     msg(MSG_ERROR, "Error %d writing to %s: %s",
@@ -101,7 +104,7 @@ void icos_pipe::cleanup() {
   unlink(path);
 }
 
-void setup_pipe() {
+void icos_pipe::setup_pipe() {
   cleanup();
   if (mkfifo(path, 0664) != 0) {
     msg(MSG_ERROR, "%s: mkfifo error %d: %s",
@@ -119,7 +122,7 @@ void setup_pipe() {
     Selector::Sel_Write;
 }
 
-void close() {
+void icos_pipe::close() {
   if (fd < 0) {
     close(fd);
     fd = -1;
@@ -127,68 +130,48 @@ void close() {
   }
 }
 
-fitd::fitd()
-  : Ser_Sel(),
+fitd::fitd(Selector *S)
+  : S(S),
     fitting_scannum(0),
     cur_scannum(0),
     cur_P(0),
     cur_T(0),
-    PTEfp(0),
-    SUMfp(0)
+    icosfit_status(IFS_Gone)
 {
-  setup_fifo(PTE_FIFO_PATH);
-  setup_fifo(ICOSsum_FIFO_PATH);
-  init(ICOSsum_FIFO, O_READ, 1024);
+  PTE.setup_pipe();
+  SUM.setup_pipe();
+  S->add_child(&TM);
+  S->add_child(&CMD);
+  S->add_child(&SUM);
+  S->add_child(&PTE);
   // Setup to handle signals
-  // Open PTE_FIFO_PATH for output
-  PTEfp = fopen(PTE_FIFO_PATH, "w");
-  if (log_icossum) {
-    SUMfp = fopen("ICOSsum.log", "a");
-  }
-  posix_spawn("icosfit", icosfit_file);
-}
-
-void fitd::setup_fifo(const char *path) {
-  mkfifo(path, 0664);
-}
-
-void fitd::cleanup() {
-  if (PTEfp) {
-    fclose(PTEfp);
-    PTEfp = 0;
-  }
-  if (SUMfp) {
-    fclose(SUMfp);
-    SUMfp = 0;
-  }
-  close();
-  // wait for icosfit to terminate and/or send it a signal
-  unline(PTE_FIFO_PATH);
-  unlink(ICOSsum_FIFO_PATH);
+  // posix_spawn("icosfit", icosfit_file);
 }
 
 void fitd::scan_data(uint32_t scannum, float P, float T,
       const char *PTparams) {
-  
-}
-
-int fitd::ProcessData(int flag) {
-  cp = 0;
-  if (flag & Selector::Sel_Read) {
-    if (fillbuf()) return 1;
-    // Handle read data from ICOSsum.fifo
-    consume(nc);
-    report_ok();
-    return 0;
+  cur_scannum = scannum;
+  cur_P = P;
+  cur_T = T;
+  if (icosfit_status == IFS_Gone) {
+    launch_icosfit();
   }
-  if (flag & Selector::Sel_Timeout) {
-    // Do we have a timeout on fitting? Perhaps to complain if
-    // icosfit dies without a signal.
-    // Are we shutting down? Do we need to signal icosfit?
-    TO.Clear();
+  if (icosfit_status == IFS_Ready) {
+    char PTEline[256];
+    snprintf(PTEline, 256, "%lu %.2lf %.1lf %s", cur_scannum,
+      cur_P, cur_T, PTparams);
+    PTE.output(PTEline);
+    icosfitd.Status = icosfit_status = IFS_Fitting;
   }
 }
 
+void fitd::launch_icosfit() {
+  // Locate the line in the specified scan file
+  // Read in icosfit source and Write out to icosfit.RT,
+  // interpolating Position info
+  // spawn icosfit icosfit.RT
+  icosfitd.Status = icosfit_status = IFS_Ready;
+}
 
 icos_cmd::icos_cmd(fitd *fit)
     : Cmd_Selectee("cmd/icosfitd", 300),
@@ -276,16 +259,7 @@ icosfitd_t icosfitd;
 int main(int argc, char **argv) {
   oui_init_options(argc, argv);
   { Selector S;
-  
-    TM_Selectee TM("icosfitd", &icosfitd, sizeof(icosfitd));
-    S.add_child(&TM);
-    
     fitd fit();
-    S.add_child(&fit);
-    
-    icos_cmd CS(&fit);
-    S.add_child(&CS);
-
     nl_error(0, "Starting: v1.0");
     S.event_loop();
   }
