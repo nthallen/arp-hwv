@@ -1,6 +1,8 @@
 /* icosfile.cc */
 #include "icosfile.h"
 
+const int ICOSfile::mindatasize = 2048;
+
 ICOSfile::ICOSfile( const char *fbase /* const char *obase */) {
   mlf = mlf_init( 3, 60, 0, fbase, "dat", NULL );
   // omlf = mlf_init( 3, 60, 1, obase, "dat", NULL );
@@ -34,7 +36,6 @@ int ICOSfile::read( unsigned long int fileno ) {
   if ( fp == 0 ) return 0;
   sdata->clear();
   // bdata->clear();
-  if ( binary ) {
     icos_hdr_t header[2];
     if ( fread_swap32( header, sizeof(icos_hdr_t), 2, fp ) != 2 ) {
       nl_error( 2, "%s: Error reading header: %s", mlf->fpath,
@@ -124,7 +125,6 @@ int ICOSfile::read( unsigned long int fileno ) {
       }
     }
 #endif // REQUIRE_ADDITIONAL_COLUMNS
-  }
   fclose(fp);
   return 1;
 }

@@ -1,6 +1,6 @@
 #include <string.h>
 #include "f_vector.h"
-#include "nl.h"
+#include "nortlib.h"
 
 /**
   @param min the minimum number of ICOS_Floats for the first allocation
