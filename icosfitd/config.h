@@ -21,6 +21,8 @@ typedef float ICOS_Float;
 #define FMT_G "g"
 #endif
 
+#define MLBASE 1
+
 // This is a placeholder in case we end up compiling on
 // a BIG_ENDIAN architecture. The default is LITTLE_ENDIAN.
 #define fread_swap32 fread

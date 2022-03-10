@@ -4,14 +4,19 @@
 <include> <stdlib.h>
 <include> "icosfitd_int.h"
 
-<opts> "L"
+<opts> "Li:o:"
 <sort>
+  -i <filename> : Input icosfit configuration file
+  -o <filename> : Output icosfit configuration file (icosfit.RT)
   -L : Copy ICOSsum.fifo data to ICOSsum.log
+  -S <base> : Scan base directory (SSP)
+  -l <from>:<to> : Sample range for line search
 <switch>
+  case 'i': set_icosfit_file(0, optarg); break;
+  case 'o': set_icosfit_file(1, optarg); break;
   case 'L': log_icossum = true; break;
-
-<args>
-  set_icosfit_file(optarg);
+  case 'S': scan_ibase = optarg; break;
+  case 'l': set_line_search(optarg); break;
 
 <package> msghdr_init
 <init>

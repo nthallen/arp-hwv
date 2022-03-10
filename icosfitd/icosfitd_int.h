@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#include <stdint.h>
 #include "icosfitd.h"
 #include "SerSelector.h"
 
@@ -45,18 +46,19 @@ class fitd {
      * file as its only argument. Redirects stdin
      * and stderr to log files.
      */
-    void launch_icosfit();
+    void launch_icosfit(uint32_t scannum);
+    int find_line_position(uint32_t scannum);
+    void generate_icosfit_file(int linepos);
     Selector *S;
     icos_pipe PTE(false, 80, "PTE.fifo", "PTE.log");
     icos_pipe SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this);
     icos_cmd CMD(this);
     TM_Selectee TM("icosfitd", &icosfitd, sizeof(icosfitd));
+    ICOSfile ICOSf(scan_ibase);
     uint32_t fitting_scannum;
     uint32_t cur_scannum;
     double cur_P;
     double cur_T;
-    FILE *PTEfp;
-    FILE *SUMfp;
     icosfitd_status icosfit_status;
     int icosfit_pid;
 };
@@ -71,7 +73,15 @@ class icos_cmd : public Cmd_Selectee {
     int PTparams_len;
 };
 
-extern void set_icosfit_file(const char *path);
+/**
+ * @param path : icosfit configuration source
+ * The icosfit configuration source file is used as a template
+ * to write the actual icosfit.RT file, updating the Position=\d+
+ * to reflect the line position of the first scan to be fit.
+ */
+extern void set_icosfit_file(bool isoutput, const char *path);
+extern void set_line_search(const char *range);
 extern bool log_icossum;
+extern const char *scan_ibase;
 
 #endif

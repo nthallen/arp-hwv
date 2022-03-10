@@ -9,6 +9,7 @@
  */
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdio.h>
 #include "icosfitd_int.h"
 
 /**
@@ -20,13 +21,31 @@
 const char *PTE_FIFO_PATH = "PTE.fifo";
 const char *ICOSsum_FIFO_PATH = "ICOSsum.fifo";
 
-const char *icosfit_file;
+const char *icosfit_file_in;
+const char *icosfit_file_out;
 bool log_icossum = false;
+int line_search[2] = {400, 650};
+const char *scan_ibase = "SSP";
 
-void set_icosfit_file(const char *path) {
-  if (icosfit_file)
+void set_icosfit_file(bool is_output, const char *path) {
+  if (is_output) {
+    if (icosfit_file_out)
+      msg(3, "Only one icosfit file can be specified on the command line");
+    icosfit_file_out = path;
+  } else if (icosfit_file_in) {
     msg(3, "Only one icosfit file can be specified on the command line");
-  icosfit_file = path;
+  } else {
+    icosfit_file_in = path;
+  }
+}
+
+void set_line_search(const char *range) {
+  if (sscanf(range, "%d:%d", &line_search[0], &line_search[1]) != 2) {
+    msg(3, "Invalid line search range specified");
+  }
+  if (line_search[0] >= line_search[1]) {
+    msg(3, "Line search range must be non-empty");
+  }
 }
 
 icos_pipe::icos_pipe(bool input, int bufsize,
@@ -136,7 +155,9 @@ fitd::fitd(Selector *S)
     cur_scannum(0),
     cur_P(0),
     cur_T(0),
-    icosfit_status(IFS_Gone)
+    icosfit_status(IFS_Gone),
+    icosfit_pid(0),
+    imlf(0)
 {
   PTE.setup_pipe();
   SUM.setup_pipe();
@@ -154,7 +175,7 @@ void fitd::scan_data(uint32_t scannum, float P, float T,
   cur_P = P;
   cur_T = T;
   if (icosfit_status == IFS_Gone) {
-    launch_icosfit();
+    launch_icosfit(cur_scannum);
   }
   if (icosfit_status == IFS_Ready) {
     char PTEline[256];
@@ -165,10 +186,62 @@ void fitd::scan_data(uint32_t scannum, float P, float T,
   }
 }
 
-void fitd::launch_icosfit() {
-  // Locate the line in the specified scan file
-  // Read in icosfit source and Write out to icosfit.RT,
-  // interpolating Position info
+/**
+ * Locate the line position in the specified scan file.
+ * @param scannum The starting scan number
+ * @return 1-based line position or 0 if there is no scan range.
+ */
+int fitd::find_line_position(uint32_t scannum) {
+  if (! ICOSf.read(scannum)) return 0;
+  int start = line_search[0]-MLBASE;
+  int end = line_search[1]-MLBASE;
+  if (ICOSf.sdata->n_data < end) end = ICOSf.sdata->n_data;
+  if (start <= end || start < 0) return 0;
+  ICOS_Float detrend_offset = ICOSf.sdata->data[start];
+  ICOS_Float detrend_slope =
+    (ICOSf.sdata->data[end]-detrend_offset) / (end-start);
+  ICOS_Float min_value = 0.;
+  int min_sample = start;
+  for (int sample = start; sample <= end; ++sample) {
+    ICOS_Float trend = detrend_offset + (sample-start)*detrend_slope;
+    ICOS_Float detrend = ICOSf.sdata->data[sample] - trend;
+    if (detrend < min_value) {
+      min_value = detrend;
+      min_sample = sample;
+    }
+  }
+  return min_sample + MLBASE;
+}
+
+void fitd::generate_icosfit_file(int linepos) {
+  char buf[256];
+  // open icosfit_file_in
+  // In each line, look for Position=
+  FILE *ifp = fopen(icosfit_file_in, "r");
+  if (ifp == 0)
+    msg(MSG_FATAL, "Cannot read from icosfit configuration input file '%s'",
+        icosfit_file_in);
+  FILE *ofp = fopen(icosfit_file_out, "w");
+  if (ofp == 0)
+    msg(MSG_FATAL, "Cannot write to icosfit configuration output file '%s'",
+        icosfit_file_out);
+  while (fgets(buf, 255, ifp)) {
+    int nc = strlen(buf);
+    if (nc == 255 && buf[254] != '\n') {
+      msg(MSG_WARN,
+        "Line length exceeded in icosfit configuration input file '%s'",
+        icosfit_file_in);
+    } else {
+      char *pos = strstr(buf, "Position=");
+      if (pos) {
+      }
+    }
+  }
+}
+
+void fitd::launch_icosfit(uint32_t scannum) {
+  int linepos = find_line_position(scannum);
+  generate_icosfit_file(linepos);
   // spawn icosfit icosfit.RT
   icosfitd.Status = icosfit_status = IFS_Ready;
 }
@@ -258,8 +331,13 @@ icosfitd_t icosfitd;
 
 int main(int argc, char **argv) {
   oui_init_options(argc, argv);
+  if (!icosfit_file_in)
+    msg(3, "Must specify input icosfit configuration file");
+  if (!icosfit_file_out)
+    icosfit_file_out = "icosfit.RT";
+
   { Selector S;
-    fitd fit();
+    fitd fit(&S);
     nl_error(0, "Starting: v1.0");
     S.event_loop();
   }

@@ -7,8 +7,10 @@ ICOSfile::ICOSfile( const char *fbase /* const char *obase */) {
   mlf = mlf_init( 3, 60, 0, fbase, "dat", NULL );
   // omlf = mlf_init( 3, 60, 1, obase, "dat", NULL );
   // ofp = 0;
-  sdata = new f_vector(mindatasize, 0);
-  // bdata = new f_vector(mindatasize, 0);
+  // Intentionally going with 1-based addressing for this to match
+  // Matlab usage.
+  sdata = new f_vector(mindatasize, 1);
+  // bdata = new f_vector(mindatasize, 1);
   // fdata = new f_vector(100, 0);
 }
 
