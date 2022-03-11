@@ -10,8 +10,6 @@
 
 class fitd;
 
-enum result_status { res_OK, res_synerr, res_eof }
-
 class results {
   public:
     results(const char *param_list);

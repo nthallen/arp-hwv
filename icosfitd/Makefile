@@ -3,7 +3,7 @@ CPPFLAGS= -I /usr/local/include
 CXXFLAGS= -Wall -g
 LIBS=-lsocket -ltmpp -ltm -lnort
 
-SRC = icosfitd.cc icosfile.cc f_vector.cc
+SRC = icosfitd.cc icosfile.cc f_vector.cc results.cc
 OBJ = ${addsuffix .o, ${basename $(SRC) } } icosfitdoui.o
 TGT = icosfitd
 

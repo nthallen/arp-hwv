@@ -113,6 +113,7 @@ void icos_pipe::protocol_input() {
     fprintf(logfp, "%s", buf);
   }
   buf[ncl] = savec;
+  res->Status = res_OK;
   int scannum;
   float P, T, val;
   if (not_int(scannum) ||
@@ -136,12 +137,13 @@ void icos_pipe::protocol_input() {
     if (res_num < res->n_Vals) {
       report_err("Reached end of line without finding all results");
       res->Status = res_synerr;
-    } else {
-      res->Status = res_OK;
     }
-    if (fit)
-      fit->process_results(res)
   }
+  if (fit)
+    fit->process_results(res);
+  consume(nc);
+  if (res->Status == res_OK)
+    report_ok();
 }
 
 int icos_pipe::output(const char *line) {

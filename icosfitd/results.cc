@@ -21,6 +21,8 @@ results::results(const char *param_list) {
       msg(3, "Invalid character in configuration string");
     }
   }
+  if (n_Vals > MAX_RESULT_VALS)
+    msg(3, "More columns specified than arbitrary limit MAX_RESULT_VALS");
   Vals = (ICOS_Float*)new_memory(n_Vals * sizeof(ICOS_Float));
   ValIdxs = (int *)new_memory(n_Vals * sizeof(int));
   s = param_list;
