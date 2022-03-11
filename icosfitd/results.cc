@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "icosfitd_int.h"
-#include "nortlib.h"
+#include "msg.h"
 
 results::results(const char *param_list) {
   n_Vals = 0;
@@ -28,7 +28,7 @@ results::results(const char *param_list) {
   s = param_list;
   int idx = 0;
   while (*s) {
-    ValIdxs[idx] = strtoul(s, &s, 10);
+    ValIdxs[idx] = strtoul(s, (char**)&s, 10);
     if (idx > 0 && ValIdxs[idx] <= ValIdxs[idx-1])
       msg(3, "Column indexes must be increasing");
     if (*s) ++s;

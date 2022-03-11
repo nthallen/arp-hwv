@@ -1,13 +1,13 @@
 <package> icosfitd
-<include> msg oui
+<include> msg
 <follow> msg
 <include> <stdlib.h>
 <include> "icosfitd_int.h"
 
-<opts> "Li:o:"
+<opts> "LI:O:"
 <sort>
-  -i <filename> : Input icosfit configuration file
-  -o <filename> : Output icosfit configuration file (icosfit.RT)
+  -I <filename> : Input icosfit configuration file
+  -O <filename> : Output icosfit configuration file (icosfit.RT)
   -L : Copy ICOSsum.fifo data to ICOSsum.log
   -S <base> : Scan base directory (SSP)
   -l <from>:<to> : Sample range for line search
@@ -19,8 +19,8 @@ The argument is a comma-separated list of increasing integers greater than 3
 with no spaces.
 
 <switch>
-  case 'i': set_icosfit_file(0, optarg); break;
-  case 'o': set_icosfit_file(1, optarg); break;
+  case 'I': set_icosfit_file(0, optarg); break;
+  case 'O': set_icosfit_file(1, optarg); break;
   case 'L': log_icossum = true; break;
   case 'S': scan_ibase = optarg; break;
   case 'l': set_line_search(optarg); break;

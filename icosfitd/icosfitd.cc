@@ -11,6 +11,9 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include "icosfitd_int.h"
+#include "msg.h"
+#include "nl_assert.h"
+#include "oui.h"
 
 /**
  * These paths need to match between the icosfit file and the
@@ -73,6 +76,7 @@ icos_pipe::icos_pipe(bool input, int bufsize,
   }
   if (is_input)
     res = new results(column_list);
+  setup_pipe();
 }
 
 icos_pipe::~icos_pipe() {
@@ -86,67 +90,70 @@ int icos_pipe::ProcessData(int flag) {
   }
   if (flag & Selector::Sel_Read) {
     if (is_input) {
-      int onc = nc;
+      unsigned int onc = nc;
       cp = 0;
       fillbuf();
       if (onc == nc) {
         close();
         msg(MSG, "%s closed on read", path);
       } else {
-        protocol_input();
+        return protocol_input();
       }
     } else {
       msg(MSG_WARN,"Unexpected input on output pipe %s", path);
       flags &= ~Selector::Sel_Read;
     }
   }
+  return 0;
 }
 
-void icos_pipe::protocol_input() {
-  char *nl = strchr(buf, '\n');
-  if (!nl)
-  int ncl = nl+1-buf;
-  nl_assert(ncl <= nc);
-  char savec = buf[ncl];
-  buf[ncl] = '\0';
-  if (logfp) {
-    fprintf(logfp, "%s", buf);
-  }
-  buf[ncl] = savec;
-  res->Status = res_OK;
-  int scannum;
-  float P, T, val;
-  if (not_int(scannum) ||
-      not_float(P) ||
-      not_float(T)) {
-    report_err("Format error in ICOSsum.dat");
-    res->Status = res_synerr;
-  } else {
-    int res_num = 0;
-    for (int cur_col = 4; cp < ncl && buf[cp] != '\n'; ++cur_col) {
-      if (not_float(val)) {
-        report_err("Expected float");
-        res->Status = res_synerr;
-        break;
-      }
-      if (cur_col == res->ValIdxs[res_num]) {
-        res->Vals[res_num++] = val;
-        if (res_num >= res->n_Vals) break;
-      }
+int icos_pipe::protocol_input() {
+  char *nl = strchr((char *)buf, '\n');
+  if (!nl) {
+    unsigned int ncl = nl+1-(char*)buf;
+    nl_assert(ncl <= nc);
+    unsigned char savec = buf[ncl];
+    buf[ncl] = '\0';
+    if (logfp) {
+      fprintf(logfp, "%s", buf);
     }
-    if (res_num < res->n_Vals) {
-      report_err("Reached end of line without finding all results");
+    buf[ncl] = savec;
+    res->Status = res_OK;
+    int scannum;
+    float P, T, val;
+    if (not_int(scannum) ||
+        not_float(P) ||
+        not_float(T)) {
+      report_err("Format error in ICOSsum.dat");
       res->Status = res_synerr;
+    } else {
+      int res_num = 0;
+      for (int cur_col = 4; cp < ncl && buf[cp] != '\n'; ++cur_col) {
+        if (not_float(val)) {
+          report_err("Expected float");
+          res->Status = res_synerr;
+          break;
+        }
+        if (cur_col == res->ValIdxs[res_num]) {
+          res->Vals[res_num++] = val;
+          if (res_num >= res->n_Vals) break;
+        }
+      }
+      if (res_num < res->n_Vals) {
+        report_err("Reached end of line without finding all results");
+        res->Status = res_synerr;
+      }
     }
+    if (fit)
+      fit->process_results(res);
+    consume(nc);
+    if (res->Status == res_OK)
+      report_ok();
   }
-  if (fit)
-    fit->process_results(res);
-  consume(nc);
-  if (res->Status == res_OK)
-    report_ok();
+  return 0;
 }
 
-int icos_pipe::output(const char *line) {
+void icos_pipe::output(const char *line) {
   int nbline = strlen(line);
   if (logfp) {
     fprintf(logfp, "%s", line);
@@ -185,24 +192,27 @@ void icos_pipe::setup_pipe() {
 
 void icos_pipe::close() {
   if (fd < 0) {
-    close(fd);
+    ::close(fd);
     fd = -1;
     flags = 0;
   }
 }
 
 fitd::fitd(Selector *S)
-  : S(S),
+  : 
+    S(S),
+    PTE(false, 80, "PTE.fifo", "PTE.log"),
+    SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this),
+    CMD(this),
+    TM("icosfitd", &icosfitd, sizeof(icosfitd)),
+    ICOSf(scan_ibase),
     fitting_scannum(0),
     cur_scannum(0),
     cur_P(0),
     cur_T(0),
     icosfit_status(IFS_Gone),
-    icosfit_pid(0),
-    imlf(0)
+    icosfit_pid(0)
 {
-  PTE.setup_pipe();
-  SUM.setup_pipe();
   S->add_child(&TM);
   S->add_child(&CMD);
   S->add_child(&SUM);
@@ -210,6 +220,8 @@ fitd::fitd(Selector *S)
   // Setup to handle signals
   // posix_spawn("icosfit", icosfit_file);
 }
+
+fitd::~fitd() {}
 
 void fitd::scan_data(uint32_t scannum, float P, float T,
       const char *PTparams) {
@@ -221,14 +233,14 @@ void fitd::scan_data(uint32_t scannum, float P, float T,
   }
   if (icosfit_status == IFS_Ready) {
     char PTEline[256];
-    snprintf(PTEline, 256, "%lu %.2lf %.1lf %s", cur_scannum,
+    snprintf(PTEline, 256, "%u %.2lf %.1lf %s", cur_scannum,
       cur_P, cur_T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
   }
 }
 
-void fitd::results(const char *res) {
+void fitd::process_results(results *res) {
 }
 
 /**
@@ -303,7 +315,7 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
     }
   } else {
     if (cp < nc)
-      report_err("%s: not_uint32: no digits at col %d", iname, cp);
+      report_err("not_uint32: no digits at col %d", cp);
     return true;
   }
   output_val = val;
@@ -328,7 +340,7 @@ int icos_cmd::ProcessData(int flag) {
     fit->scan_data(scannum, P, T, PTparams);
     consume(nc);
     report_ok();
-    return false;
+    return 0;
   }
   if (cp < nc && buf[cp] == 'P') {
     if (not_str("P:")) {
@@ -337,7 +349,7 @@ int icos_cmd::ProcessData(int flag) {
       consume(nc);
       return 0;
     }
-    for (int endp = cp; endp < nc; ++endp) {
+    for (unsigned int endp = cp; endp < nc; ++endp) {
       if (buf[endp] == '\n') {
         int PT_len = endp - cp;
         if (PT_len >= PTparams_len) {
@@ -347,7 +359,7 @@ int icos_cmd::ProcessData(int flag) {
           PTparams = (char *)new_memory(PT_len+1);
           PTparams_len = PT_len+1;
         }
-        strncpy(PTparams, buf[2], PT_len);
+        strncpy(PTparams, (char*)&buf[2], PT_len);
         PTparams[PT_len] = '\0';
         report_ok();
         consume(++cp);
@@ -362,11 +374,11 @@ int icos_cmd::ProcessData(int flag) {
     nl_error(0, "Received Quit command");
     consume(nc);
     report_ok();
-    return true;
+    return 1;
   }
   report_err("Invalid command syntax");
   consume(nc);
-  return false;
+  return 0;
 }
 
 icosfitd_t icosfitd;

@@ -1,8 +1,9 @@
 #ifndef ICOSFITD_H_INCLUDED
 #define ICOSFITD_H_INCLUDED
 #include <stdint.h>
+#include "config.h"
 
-enum result_status { res_OK, res_synerr, res_eof }
+enum result_status { res_OK, res_synerr, res_eof };
 enum icosfitd_status { IFS_Gone, IFS_Ready, IFS_Fitting };
 #define MAX_RESULT_VALS 5
 

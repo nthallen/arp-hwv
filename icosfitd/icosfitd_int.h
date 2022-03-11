@@ -1,14 +1,15 @@
-#ifndef ICOSFITD_H_INCLUDED
-#define ICOSFITD_H_INCLUDED
+#ifndef ICOSFITD_INT_H_INCLUDED
+#define ICOSFITD_INT_H_INCLUDED
 
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdint.h>
 #include "icosfitd.h"
 #include "SerSelector.h"
-#include "config.h"
+#include "icosfile.h"
 
 class fitd;
+class icos_cmd;
 
 class results {
   public:
@@ -25,22 +26,34 @@ class results {
 
 class icos_pipe : public Ser_Sel {
   public:
+    icos_pipe(int foo);
     icos_pipe(bool input, int bufsize,
       const char *path, const char *logfile,
       fitd *fit = 0);
     ~icos_pipe();
     int ProcessData(int flag);
-    int output(const char *line);
+    void output(const char *line);
   protected:
-    void protocol_input();
+    int protocol_input();
     void cleanup();
     void setup_pipe();
     void close();
     bool is_input;
     const char *path;
-    File *logfp;
+    FILE *logfp;
     fitd *fit;
     results *res;
+};
+
+class icos_cmd : public Cmd_Selectee {
+  public:
+    icos_cmd(fitd *fit);
+    int ProcessData(int flag);
+  private:
+    bool not_uint32(uint32_t &output_val);
+    fitd *fit;
+    char *PTparams;
+    int PTparams_len;
 };
 
 class fitd {
@@ -52,7 +65,7 @@ class fitd {
      * @param P Cell pressure in torr
      * @param T Cell temperature in Kelvin
      */
-    void scan_data(int scannum, float P, float T,
+    void scan_data(uint32_t scannum, float P, float T,
       const char *PTparams);
     void process_results(results *res);
   protected:
@@ -66,27 +79,17 @@ class fitd {
     int find_line_position(uint32_t scannum);
     void generate_icosfit_file(int linepos);
     Selector *S;
-    icos_pipe PTE(false, 80, "PTE.fifo", "PTE.log");
-    icos_pipe SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this);
-    icos_cmd CMD(this);
-    TM_Selectee TM("icosfitd", &icosfitd, sizeof(icosfitd));
-    ICOSfile ICOSf(scan_ibase);
+    icos_pipe PTE;
+    icos_pipe SUM;
+    icos_cmd CMD;
+    TM_Selectee TM;
+    ICOSfile ICOSf;
     uint32_t fitting_scannum;
     uint32_t cur_scannum;
     double cur_P;
     double cur_T;
     icosfitd_status icosfit_status;
     int icosfit_pid;
-};
-
-class icos_cmd : public Cmd_Selectee {
-  public:
-    icos_cmd(fitd *fit);
-    int ProcessData(int flag);
-  private:
-    fitd *fit;
-    char *PTparams;
-    int PTparams_len;
 };
 
 /**
