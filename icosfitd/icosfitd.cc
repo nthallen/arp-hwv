@@ -26,6 +26,7 @@ const char *icosfit_file_out;
 bool log_icossum = false;
 int line_search[2] = {400, 650};
 const char *scan_ibase = "SSP";
+const char *column_list;
 
 void set_icosfit_file(bool is_output, const char *path) {
   if (is_output) {
@@ -70,6 +71,8 @@ icos_pipe::icos_pipe(bool input, int bufsize,
     buf = (unsigned char *)new_memory(bufsize);
     this->bufsize = bufsize;
   }
+  if (is_input)
+    res = new results(column_list);
 }
 
 icos_pipe::~icos_pipe() {
@@ -90,17 +93,54 @@ int icos_pipe::ProcessData(int flag) {
         close();
         msg(MSG, "%s closed on read", path);
       } else {
-        if (logfp) {
-          fprintf(logfp, "%s", buf);
-        }
-        if (fit) fit->results(buf);
+        protocol_input();
       }
-      consume(nc);
-      report_ok();
     } else {
       msg(MSG_WARN,"Unexpected input on output pipe %s", path);
       flags &= ~Selector::Sel_Read;
     }
+  }
+}
+
+void icos_pipe::protocol_input() {
+  char *nl = strchr(buf, '\n');
+  if (!nl)
+  int ncl = nl+1-buf;
+  nl_assert(ncl <= nc);
+  char savec = buf[ncl];
+  buf[ncl] = '\0';
+  if (logfp) {
+    fprintf(logfp, "%s", buf);
+  }
+  buf[ncl] = savec;
+  int scannum;
+  float P, T, val;
+  if (not_int(scannum) ||
+      not_float(P) ||
+      not_float(T)) {
+    report_err("Format error in ICOSsum.dat");
+    res->Status = res_synerr;
+  } else {
+    int res_num = 0;
+    for (int cur_col = 4; cp < ncl && buf[cp] != '\n'; ++cur_col) {
+      if (not_float(val)) {
+        report_err("Expected float");
+        res->Status = res_synerr;
+        break;
+      }
+      if (cur_col == res->ValIdxs[res_num]) {
+        res->Vals[res_num++] = val;
+        if (res_num >= res->n_Vals) break;
+      }
+    }
+    if (res_num < res->n_Vals) {
+      report_err("Reached end of line without finding all results");
+      res->Status = res_synerr;
+    } else {
+      res->Status = res_OK;
+    }
+    if (fit)
+      fit->process_results(res)
   }
 }
 
@@ -186,6 +226,9 @@ void fitd::scan_data(uint32_t scannum, float P, float T,
   }
 }
 
+void fitd::results(const char *res) {
+}
+
 /**
  * Locate the line position in the specified scan file.
  * @param scannum The starting scan number
@@ -216,7 +259,7 @@ int fitd::find_line_position(uint32_t scannum) {
 void fitd::generate_icosfit_file(int linepos) {
   char buf[256];
   // open icosfit_file_in
-  // In each line, look for Position=
+  // In each line, look for Position=%d
   FILE *ifp = fopen(icosfit_file_in, "r");
   if (ifp == 0)
     msg(MSG_FATAL, "Cannot read from icosfit configuration input file '%s'",
@@ -226,17 +269,14 @@ void fitd::generate_icosfit_file(int linepos) {
     msg(MSG_FATAL, "Cannot write to icosfit configuration output file '%s'",
         icosfit_file_out);
   while (fgets(buf, 255, ifp)) {
-    int nc = strlen(buf);
-    if (nc == 255 && buf[254] != '\n') {
-      msg(MSG_WARN,
-        "Line length exceeded in icosfit configuration input file '%s'",
-        icosfit_file_in);
+    if (strstr(buf, "Position=%d")) {
+      fprintf(ofp, buf, linepos);
     } else {
-      char *pos = strstr(buf, "Position=");
-      if (pos) {
-      }
+      fprintf(ofp, "%s", buf);
     }
   }
+  fclose(ifp);
+  fclose(ofp);
 }
 
 void fitd::launch_icosfit(uint32_t scannum) {

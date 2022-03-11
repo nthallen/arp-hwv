@@ -6,8 +6,24 @@
 #include <stdint.h>
 #include "icosfitd.h"
 #include "SerSelector.h"
+#include "config.h"
 
 class fitd;
+
+enum result_status { res_OK, res_synerr, res_eof }
+
+class results {
+  public:
+    results(const char *param_list);
+    ~results();
+    uint32_t scannum;
+    ICOS_Float P;
+    ICOS_Float T;
+    ICOS_Float *Vals;
+    result_status Status;
+    int *ValIdxs;
+    int n_Vals;
+};
 
 class icos_pipe : public Ser_Sel {
   public:
@@ -18,6 +34,7 @@ class icos_pipe : public Ser_Sel {
     int ProcessData(int flag);
     int output(const char *line);
   protected:
+    void protocol_input();
     void cleanup();
     void setup_pipe();
     void close();
@@ -25,6 +42,7 @@ class icos_pipe : public Ser_Sel {
     const char *path;
     File *logfp;
     fitd *fit;
+    results *res;
 };
 
 class fitd {
@@ -38,7 +56,7 @@ class fitd {
      */
     void scan_data(int scannum, float P, float T,
       const char *PTparams);
-    void results(const char *res);
+    void process_results(results *res);
   protected:
   private:
     /**
@@ -83,5 +101,6 @@ extern void set_icosfit_file(bool isoutput, const char *path);
 extern void set_line_search(const char *range);
 extern bool log_icossum;
 extern const char *scan_ibase;
+extern const char *column_list;
 
 #endif
