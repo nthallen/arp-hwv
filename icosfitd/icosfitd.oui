@@ -6,13 +6,13 @@
 
 <opts> "LI:O:"
 <sort>
-  -I <filename> : Input icosfit configuration file
-  -O <filename> : Output icosfit configuration file (icosfit.RT)
-  -R <filename> : Read commands from file instead of cmd server
-  -L : Copy ICOSsum.fifo data to ICOSsum.log
-  -S <base> : Scan base directory (SSP)
-  -l <from>:<to> : Sample range for line search
-  -P <col_list> : Specify columns from ICOSsum.dat to send to telemetry
+	-I <filename> : Input icosfit configuration file
+	-O <filename> : Output icosfit configuration file (icosfit.RT)
+	-R <cmd_file> : Read commands from file instead of cmd server
+	-L : Copy ICOSsum.fifo data to ICOSsum.log
+	-S <base> : Scan base directory (SSP)
+	-l <from>:<to> : Sample range for line search
+	-P <col_list> : Specify columns from ICOSsum.dat to send to telemetry
 <unsort>
 Data sent to telemetry always includes scan number, pressure and temperature.
 The -P option specifies what additional columns should be saved and forwarded.
