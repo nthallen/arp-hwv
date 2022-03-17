@@ -199,12 +199,12 @@ void icos_pipe::close() {
   }
 }
 
-fitd::fitd(Selector *S)
+fitd::fitd()
   : 
     PTE(false, 80, "PTE.fifo", "PTE.log"),
     SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this),
     CMD(this),
-    TM("icosfitd", &icosfitd, sizeof(icosfitd)),
+    TM(0),
     ICOSf(scan_ibase),
     fitting_scannum(0),
     cur_scannum(0),
@@ -214,7 +214,8 @@ fitd::fitd(Selector *S)
     icosfit_pid(0)
 {
   if (!command_file) {
-    S.add_child(&TM);
+    TM = new TM_Selectee("icosfitd", &icosfitd, sizeof(icosfitd));
+    S.add_child(TM);
   }
   S.add_child(&SUM);
   S.add_child(&PTE);
