@@ -50,11 +50,16 @@ class icos_cmd : public Ser_Sel {
     icos_cmd(fitd *fit);
     int ProcessData(int flag);
     int protocol_input();
+    void check_queue();
   private:
     bool not_uint32(uint32_t &output_val);
     fitd *fit;
     char *PTparams;
     int PTparams_len;
+    uint32_t cur_scannum;
+    uint32_t fitting_scannum;
+    float P, T;
+    FILE *ifp;
 };
 
 class fitd {
@@ -88,9 +93,6 @@ class fitd {
     TM_Selectee *TM;
     ICOSfile ICOSf;
     uint32_t fitting_scannum;
-    uint32_t cur_scannum;
-    double cur_P;
-    double cur_T;
     icosfitd_status icosfit_status;
     int icosfit_pid;
 };

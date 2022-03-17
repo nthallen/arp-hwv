@@ -207,9 +207,6 @@ fitd::fitd()
     TM(0),
     ICOSf(scan_ibase),
     fitting_scannum(0),
-    cur_scannum(0),
-    cur_P(0),
-    cur_T(0),
     icosfit_status(IFS_Gone),
     icosfit_pid(0)
 {
@@ -219,6 +216,7 @@ fitd::fitd()
   }
   S.add_child(&SUM);
   S.add_child(&PTE);
+  CMD.check_queue();
   // Setup to handle signals
   // posix_spawn("icosfit", icosfit_file);
   S.event_loop();
@@ -228,22 +226,30 @@ fitd::~fitd() {}
 
 void fitd::scan_data(uint32_t scannum, float P, float T,
       const char *PTparams) {
-  cur_scannum = scannum;
-  cur_P = P;
-  cur_T = T;
+  fitting_scannum = scannum;
   if (icosfit_status == IFS_Gone) {
-    launch_icosfit(cur_scannum);
+    launch_icosfit(fitting_scannum);
   }
   if (icosfit_status == IFS_Ready) {
     char PTEline[256];
-    snprintf(PTEline, 256, "%u %.2lf %.1lf %s", cur_scannum,
-      cur_P, cur_T, PTparams);
+    snprintf(PTEline, 256, "%u %.2f %.1f %s", fitting_scannum,
+      P, T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
   }
 }
 
 void fitd::process_results(results *res) {
+  switch (res->State) {
+    case res_OK:
+      msg(-2, "%u: Successfully fit", res->scannum);
+      icosfitd.Status = icosfit_status = IFS_Ready;
+      Cmd.check_queue();
+    case res_synerr:
+      msg(3, "Syntax error response from icosfit");
+    case res_eof:
+      msg(3, "icosfit died");
+  }
 }
 
 /**
@@ -310,7 +316,9 @@ icos_cmd::icos_cmd(fitd *fit)
       PTparams_len(0)
 {
   if (command_file) {
-    msg(3, "command_file not implemented");
+    ifp = fopen(command_file, "r");
+    if (ifp == 0)
+      msg(3, "Unable to open command_file %s", command_file);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
     fit->add_child(this);
@@ -339,11 +347,9 @@ int icos_cmd::ProcessData(int flag) {
 
 int icos_cmd::protocol_input() {
   cp = 0;
-  uint32_t scannum;
-  float P, T;
   if (cp < nc && buf[cp] == 'S') {
     if (not_str("S:") ||
-        not_uint32(scannum) || not_str(",") ||
+        not_uint32(cur_scannum) || not_str(",") ||
         not_float(P) || not_str(",") ||
         not_float(T) || not_str("\n")) {
       if (cp < nc)
@@ -351,7 +357,11 @@ int icos_cmd::protocol_input() {
       consume(nc);
       return 0;
     }
-    fit->scan_data(scannum, P, T, PTparams);
+    if (cur_scannum != fitting_scannum &&
+        icosfitd.Status != IFS_Fitting) {
+      fit->scan_data(cur_scannum, P, T, PTparams);
+      fitting_scannum = cur_scannum;
+    }
     consume(nc);
     report_ok();
     return 0;
@@ -393,6 +403,27 @@ int icos_cmd::protocol_input() {
   report_err("Invalid command syntax");
   consume(nc);
   return 0;
+}
+
+void icos_cmd::check_queue() {
+  // Read commands from the input file a line at a time
+  // Stop once a scan has been sent to fitd
+  if (!ifp) return;
+  if (cur_scannum != fitting_scannum &&
+      icosfitd.Status != IFS_Fitting) {
+    fit->scan_data(cur_scannum, P, T, PTparams);
+    fitting_scannum = cur_scannum;
+  } else {
+    while (icosfitd.Status != IFS_Fitting) {
+      if (fgets(buf, bufsize, ifp)) {
+        protocol_input();
+      } else {
+        fclose(ifp);
+        ifp = 0;
+        break;
+      }
+    }
+  }
 }
 
 icosfitd_t icosfitd;
