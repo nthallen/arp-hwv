@@ -86,6 +86,10 @@ class fitd {
     void launch_icosfit(uint32_t scannum);
     int find_line_position(uint32_t scannum);
     void generate_icosfit_file(int linepos);
+    /**
+     * @return non-zero on success
+     */
+    int spawn_icosfit();
     Selector S;
     icos_pipe PTE;
     icos_pipe SUM;
@@ -95,6 +99,7 @@ class fitd {
     uint32_t fitting_scannum;
     icosfitd_status icosfit_status;
     int icosfit_pid;
+    struct sched_param spawn_sched_param;
 };
 
 /**

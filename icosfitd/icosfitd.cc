@@ -9,6 +9,7 @@
  */
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/spawn.h>
 #include <stdio.h>
 #include "icosfitd_int.h"
 #include "msg.h"
@@ -217,9 +218,11 @@ fitd::fitd()
   S.add_child(&SUM);
   S.add_child(&PTE);
   CMD.check_queue();
+  
+  pthread_getschedparam(pthread_self(), 0, &spawn_sched_param);
+  msg(-2, "my_priority = %d", spawn_sched_param.sched_priority);
+  --spawn_sched_param.sched_priority;
   // Setup to handle signals
-  // posix_spawn("icosfit", icosfit_file);
-  S.event_loop();
 }
 
 fitd::~fitd() {}
@@ -249,6 +252,14 @@ void fitd::process_results(results *res) {
       msg(3, "Syntax error response from icosfit");
     case res_eof:
       msg(3, "icosfit died");
+  }
+}
+
+void fitd::launch_icosfit(uint32_t scannum) {
+  int linepos = find_line_position(scannum);
+  generate_icosfit_file(linepos);
+  if (spawn_icosfit()) {
+    icosfitd.Status = icosfit_status = IFS_Ready;
   }
 }
 
@@ -302,11 +313,45 @@ void fitd::generate_icosfit_file(int linepos) {
   fclose(ofp);
 }
 
-void fitd::launch_icosfit(uint32_t scannum) {
-  int linepos = find_line_position(scannum);
-  generate_icosfit_file(linepos);
-  // spawn icosfit icosfit.RT
-  icosfitd.Status = icosfit_status = IFS_Ready;
+int fitd::spawn_icosfit() {
+  int rv = 1;
+  pid_t pid;
+  const char *argv[3];
+  posix_spawn_file_actions_t fact;
+  posix_spawnattr_t attr;
+  argv[0] = "/usr/local/bin/icosfit";
+  argv[1] = icosfit_file_out;
+  argv[2] = 0;
+  
+  if (posix_spawn_file_actions_init(&fact))
+    msg(3, "posix_spawn_file_actions_init returned err %d: %s",
+      errno, strerror(errno));
+  if (posix_spawn_file_actions_addclose(&fact,PTE.fd) ||
+      posix_spawn_file_actions_addclose(&fact,SUM.fd) ||
+      posix_spawn_file_actions_addclose(&fact,CMD.fd) ||
+      (TM && TM->fd >= 0 &&
+        posix_spawn_file_actions_addclose(&fact,CMD.fd))) {
+    msg(3, "psfa_addclose returned error %d: %s",
+      errno, strerror(errno));
+  }
+
+  if (posix_spawnattr_init(&attr) ||
+      posix_spawnattr_setschedparam(&attr, &spawn_sched_param) {
+    msg(3, "spawnattr error %d: %s", errno, strerror(errno));
+  }
+  
+  if (posix_spawn(&pid, arv[0], &fact, &attr, argv, 0) < 0) {
+    msg(2, "spawn returned error %d: %s", errno, strerror(errno));
+    rv = 0;
+  }
+
+  if (posix_spawn_file_actions_destroy(&fact))
+    msg(2, "posix_spawn_file_actions_destroy returned err %d: %s",
+      errno, strerror(errno));
+  if (posix_spawnattr_destroy(&attr))
+    msg(2, "posix_spawnattr_destroy returned err %d: %s",
+      errno, strerror(errno));
+  return rv;
 }
 
 icos_cmd::icos_cmd(fitd *fit)
@@ -319,6 +364,7 @@ icos_cmd::icos_cmd(fitd *fit)
     ifp = fopen(command_file, "r");
     if (ifp == 0)
       msg(3, "Unable to open command_file %s", command_file);
+    fp = fileno(fp);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
     fit->add_child(this);
