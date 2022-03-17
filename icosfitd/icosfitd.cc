@@ -240,11 +240,11 @@ void fitd::scan_data(uint32_t scannum, float P, float T,
 }
 
 void fitd::process_results(results *res) {
-  switch (res->State) {
+  switch (res->Status) {
     case res_OK:
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
-      Cmd.check_queue();
+      CMD.check_queue();
     case res_synerr:
       msg(3, "Syntax error response from icosfit");
     case res_eof:
@@ -415,7 +415,8 @@ void icos_cmd::check_queue() {
     fitting_scannum = cur_scannum;
   } else {
     while (icosfitd.Status != IFS_Fitting) {
-      if (fgets(buf, bufsize, ifp)) {
+      if (fgets((char*)buf, bufsize, ifp)) {
+        nc = strlen((const char*)buf);
         protocol_input();
       } else {
         fclose(ifp);
