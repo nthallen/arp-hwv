@@ -9,7 +9,7 @@
  */
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/spawn.h>
+#include <spawn.h>
 #include <stdio.h>
 #include "icosfitd_int.h"
 #include "msg.h"
@@ -336,11 +336,11 @@ int fitd::spawn_icosfit() {
   }
 
   if (posix_spawnattr_init(&attr) ||
-      posix_spawnattr_setschedparam(&attr, &spawn_sched_param) {
+      posix_spawnattr_setschedparam(&attr, &spawn_sched_param)) {
     msg(3, "spawnattr error %d: %s", errno, strerror(errno));
   }
   
-  if (posix_spawn(&pid, arv[0], &fact, &attr, argv, 0) < 0) {
+  if (posix_spawn(&pid, argv[0], &fact, &attr, (char*const*)argv, 0) < 0) {
     msg(2, "spawn returned error %d: %s", errno, strerror(errno));
     rv = 0;
   }
@@ -364,7 +364,7 @@ icos_cmd::icos_cmd(fitd *fit)
     ifp = fopen(command_file, "r");
     if (ifp == 0)
       msg(3, "Unable to open command_file %s", command_file);
-    fp = fileno(fp);
+    fd = fileno(ifp);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
     fit->add_child(this);

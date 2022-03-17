@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdint.h>
+#include <pthread.h>
 #include "icosfitd.h"
 #include "SerSelector.h"
 #include "icosfile.h"
