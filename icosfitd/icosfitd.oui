@@ -8,6 +8,7 @@
 <sort>
   -I <filename> : Input icosfit configuration file
   -O <filename> : Output icosfit configuration file (icosfit.RT)
+  -R <filename> : Read commands from file instead of cmd server
   -L : Copy ICOSsum.fifo data to ICOSsum.log
   -S <base> : Scan base directory (SSP)
   -l <from>:<to> : Sample range for line search
@@ -25,6 +26,7 @@ with no spaces.
   case 'S': scan_ibase = optarg; break;
   case 'l': set_line_search(optarg); break;
   case 'P': column_list = optarg; break;
+  case 'R': command_file = optarg; break;
 
 <package> msghdr_init
 <init>

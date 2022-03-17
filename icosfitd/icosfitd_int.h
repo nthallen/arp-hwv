@@ -45,10 +45,11 @@ class icos_pipe : public Ser_Sel {
     results *res;
 };
 
-class icos_cmd : public Cmd_Selectee {
+class icos_cmd : public Ser_Sel {
   public:
     icos_cmd(fitd *fit);
     int ProcessData(int flag);
+    int protocol_input();
   private:
     bool not_uint32(uint32_t &output_val);
     fitd *fit;
@@ -58,8 +59,10 @@ class icos_cmd : public Cmd_Selectee {
 
 class fitd {
   public:
-    fitd(Selector *S);
+    fitd();
     ~fitd();
+    inline void add_child(Selectee *P) { S.add_child(P); }
+    inline void event_loop() { S.event_loop(); }
     /**
      * @param scannum The current scan number
      * @param P Cell pressure in torr
@@ -78,11 +81,11 @@ class fitd {
     void launch_icosfit(uint32_t scannum);
     int find_line_position(uint32_t scannum);
     void generate_icosfit_file(int linepos);
-    Selector *S;
+    Selector S;
     icos_pipe PTE;
     icos_pipe SUM;
     icos_cmd CMD;
-    TM_Selectee TM;
+    TM_Selectee *TM;
     ICOSfile ICOSf;
     uint32_t fitting_scannum;
     uint32_t cur_scannum;
@@ -103,5 +106,6 @@ extern void set_line_search(const char *range);
 extern bool log_icossum;
 extern const char *scan_ibase;
 extern const char *column_list;
+extern const char *command_file;
 
 #endif

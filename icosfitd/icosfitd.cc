@@ -30,6 +30,7 @@ bool log_icossum = false;
 int line_search[2] = {400, 650};
 const char *scan_ibase = "SSP";
 const char *column_list;
+const char *command_file;
 
 void set_icosfit_file(bool is_output, const char *path) {
   if (is_output) {
@@ -200,7 +201,6 @@ void icos_pipe::close() {
 
 fitd::fitd(Selector *S)
   : 
-    S(S),
     PTE(false, 80, "PTE.fifo", "PTE.log"),
     SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this),
     CMD(this),
@@ -213,12 +213,14 @@ fitd::fitd(Selector *S)
     icosfit_status(IFS_Gone),
     icosfit_pid(0)
 {
-  S->add_child(&TM);
-  S->add_child(&CMD);
-  S->add_child(&SUM);
-  S->add_child(&PTE);
+  if (!command_file) {
+    S.add_child(&TM);
+  }
+  S.add_child(&SUM);
+  S.add_child(&PTE);
   // Setup to handle signals
   // posix_spawn("icosfit", icosfit_file);
+  S.event_loop();
 }
 
 fitd::~fitd() {}
@@ -301,11 +303,18 @@ void fitd::launch_icosfit(uint32_t scannum) {
 }
 
 icos_cmd::icos_cmd(fitd *fit)
-    : Cmd_Selectee("cmd/icosfitd", 300),
+    : Ser_Sel(),
       fit(fit),
       PTparams(0),
       PTparams_len(0)
-{}
+{
+  if (command_file) {
+    msg(3, "command_file not implemented");
+  } else {
+    init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
+    fit->add_child(this);
+  }
+}
 
 bool icos_cmd::not_uint32(uint32_t &output_val) {
   uint32_t val = 0;
@@ -324,6 +333,10 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 
 int icos_cmd::ProcessData(int flag) {
   if (fillbuf()) return 1;
+  return protocol_input();
+}
+
+int icos_cmd::protocol_input() {
   cp = 0;
   uint32_t scannum;
   float P, T;
@@ -390,10 +403,9 @@ int main(int argc, char **argv) {
   if (!icosfit_file_out)
     icosfit_file_out = "icosfit.RT";
 
-  { Selector S;
-    fitd fit(&S);
+  { fitd fit;
     nl_error(0, "Starting: v1.0");
-    S.event_loop();
+    fit.event_loop();
   }
   nl_error(0, "Terminating");
 }
