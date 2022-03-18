@@ -260,6 +260,10 @@ void icos_pipe::close() {
   }
 }
 
+Timeout *icos_pipe::GetTimeout() {
+  return &TO;
+}
+
 fitd::fitd()
   : 
     PTE(false, 80, "PTE.fifo", "PTE.log"),
@@ -389,9 +393,10 @@ int fitd::spawn_icosfit() {
   if (posix_spawn_file_actions_init(&fact))
     msg(3, "posix_spawn_file_actions_init returned err %d: %s",
       errno, strerror(errno));
-  if (posix_spawn_file_actions_addclose(&fact,PTE.fd) ||
-      posix_spawn_file_actions_addclose(&fact,SUM.fd) ||
-      posix_spawn_file_actions_addclose(&fact,CMD.fd) ||
+  // PTE is not open while launching
+  if (posix_spawn_file_actions_addclose(&fact,SUM.fd) ||
+      (CMD.fd >= 0 &&
+       posix_spawn_file_actions_addclose(&fact,CMD.fd)) ||
       (TM && TM->fd >= 0 &&
         posix_spawn_file_actions_addclose(&fact,CMD.fd))) {
     msg(3, "psfa_addclose returned error %d: %s",
@@ -430,6 +435,7 @@ icos_cmd::icos_cmd(fitd *fit)
     if (ifp == 0)
       msg(3, "Unable to open command_file %s", command_file);
     fd = fileno(ifp);
+    init(0, 0, 300);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
     fit->add_child(this);
@@ -532,6 +538,7 @@ void icos_cmd::check_queue() {
       } else {
         fclose(ifp);
         ifp = 0;
+        fd = -1;
         break;
       }
     }

@@ -47,7 +47,7 @@ class icos_pipe : public Ser_Sel {
     FILE *logfp;
     fitd *fit;
     results *res;
-    Timeout *TO;
+    Timeout TO;
 };
 
 class icos_cmd : public Ser_Sel {
