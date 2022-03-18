@@ -407,10 +407,10 @@ int fitd::spawn_icosfit() {
       errno, strerror(errno));
   // PTE is not open while launching
   if (posix_spawn_file_actions_addclose(&fact,SUM.fd) ||
+      (SUM.logfd() >= 0 &&
+       posix_spawn_file_actions_addclose(&fact,SUM.logfd())) ||
       (CMD.fd >= 0 &&
        posix_spawn_file_actions_addclose(&fact,CMD.fd)) ||
-      (CMD.logfd() >= 0 &&
-       posix_spawn_file_actions_addclose(&fact,CMD.logfd())) ||
       (PTE.logfd() >= 0 &&
        posix_spawn_file_actions_addclose(&fact,PTE.logfd())) ||
       (TM && TM->fd >= 0 &&

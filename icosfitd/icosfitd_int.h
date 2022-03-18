@@ -121,5 +121,6 @@ extern bool log_icossum;
 extern const char *scan_ibase;
 extern const char *column_list;
 extern const char *command_file;
+extern FILE *memo_fp, *file_fp;
 
 #endif
