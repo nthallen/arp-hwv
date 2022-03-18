@@ -32,9 +32,17 @@ void setup_fifo(const char *path) {
 int main(int argc, char **argv) {
   setup_fifo(PTE_FIFO_PATH);
   setup_fifo(ICOSsum_FIFO_PATH);
-  int PTEfd = open(PTE_FIFO_PATH, O_WRONLY);
+  int PTEfd = open(PTE_FIFO_PATH, O_WRONLY|O_NONBLOCK);
+  while (PTEfd < 0) {
+    // This demonstrates that we cannot open a FIFO
+    // for write until someone has opened it for read.
+    fprintf(stderr, "Error %d opening fifo %s: %s\n",
+      errno, PTE_FIFO_PATH, strerror(errno));
+    sleep(3);
+    PTEfd = open(PTE_FIFO_PATH, O_WRONLY|O_NONBLOCK);
+  }
   printf("Opened PTEfd\n");
-  int SUMfd = open(ICOSsum_FIFO_PATH, O_RDONLY);
+  int SUMfd = open(ICOSsum_FIFO_PATH, O_RDONLY|O_NONBLOCK);
   printf("Opened SUMfd\n");
   FILE *LOGfp = fopen("ICOSsum.log", "a");
   if (PTEfd < 0 || SUMfd < 0 || LOGfp == 0) {

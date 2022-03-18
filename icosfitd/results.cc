@@ -14,7 +14,9 @@ results::results(const char *param_list) {
       ++n_Vals;
       ++s;
       while (isdigit(*s)) ++s;
-      if (*s != ',' && *s != '\0') {
+      if (*s == ',') {
+        ++s;
+      } else if (*s != '\0') {
         msg(3, "Invalid configuration string: '%s'", param_list);
       }
     } else {
