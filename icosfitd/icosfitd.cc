@@ -57,8 +57,8 @@ void set_line_search(const char *range) {
 icos_pipe::icos_pipe(bool input, int bufsize,
         const char *path, const char *logfile, fitd *fit)
     : Ser_Sel(),
-      is_input(input),
       is_ready(false),
+      is_input(input),
       path(path),
       logfp(0),
       fit(fit)
@@ -106,13 +106,12 @@ int icos_pipe::ProcessData(int flag) {
     if (!is_input) {
       msg(MSG, "Pipe %s ready for output", path);
       is_ready = true;
-      if (fit) fit->PTE_is_ready();
+      if (fit) fit->PTE_ready();
     }
     flags &= ~Selector::Sel_Write;
   }
   if (flag & Selector::Sel_Read) {
     if (is_input) {
-      unsigned int onc = nc;
       cp = 0;
       ++n_fills;
       int i = read( fd, &buf[nc], bufsize - 1 - nc );
@@ -306,7 +305,7 @@ int fitd::scan_data(uint32_t scannum, float P, float T,
       P, T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
-    return 1
+    return 1;
   }
   return 0;
 }
