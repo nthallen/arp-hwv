@@ -365,7 +365,9 @@ icos_cmd::icos_cmd(fitd *fit)
     : Ser_Sel(),
       fit(fit),
       PTparams(0),
-      PTparams_len(0)
+      PTparams_len(0),
+      cur_scannum(0),
+      fitting_scannum(0)
 {
   if (command_file) {
     ifp = fopen(command_file, "r");
