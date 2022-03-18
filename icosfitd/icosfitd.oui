@@ -4,7 +4,7 @@
 <include> <stdlib.h>
 <include> "icosfitd_int.h"
 
-<opts> "LI:O:"
+<opts> "LI:O:R:S:l:P:"
 <sort>
 	-I <filename> : Input icosfit configuration file
 	-O <filename> : Output icosfit configuration file (icosfit.RT)
