@@ -58,6 +58,7 @@ icos_pipe::icos_pipe(bool input, int bufsize,
         const char *path, const char *logfile, fitd *fit)
     : Ser_Sel(),
       is_input(input),
+      is_ready(false),
       path(path),
       logfp(0),
       fit(fit)
@@ -78,7 +79,7 @@ icos_pipe::icos_pipe(bool input, int bufsize,
   }
   if (is_input)
     res = new results(column_list);
-  setup_pipe();
+  flags = 0;
 }
 
 icos_pipe::~icos_pipe() {
@@ -86,19 +87,66 @@ icos_pipe::~icos_pipe() {
 }
 
 int icos_pipe::ProcessData(int flag) {
+  if (flag & Selector::Sel_Timeout) {
+    TO.Clear();
+    flags &= Selector::Sel_Timeout;
+    if (is_ready) {
+      msg(MSG_ERROR, "Unexpected timeout when ready");
+      flags &= ~Selector::Sel_Timeout;
+    } else if (is_input) {
+      nl_assert(fd >= 0 && !is_ready);
+      flag |= Selector::Sel_Read;
+    } else {
+      nl_assert(fd < 0 && !is_ready);
+      open_pipe();
+      return 0;
+    }
+  }
   if (flag & Selector::Sel_Write) {
-    msg(MSG, "Pipe %s ready for output", path);
+    if (!is_input) {
+      msg(MSG, "Pipe %s ready for output", path);
+      is_ready = true;
+    }
     flags &= ~Selector::Sel_Write;
   }
   if (flag & Selector::Sel_Read) {
     if (is_input) {
       unsigned int onc = nc;
       cp = 0;
-      fillbuf();
-      if (onc == nc) {
-        close();
-        msg(MSG, "%s closed on read", path);
+      ++n_fills;
+      int i = read( fd, &buf[nc], bufsize - 1 - nc );
+      if (i < 0) {
+        if (errno == EAGAIN) {
+          nl_assert(!is_ready);
+          TO.Clear();
+          is_ready = true;
+          flags = Selector::Sel_Read;
+          return 0;
+        } else if (errno == EINTR) {
+          ++n_eintr;
+        } else {
+          msg(MSG_ERROR,
+            "Error %d on read from serial port", errno);
+          return 1;
+        }
+        return 0;
+      }
+      if (i == 0) {
+        if (is_ready) {
+          msg(MSG_ERROR,
+            "Zero bytes from icosfit: probably terminated");
+          is_ready = false;
+        }
+        TO.Set(1,0);
+        flags = Selector::Sel_Timeout;
       } else {
+        if (!is_ready) {
+          TO.Clear();
+          is_ready = true;
+          flags = Selector::Sel_Read;
+        }
+        nc += i;
+        buf[nc] = '\0';
         return protocol_input();
       }
     } else {
@@ -190,8 +238,14 @@ void icos_pipe::setup_pipe() {
 void icos_pipe::open_pipe() {
   fd = open(path, (is_input?O_RDONLY:O_WRONLY)|O_NONBLOCK);
   if (fd < 0) {
-    msg(MSG_ERROR, "%s: open error %d: %s",
-      path, errno, strerror(errno));
+    if (is_input) {
+      msg(MSG_FATAL, "%s: error %d opening for read: %s",
+        path, errno, strerror(errno));
+    } else {
+      TO.Set(1,0);
+      flags = Selector::Sel_Timeout;
+    }
+    return;
   }
   flags = 
     Selector::Sel_Read |
@@ -264,6 +318,8 @@ void fitd::process_results(results *res) {
 void fitd::launch_icosfit(uint32_t scannum) {
   int linepos = find_line_position(scannum);
   generate_icosfit_file(linepos);
+  SUM.setup_pipe();
+  PTE.setup_pipe();
   if (spawn_icosfit()) {
     icosfitd.Status = icosfit_status = IFS_Ready;
   }

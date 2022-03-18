@@ -37,14 +37,17 @@ class icos_pipe : public Ser_Sel {
     void setup_pipe();
     void open_pipe();
     void close();
+    Timeout *GetTimeout();
   protected:
     int protocol_input();
     void cleanup();
     bool is_input;
+    bool is_ready;
     const char *path;
     FILE *logfp;
     fitd *fit;
     results *res;
+    Timeout *TO;
 };
 
 class icos_cmd : public Ser_Sel {
