@@ -27,7 +27,6 @@ class results {
 
 class icos_pipe : public Ser_Sel {
   public:
-    icos_pipe(int foo);
     icos_pipe(bool input, int bufsize,
       const char *path, const char *logfile,
       fitd *fit = 0);
@@ -38,16 +37,16 @@ class icos_pipe : public Ser_Sel {
     void open_pipe();
     void close();
     Timeout *GetTimeout();
+    bool is_ready;
   protected:
     int protocol_input();
     void cleanup();
     bool is_input;
-    bool is_ready;
     const char *path;
     FILE *logfp;
     fitd *fit;
     results *res;
-    Timeout TO;
+    Timeout *TO;
 };
 
 class icos_cmd : public Ser_Sel {
@@ -77,10 +76,12 @@ class fitd {
      * @param scannum The current scan number
      * @param P Cell pressure in torr
      * @param T Cell temperature in Kelvin
+     * @return non-zero if the scan was sent to icosfit
      */
-    void scan_data(uint32_t scannum, float P, float T,
+    int scan_data(uint32_t scannum, float P, float T,
       const char *PTparams);
     void process_results(results *res);
+    void PTE_ready();
   protected:
   private:
     /**

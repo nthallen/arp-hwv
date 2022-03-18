@@ -106,6 +106,7 @@ int icos_pipe::ProcessData(int flag) {
     if (!is_input) {
       msg(MSG, "Pipe %s ready for output", path);
       is_ready = true;
+      if (fit) fit->PTE_is_ready();
     }
     flags &= ~Selector::Sel_Write;
   }
@@ -253,10 +254,11 @@ void icos_pipe::open_pipe() {
 }
 
 void icos_pipe::close() {
-  if (fd < 0) {
+  if (fd >= 0) {
     ::close(fd);
     fd = -1;
     flags = 0;
+    is_ready = false;
   }
 }
 
@@ -266,7 +268,7 @@ Timeout *icos_pipe::GetTimeout() {
 
 fitd::fitd()
   : 
-    PTE(false, 80, "PTE.fifo", "PTE.log"),
+    PTE(false, 80, "PTE.fifo", "PTE.log", this),
     SUM(true, 1024, "ICOSsum.fifo", "ICOSsum.log", this),
     CMD(this),
     TM(0),
@@ -291,19 +293,22 @@ fitd::fitd()
 
 fitd::~fitd() {}
 
-void fitd::scan_data(uint32_t scannum, float P, float T,
+int fitd::scan_data(uint32_t scannum, float P, float T,
       const char *PTparams) {
-  fitting_scannum = scannum;
   if (icosfit_status == IFS_Gone) {
-    launch_icosfit(fitting_scannum);
+    launch_icosfit(scannum);
   }
-  if (icosfit_status == IFS_Ready) {
+  if (icosfit_status == IFS_Ready && PTE.is_ready) {
+    fitting_scannum = scannum;
     char PTEline[256];
+    // assumes there is a newline in PTparams
     snprintf(PTEline, 256, "%u %.2f %.1f %s", fitting_scannum,
       P, T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
+    return 1
   }
+  return 0;
 }
 
 void fitd::process_results(results *res) {
@@ -317,6 +322,10 @@ void fitd::process_results(results *res) {
     case res_eof:
       msg(3, "icosfit died");
   }
+}
+
+void fitd::PTE_ready() {
+  CMD.check_queue();
 }
 
 void fitd::launch_icosfit(uint32_t scannum) {
@@ -475,8 +484,7 @@ int icos_cmd::protocol_input() {
       return 0;
     }
     if (cur_scannum != fitting_scannum &&
-        icosfitd.Status != IFS_Fitting) {
-      fit->scan_data(cur_scannum, P, T, PTparams);
+        fit->scan_data(cur_scannum, P, T, PTparams)) {
       fitting_scannum = cur_scannum;
     }
     consume(nc);
@@ -526,10 +534,10 @@ void icos_cmd::check_queue() {
   // Read commands from the input file a line at a time
   // Stop once a scan has been sent to fitd
   if (!ifp) return;
-  if (cur_scannum != fitting_scannum &&
-      icosfitd.Status != IFS_Fitting) {
-    fit->scan_data(cur_scannum, P, T, PTparams);
-    fitting_scannum = cur_scannum;
+  if (cur_scannum != fitting_scannum) {
+    if (fit->scan_data(cur_scannum, P, T, PTparams)) {
+      fitting_scannum = cur_scannum;
+    }
   } else {
     while (icosfitd.Status != IFS_Fitting) {
       if (fgets((char*)buf, bufsize, ifp)) {
