@@ -265,6 +265,10 @@ Timeout *icos_pipe::GetTimeout() {
   return &TO;
 }
 
+int icos_pipe::logfd() {
+  return logfp ? fileno(logfp) : -1;
+}
+
 fitd::fitd()
   : 
     PTE(false, 80, "PTE.fifo", "PTE.log", this),
@@ -301,7 +305,7 @@ int fitd::scan_data(uint32_t scannum, float P, float T,
     fitting_scannum = scannum;
     char PTEline[256];
     // assumes there is a newline in PTparams
-    snprintf(PTEline, 256, "%u %.2f %.1f %s", fitting_scannum,
+    snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
       P, T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
@@ -405,8 +409,16 @@ int fitd::spawn_icosfit() {
   if (posix_spawn_file_actions_addclose(&fact,SUM.fd) ||
       (CMD.fd >= 0 &&
        posix_spawn_file_actions_addclose(&fact,CMD.fd)) ||
+      (CMD.logfd() >= 0 &&
+       posix_spawn_file_actions_addclose(&fact,CMD.logfd())) ||
+      (PTE.logfd() >= 0 &&
+       posix_spawn_file_actions_addclose(&fact,PTE.logfd())) ||
       (TM && TM->fd >= 0 &&
-        posix_spawn_file_actions_addclose(&fact,CMD.fd))) {
+       posix_spawn_file_actions_addclose(&fact,CMD.fd)) ||
+      (memo_fp &&
+       posix_spawn_file_actions_addclose(&fact,fileno(memo_fp))) ||
+      (file_fp &&
+       posix_spawn_file_actions_addclose(&fact,fileno(file_fp)))) {
     msg(3, "psfa_addclose returned error %d: %s",
       errno, strerror(errno));
   }

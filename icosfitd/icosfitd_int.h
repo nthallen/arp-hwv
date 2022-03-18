@@ -37,6 +37,7 @@ class icos_pipe : public Ser_Sel {
     void open_pipe();
     void close();
     Timeout *GetTimeout();
+    int logfd();
     bool is_ready;
   protected:
     int protocol_input();
