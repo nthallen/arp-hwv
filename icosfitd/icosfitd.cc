@@ -182,6 +182,12 @@ void icos_pipe::setup_pipe() {
   }
   // could use init() here, but it can only be called once
   // without creating a memory leak on buf
+  if (is_input) {
+    open_pipe();
+  }
+}
+
+void icos_pipe::open_pipe() {
   fd = open(path, (is_input?O_RDONLY:O_WRONLY)|O_NONBLOCK);
   if (fd < 0) {
     msg(MSG_ERROR, "%s: open error %d: %s",
@@ -216,7 +222,7 @@ fitd::fitd()
     S.add_child(TM);
   }
   S.add_child(&SUM);
-  S.add_child(&PTE);
+  // S.add_child(&PTE);
   CMD.check_queue();
   
   pthread_getschedparam(pthread_self(), 0, &spawn_sched_param);
@@ -261,6 +267,7 @@ void fitd::launch_icosfit(uint32_t scannum) {
   if (spawn_icosfit()) {
     icosfitd.Status = icosfit_status = IFS_Ready;
   }
+  PTE.open_pipe();
 }
 
 /**

@@ -34,11 +34,12 @@ class icos_pipe : public Ser_Sel {
     ~icos_pipe();
     int ProcessData(int flag);
     void output(const char *line);
+    void setup_pipe();
+    void open_pipe();
+    void close();
   protected:
     int protocol_input();
     void cleanup();
-    void setup_pipe();
-    void close();
     bool is_input;
     const char *path;
     FILE *logfp;
