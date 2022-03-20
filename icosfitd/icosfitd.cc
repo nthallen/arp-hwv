@@ -95,9 +95,11 @@ int icos_pipe::ProcessData(int flag) {
       flags &= ~Selector::Sel_Timeout;
     } else if (is_input) {
       nl_assert(fd >= 0 && !is_ready);
+      msg(-2, "input pipe: timeout to check if ready");
       flag |= Selector::Sel_Read;
     } else {
       nl_assert(fd < 0 && !is_ready);
+      msg(-2, "output pipe: timeout to check if ready");
       open_pipe();
       return 0;
     }
@@ -117,6 +119,7 @@ int icos_pipe::ProcessData(int flag) {
       int i = read( fd, &buf[nc], bufsize - 1 - nc );
       if (i < 0) {
         if (errno == EAGAIN) {
+          msg(-2, "input pipe: read now returns EAGAIN, dropping TO");
           nl_assert(!is_ready);
           TO.Clear();
           is_ready = true;
@@ -137,10 +140,12 @@ int icos_pipe::ProcessData(int flag) {
             "Zero bytes from icosfit: probably terminated");
           is_ready = false;
         }
+        msg(-2, "input pipe: read zero bites, setting TO");
         TO.Set(1,0);
         flags = Selector::Sel_Timeout;
       } else {
         if (!is_ready) {
+          msg(-2, "input pipe: receiving data");
           TO.Clear();
           is_ready = true;
           flags = Selector::Sel_Read;
@@ -159,7 +164,7 @@ int icos_pipe::ProcessData(int flag) {
 
 int icos_pipe::protocol_input() {
   char *nl = strchr((char *)buf, '\n');
-  if (!nl) {
+  if (nl) {
     unsigned int ncl = nl+1-(char*)buf;
     nl_assert(ncl <= nc);
     unsigned char savec = buf[ncl];
@@ -207,6 +212,7 @@ void icos_pipe::output(const char *line) {
   int nbline = strlen(line);
   if (logfp) {
     fprintf(logfp, "%s", line);
+    fflush(logfp);
   }
   int rc = write(fd, line, nbline);
   if (rc < 0) {
@@ -232,6 +238,7 @@ void icos_pipe::setup_pipe() {
   // without creating a memory leak on buf
   if (is_input) {
     open_pipe();
+    if (fit) fit->add_child(this);
   }
 }
 
@@ -242,10 +249,16 @@ void icos_pipe::open_pipe() {
       msg(MSG_FATAL, "%s: error %d opening for read: %s",
         path, errno, strerror(errno));
     } else {
+      msg(-2, "output pipe: unable to open, setting TO");
       TO.Set(1,0);
       flags = Selector::Sel_Timeout;
+      if (fit) fit->add_child(this);
     }
     return;
+  } else if (!is_input) {
+    msg(-2, "output pipe: open and ready");
+    is_ready = true;
+    if (fit) fit->check_queue();
   }
   flags = 
     Selector::Sel_Read |
@@ -284,7 +297,7 @@ fitd::fitd()
     TM = new TM_Selectee("icosfitd", &icosfitd, sizeof(icosfitd));
     S.add_child(TM);
   }
-  S.add_child(&SUM);
+  // S.add_child(&SUM);
   // S.add_child(&PTE);
   CMD.check_queue();
   
@@ -352,7 +365,7 @@ int fitd::find_line_position(uint32_t scannum) {
   int start = line_search[0]-MLBASE;
   int end = line_search[1]-MLBASE;
   if (ICOSf.sdata->n_data < end) end = ICOSf.sdata->n_data;
-  if (start <= end || start < 0) return 0;
+  if (start >= end || start < 0) return 0;
   ICOS_Float detrend_offset = ICOSf.sdata->data[start];
   ICOS_Float detrend_slope =
     (ICOSf.sdata->data[end]-detrend_offset) / (end-start);
@@ -494,6 +507,7 @@ int icos_cmd::protocol_input() {
       consume(nc);
       return 0;
     }
+    msg(-2, "icos_cmd: S %u %u\n", cur_scannum, fitting_scannum);
     if (cur_scannum != fitting_scannum &&
         fit->scan_data(cur_scannum, P, T, PTparams)) {
       fitting_scannum = cur_scannum;
@@ -521,6 +535,7 @@ int icos_cmd::protocol_input() {
         }
         strncpy(PTparams, (char*)&buf[2], PT_len);
         PTparams[PT_len] = '\0';
+        msg(-2, "icos_cmd: PT params: %s\n",PTparams);
         report_ok();
         consume(++cp);
         return 0;
@@ -546,6 +561,7 @@ void icos_cmd::check_queue() {
   // Stop once a scan has been sent to fitd
   if (!ifp) return;
   if (cur_scannum != fitting_scannum) {
+    msg(-2, "check_queue: resending scan %u", cur_scannum);
     if (fit->scan_data(cur_scannum, P, T, PTparams)) {
       fitting_scannum = cur_scannum;
     }
@@ -554,6 +570,8 @@ void icos_cmd::check_queue() {
       if (fgets((char*)buf, bufsize, ifp)) {
         nc = strlen((const char*)buf);
         protocol_input();
+        if (buf[0] == 'S')
+          return;
       } else {
         fclose(ifp);
         ifp = 0;

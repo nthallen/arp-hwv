@@ -73,6 +73,7 @@ class fitd {
     ~fitd();
     inline void add_child(Selectee *P) { S.add_child(P); }
     inline void event_loop() { S.event_loop(); }
+    inline void check_queue() { CMD.check_queue(); }
     /**
      * @param scannum The current scan number
      * @param P Cell pressure in torr
