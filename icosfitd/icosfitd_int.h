@@ -42,6 +42,7 @@ class icos_pipe : public Ser_Sel {
   protected:
     int protocol_input();
     void cleanup();
+    int not_whitespace();
     bool is_input;
     const char *path;
     FILE *logfp;

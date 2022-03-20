@@ -34,5 +34,6 @@ results::results(const char *param_list) {
     if (idx > 0 && ValIdxs[idx] <= ValIdxs[idx-1])
       msg(3, "Column indexes must be increasing");
     if (*s) ++s;
+    ++idx;
   }
 }

@@ -171,20 +171,26 @@ int icos_pipe::protocol_input() {
     buf[ncl] = '\0';
     if (logfp) {
       fprintf(logfp, "%s", buf);
+      fflush(logfp);
     }
     buf[ncl] = savec;
     res->Status = res_OK;
     int scannum;
     float P, T, val;
     if (not_int(scannum) ||
+        not_whitespace() ||
         not_float(P) ||
+        not_whitespace() ||
         not_float(T)) {
       report_err("Format error in ICOSsum.dat");
       res->Status = res_synerr;
     } else {
+      res->scannum = scannum;
+      res->P = P;
+      res->T = T;
       int res_num = 0;
       for (int cur_col = 4; cp < ncl && buf[cp] != '\n'; ++cur_col) {
-        if (not_float(val)) {
+        if (not_whitespace() || not_float(val)) {
           report_err("Expected float");
           res->Status = res_synerr;
           break;
@@ -280,6 +286,14 @@ Timeout *icos_pipe::GetTimeout() {
 
 int icos_pipe::logfd() {
   return logfp ? fileno(logfp) : -1;
+}
+
+int icos_pipe::not_whitespace() {
+  if (cp >= nc || !isspace(buf[cp]))
+    return 1;
+  while (cp < nc && isspace(buf[cp])) {
+    ++cp;
+  }
 }
 
 fitd::fitd()
@@ -467,8 +481,8 @@ icos_cmd::icos_cmd(fitd *fit)
     ifp = fopen(command_file, "r");
     if (ifp == 0)
       msg(3, "Unable to open command_file %s", command_file);
-    fd = fileno(ifp);
     init(0, 0, 300);
+    fd = fileno(ifp);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
     fit->add_child(this);
