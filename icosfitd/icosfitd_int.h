@@ -34,7 +34,7 @@ class icos_pipe : public Ser_Sel {
     int ProcessData(int flag);
     void output(const char *line);
     void setup_pipe();
-    void open_pipe();
+    int open_pipe();
     void close();
     Timeout *GetTimeout();
     int logfd();
@@ -56,7 +56,7 @@ class icos_cmd : public Ser_Sel {
     icos_cmd(fitd *fit);
     int ProcessData(int flag);
     int protocol_input();
-    void check_queue();
+    int check_queue();
   private:
     bool not_uint32(uint32_t &output_val);
     fitd *fit;
@@ -74,17 +74,17 @@ class fitd {
     ~fitd();
     inline void add_child(Selectee *P) { S.add_child(P); }
     inline void event_loop() { S.event_loop(); }
-    inline void check_queue() { CMD.check_queue(); }
+    inline int check_queue() { return CMD.check_queue(); }
     /**
      * @param scannum The current scan number
      * @param P Cell pressure in torr
      * @param T Cell temperature in Kelvin
-     * @return non-zero if the scan was sent to icosfit
+     * @return non-zero to exit the event_loop
      */
     int scan_data(uint32_t scannum, float P, float T,
       const char *PTparams);
-    void process_results(results *res);
-    void PTE_ready();
+    int process_results(results *res);
+    int PTE_ready();
   protected:
   private:
     /**
@@ -92,7 +92,7 @@ class fitd {
      * file as its only argument. Redirects stdin
      * and stderr to log files.
      */
-    void launch_icosfit(uint32_t scannum);
+    int launch_icosfit(uint32_t scannum);
     int find_line_position(uint32_t scannum);
     void generate_icosfit_file(int linepos);
     /**

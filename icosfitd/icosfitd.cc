@@ -100,15 +100,15 @@ int icos_pipe::ProcessData(int flag) {
     } else {
       nl_assert(fd < 0 && !is_ready);
       msg(-2, "output pipe: timeout to check if ready");
-      open_pipe();
-      return 0;
+      return open_pipe();
     }
   }
   if (flag & Selector::Sel_Write) {
     if (!is_input) {
       msg(MSG, "Pipe %s ready for output", path);
       is_ready = true;
-      if (fit) fit->PTE_ready();
+      if (fit && fit->PTE_ready())
+        return 1;
     }
     flags &= ~Selector::Sel_Write;
   }
@@ -205,9 +205,9 @@ int icos_pipe::protocol_input() {
         res->Status = res_synerr;
       }
     }
-    if (fit)
-      fit->process_results(res);
     consume(nc);
+    if (fit && fit->process_results(res))
+      return 1;
     if (res->Status == res_OK)
       report_ok();
   }
@@ -234,7 +234,7 @@ void icos_pipe::cleanup() {
   unlink(path);
 }
 
-void icos_pipe::setup_pipe() {
+int icos_pipe::setup_pipe() {
   cleanup();
   if (mkfifo(path, 0664) != 0) {
     msg(MSG_ERROR, "%s: mkfifo error %d: %s",
@@ -243,12 +243,13 @@ void icos_pipe::setup_pipe() {
   // could use init() here, but it can only be called once
   // without creating a memory leak on buf
   if (is_input) {
-    open_pipe();
+    if (open_pipe()) return 1;
     if (fit) fit->add_child(this);
   }
+  return 0;
 }
 
-void icos_pipe::open_pipe() {
+int icos_pipe::open_pipe() {
   fd = open(path, (is_input?O_RDONLY:O_WRONLY)|O_NONBLOCK);
   if (fd < 0) {
     if (is_input) {
@@ -260,15 +261,17 @@ void icos_pipe::open_pipe() {
       flags = Selector::Sel_Timeout;
       if (fit) fit->add_child(this);
     }
-    return;
+    return 0;
   } else if (!is_input) {
     msg(-2, "output pipe: open and ready");
     is_ready = true;
-    if (fit) fit->check_queue();
+    if (fit && fit->check_queue())
+      return 1;
   }
   flags = 
     Selector::Sel_Read |
     Selector::Sel_Write;
+  return 0;
 }
 
 void icos_pipe::close() {
@@ -311,24 +314,23 @@ fitd::fitd()
     TM = new TM_Selectee("icosfitd", &icosfitd, sizeof(icosfitd));
     S.add_child(TM);
   }
-  // S.add_child(&SUM);
-  // S.add_child(&PTE);
-  CMD.check_queue();
   
   pthread_getschedparam(pthread_self(), 0, &spawn_sched_param);
   msg(-2, "my_priority = %d", spawn_sched_param.sched_priority);
   --spawn_sched_param.sched_priority;
-  // Setup to handle signals
+
+  // CMD.check_queue();
 }
 
 fitd::~fitd() {}
 
 int fitd::scan_data(uint32_t scannum, float P, float T,
       const char *PTparams) {
-  if (icosfit_status == IFS_Gone) {
-    launch_icosfit(scannum);
+  if (icosfitd.Status == IFS_Gone &&
+      launch_icosfit(scannum)) {
+    return 1;
   }
-  if (icosfit_status == IFS_Ready && PTE.is_ready) {
+  if (icosfitd.Status == IFS_Ready && PTE.is_ready) {
     fitting_scannum = scannum;
     char PTEline[256];
     // assumes there is a newline in PTparams
@@ -336,17 +338,17 @@ int fitd::scan_data(uint32_t scannum, float P, float T,
       P, T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
-    return 1;
+    return 0;
   }
   return 0;
 }
 
-void fitd::process_results(results *res) {
+int fitd::process_results(results *res) {
   switch (res->Status) {
     case res_OK:
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
-      CMD.check_queue();
+      return CMD.check_queue();
       break;
     case res_synerr:
       msg(3, "Syntax error response from icosfit");
@@ -355,21 +357,24 @@ void fitd::process_results(results *res) {
       msg(3, "icosfit died");
       break;
   }
+  return 0;
 }
 
-void fitd::PTE_ready() {
+int fitd::PTE_ready() {
   CMD.check_queue();
 }
 
-void fitd::launch_icosfit(uint32_t scannum) {
+int fitd::launch_icosfit(uint32_t scannum) {
   int linepos = find_line_position(scannum);
   generate_icosfit_file(linepos);
-  SUM.setup_pipe();
-  PTE.setup_pipe();
+  if (SUM.setup_pipe() ||
+      PTE.setup_pipe()) {
+    return 1;
+  }
   if (spawn_icosfit()) {
     icosfitd.Status = icosfit_status = IFS_Ready;
   }
-  PTE.open_pipe();
+  return PTE.open_pipe();
 }
 
 /**
@@ -515,6 +520,7 @@ int icos_cmd::ProcessData(int flag) {
 int icos_cmd::protocol_input() {
   cp = 0;
   if (cp < nc && buf[cp] == 'S') {
+    int rv = 0;
     if (not_str("S:") ||
         not_uint32(cur_scannum) || not_str(",") ||
         not_float(P) || not_str(",") ||
@@ -526,12 +532,16 @@ int icos_cmd::protocol_input() {
     }
     msg(-2, "icos_cmd: S %u %u\n", cur_scannum, fitting_scannum);
     if (cur_scannum != fitting_scannum &&
-        fit->scan_data(cur_scannum, P, T, PTparams)) {
-      fitting_scannum = cur_scannum;
+        icosfitd.Status != IFS_Fitting)
+      if (fit->scan_data(cur_scannum, P, T, PTparams)) {
+        rv = 1;
+      } else if (icosfitd.Status == IFS_Fitting) {
+        fitting_scannum = cur_scannum;
+      }
     }
     consume(nc);
     report_ok();
-    return 0;
+    return rv;
   }
   if (cp < nc && buf[cp] == 'P') {
     if (not_str("P:")) {
@@ -573,27 +583,32 @@ int icos_cmd::protocol_input() {
   return 0;
 }
 
-void icos_cmd::check_queue() {
+int icos_cmd::check_queue() {
   // Read commands from the input file a line at a time
   // Stop once a scan has been sent to fitd
-  if (!ifp) return;
-  if (cur_scannum != fitting_scannum) {
+  int rv = 0;
+  int rc = 0;
+  if (!ifp) return rc;
+  if (cur_scannum != fitting_scannum &&
+      icosfitd.Status != IFS_Fitting)
     msg(-2, "check_queue: resending scan %u", cur_scannum);
     if (fit->scan_data(cur_scannum, P, T, PTparams)) {
+      rv = 1;
+    } else if (icosfitd.Status == IFS_Fitting) {
       fitting_scannum = cur_scannum;
     }
   } else {
     while (icosfitd.Status != IFS_Fitting) {
       if (fgets((char*)buf, bufsize, ifp)) {
         nc = strlen((const char*)buf);
-        protocol_input();
-        if (buf[0] == 'S')
-          return;
+        rc = protocol_input();
+        if (rc || buf[0] == 'S')
+          return rc;
       } else {
         fclose(ifp);
         ifp = 0;
         fd = -1;
-        break;
+        return 1;
       }
     }
   }
@@ -610,7 +625,8 @@ int main(int argc, char **argv) {
 
   { fitd fit;
     nl_error(0, "Starting: v1.0");
-    fit.event_loop();
+    if (!fit.check_queue())
+      fit.event_loop();
   }
   nl_error(0, "Terminating");
 }
