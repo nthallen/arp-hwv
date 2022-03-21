@@ -347,10 +347,13 @@ void fitd::process_results(results *res) {
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
       CMD.check_queue();
+      break;
     case res_synerr:
       msg(3, "Syntax error response from icosfit");
+      break;
     case res_eof:
       msg(3, "icosfit died");
+      break;
   }
 }
 
