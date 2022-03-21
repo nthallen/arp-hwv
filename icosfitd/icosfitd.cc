@@ -59,6 +59,7 @@ icos_pipe::icos_pipe(bool input, int bufsize,
     : Ser_Sel(),
       is_ready(false),
       is_input(input),
+      in_the_loop(false),
       path(path),
       logfp(0),
       fit(fit)
@@ -251,7 +252,10 @@ int icos_pipe::setup_pipe() {
   // without creating a memory leak on buf
   if (is_input) {
     if (open_pipe()) return 1;
-    if (fit) fit->add_child(this);
+    if (fit && !in_the_loop) {
+      fit->add_child(this);
+      in_the_loop = true;
+    }
   }
   return 0;
 }
@@ -266,7 +270,10 @@ int icos_pipe::open_pipe() {
       msg(-2, "output pipe: unable to open, setting TO");
       TO.Set(1,0);
       flags = Selector::Sel_Timeout;
-      if (fit) fit->add_child(this);
+      if (fit && !in_the_loop) {
+        fit->add_child(this);
+        in_the_loop = true;
+      }
     }
     return 0;
   } else if (!is_input) {
@@ -326,8 +333,6 @@ fitd::fitd()
   pthread_getschedparam(pthread_self(), 0, &spawn_sched_param);
   msg(-2, "my_priority = %d", spawn_sched_param.sched_priority);
   --spawn_sched_param.sched_priority;
-
-  // CMD.check_queue();
 }
 
 fitd::~fitd() {}
@@ -357,7 +362,6 @@ int fitd::process_results(results *res) {
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
       return CMD.check_queue();
-      break;
     case res_synerr:
       msg(3, "Syntax error response from icosfit");
       break;
@@ -372,11 +376,12 @@ int fitd::PTE_ready() {
   return CMD.check_queue();
 }
 
-void fitd::recover() {
+int fitd::recover() {
   msg(-2, "fitd::recover()");
   PTE.cleanup();
   SUM.cleanup();
   icosfitd.Status = icosfit_status = IFS_Gone;
+  return CMD.check_queue();
 }
 
 int fitd::launch_icosfit(uint32_t scannum) {
@@ -508,9 +513,9 @@ icos_cmd::icos_cmd(fitd *fit)
     fd = fileno(ifp);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
-    fit->add_child(this);
   }
   flags |= Selector::gflag(1);
+  fit->add_child(this);
 }
 
 bool icos_cmd::not_uint32(uint32_t &output_val) {
@@ -531,7 +536,8 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 int icos_cmd::ProcessData(int flag) {
   if (flag & Selector::gflag(1)) {
     msg(-2, "icos_cmd: gflag(1)");
-    fit->recover();
+    if (fit->recover())
+      return 1;
   }
   if (flag & Selector::Sel_Read) {
     if (fillbuf()) return 1;

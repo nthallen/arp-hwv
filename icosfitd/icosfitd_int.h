@@ -44,6 +44,7 @@ class icos_pipe : public Ser_Sel {
     void close();
     int not_whitespace();
     bool is_input;
+    bool in_the_loop;
     const char *path;
     FILE *logfp;
     fitd *fit;
@@ -86,7 +87,7 @@ class fitd {
       const char *PTparams);
     int process_results(results *res);
     int PTE_ready();
-    void recover();
+    int recover();
   protected:
   private:
     /**
