@@ -33,15 +33,15 @@ class icos_pipe : public Ser_Sel {
     ~icos_pipe();
     int ProcessData(int flag);
     void output(const char *line);
-    void setup_pipe();
+    int setup_pipe();
     int open_pipe();
-    void close();
     Timeout *GetTimeout();
     int logfd();
+    void cleanup();
     bool is_ready;
   protected:
     int protocol_input();
-    void cleanup();
+    void close();
     int not_whitespace();
     bool is_input;
     const char *path;
@@ -75,6 +75,7 @@ class fitd {
     inline void add_child(Selectee *P) { S.add_child(P); }
     inline void event_loop() { S.event_loop(); }
     inline int check_queue() { return CMD.check_queue(); }
+    inline void kill_icosfit() { PTE.output("GACK!\n"); }
     /**
      * @param scannum The current scan number
      * @param P Cell pressure in torr
@@ -85,6 +86,7 @@ class fitd {
       const char *PTparams);
     int process_results(results *res);
     int PTE_ready();
+    void recover();
   protected:
   private:
     /**

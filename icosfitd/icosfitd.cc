@@ -139,6 +139,7 @@ int icos_pipe::ProcessData(int flag) {
           msg(MSG_ERROR,
             "Zero bytes from icosfit: probably terminated");
           is_ready = false;
+          Stor->set_gflag(1);
         }
         msg(-2, "input pipe: read zero bites, setting TO");
         TO.Set(1,0);
@@ -155,7 +156,13 @@ int icos_pipe::ProcessData(int flag) {
         return protocol_input();
       }
     } else {
-      msg(MSG_WARN,"Unexpected input on output pipe %s", path);
+      int i = read( fd, &buf[nc], bufsize - 1 - nc );
+      if (i < 0) {
+        msg(-2, "read from output pipe return error %d: %s",
+          errno, strerror(errno));
+      } else {
+        msg(-2, "read from output pipe returned %d bytes", i);
+      }
       flags &= ~Selector::Sel_Read;
     }
   }
@@ -265,12 +272,12 @@ int icos_pipe::open_pipe() {
   } else if (!is_input) {
     msg(-2, "output pipe: open and ready");
     is_ready = true;
+    flags = Selector::Sel_Write;
     if (fit && fit->check_queue())
       return 1;
+  } else {
+    flags = Selector::Sel_Read;
   }
-  flags = 
-    Selector::Sel_Read |
-    Selector::Sel_Write;
   return 0;
 }
 
@@ -297,6 +304,7 @@ int icos_pipe::not_whitespace() {
   while (cp < nc && isspace(buf[cp])) {
     ++cp;
   }
+  return 0;
 }
 
 fitd::fitd()
@@ -361,7 +369,14 @@ int fitd::process_results(results *res) {
 }
 
 int fitd::PTE_ready() {
-  CMD.check_queue();
+  return CMD.check_queue();
+}
+
+void fitd::recover() {
+  msg(-2, "fitd::recover()");
+  PTE.cleanup();
+  SUM.cleanup();
+  icosfitd.Status = icosfit_status = IFS_Gone;
 }
 
 int fitd::launch_icosfit(uint32_t scannum) {
@@ -495,6 +510,7 @@ icos_cmd::icos_cmd(fitd *fit)
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
     fit->add_child(this);
   }
+  flags |= Selector::gflag(1);
 }
 
 bool icos_cmd::not_uint32(uint32_t &output_val) {
@@ -513,8 +529,15 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 }
 
 int icos_cmd::ProcessData(int flag) {
-  if (fillbuf()) return 1;
-  return protocol_input();
+  if (flag & Selector::gflag(1)) {
+    msg(-2, "icos_cmd: gflag(1)");
+    fit->recover();
+  }
+  if (flag & Selector::Sel_Read) {
+    if (fillbuf()) return 1;
+    return protocol_input();
+  }
+  return 0;
 }
 
 int icos_cmd::protocol_input() {
@@ -532,7 +555,7 @@ int icos_cmd::protocol_input() {
     }
     msg(-2, "icos_cmd: S %u %u\n", cur_scannum, fitting_scannum);
     if (cur_scannum != fitting_scannum &&
-        icosfitd.Status != IFS_Fitting)
+        icosfitd.Status != IFS_Fitting) {
       if (fit->scan_data(cur_scannum, P, T, PTparams)) {
         rv = 1;
       } else if (icosfitd.Status == IFS_Fitting) {
@@ -578,6 +601,13 @@ int icos_cmd::protocol_input() {
     report_ok();
     return 1;
   }
+  if (cp < nc && buf[cp] == 'D') {
+    msg(0, "Received kill icosfit command");
+    consume(nc);
+    report_ok();
+    fit->kill_icosfit();
+    return 0;
+  }
   report_err("Invalid command syntax");
   consume(nc);
   return 0;
@@ -586,14 +616,13 @@ int icos_cmd::protocol_input() {
 int icos_cmd::check_queue() {
   // Read commands from the input file a line at a time
   // Stop once a scan has been sent to fitd
-  int rv = 0;
   int rc = 0;
   if (!ifp) return rc;
   if (cur_scannum != fitting_scannum &&
-      icosfitd.Status != IFS_Fitting)
+      icosfitd.Status != IFS_Fitting) {
     msg(-2, "check_queue: resending scan %u", cur_scannum);
     if (fit->scan_data(cur_scannum, P, T, PTparams)) {
-      rv = 1;
+      rc = 1;
     } else if (icosfitd.Status == IFS_Fitting) {
       fitting_scannum = cur_scannum;
     }
@@ -612,6 +641,7 @@ int icos_cmd::check_queue() {
       }
     }
   }
+  return rc;
 }
 
 icosfitd_t icosfitd;
