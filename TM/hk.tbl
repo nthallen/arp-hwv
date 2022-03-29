@@ -34,7 +34,6 @@ DataSys {
       SysTD: (SysTDrift,7) sec;
     }
   };
-  >{FreeMem: (freemem,7) MB}<
 }
 
 SD {
