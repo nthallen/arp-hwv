@@ -15,7 +15,7 @@ int ptrhm::check_coeff( int i, USHRT C_in) {
 
 void ptrhm::check_coeffs() {
   int i, ok = 1, rv;
-  unsigned short CR[7];
+  uint16_t CR[7];
   char req[15];
   subbus_mread_req *creq;
   

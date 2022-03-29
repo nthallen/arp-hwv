@@ -12,7 +12,7 @@
   #define BOARD_TEMP 0x26
   #define CPU_TEMP 0x25
 
-  unsigned char read_vl_temp( unsigned short addr) {
+  unsigned char read_vl_temp( uint16_t addr) {
     signed char rv;
     out8(HWM_index, addr);
     rv = in8(HWM_data);

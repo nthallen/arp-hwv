@@ -19,7 +19,7 @@
 #         "DAC3 requested value out of range: %lf V = %lf bits",
 #         $5, dbits );
 #     } else {
-#       unsigned short ibits = (unsigned short)dbits;
+#       uint16_t ibits = (uint16_t)dbits;
 #       $1->Turf( "D3:%u\n", ibits );
 #     }
 #   }
@@ -49,6 +49,6 @@
   : DAC2 { $0 = 2; }
   : DAC3 { $0 = 3; }
   ;
-&QCLI_T_val <unsigned short>
+&QCLI_T_val <uint16_t>
   : %d (Enter time in usecs) { $0 = $1; }
   ;

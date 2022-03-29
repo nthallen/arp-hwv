@@ -4,8 +4,8 @@
 
 TM "Receive" QCLI 1;
 
-TM typedef unsigned short QCLI_Wave_t { text "%10d" QCLI_Wave_text(); }
-TM typedef unsigned short QCLI_CS_t {
+TM typedef uint16_t QCLI_Wave_t { text "%10d" QCLI_Wave_text(); }
+TM typedef uint16_t QCLI_CS_t {
   text "%5d";
   collect x = sbrwa(x.address);
 }

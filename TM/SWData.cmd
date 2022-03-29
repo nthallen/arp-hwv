@@ -13,7 +13,7 @@
 &SWTM
   : SW Status &SWStat { SWData.SWStat = $3; }
   ;
-&SWStat <unsigned short>
+&SWStat <uint16_t>
   : Altitude Takeoff { $0 = SWS_TAKEOFF; }
   : Set %d { $0 = $2; }
   : Altitude Land { $0 = SWS_LAND; }

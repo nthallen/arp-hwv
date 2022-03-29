@@ -14,7 +14,7 @@ ptrh::ptrh( const char *id_in, USHRT base, USHRT C1, USHRT C2,
   C2d = C2*131072.;
   C3d = C3/128.;
   C4d = C4/64.;
-  C5d = (((unsigned long)C5)<<8);
+  C5d = (((uint32_t)C5)<<8);
   C6d = C6/838860800.;
   Off = Sens = 0.;
   stale = 1;
@@ -51,9 +51,9 @@ double ptrh::SHT21RH( USHRT S2 ) {
  * @return Temperature in Celcius
  */
 double ptrh::MS5607T( USHRT Dta, USHRT Dtb) {
-  unsigned long D2;
-  long dT;
-  D2 = (((unsigned long)Dtb)<<16) + Dta;
+  uint32_t D2;
+  int32_t dT;
+  D2 = (((uint32_t)Dtb)<<16) + Dta;
   dT = D2 - C5d;
   Off = C2d + C4d * dT;
   Sens = C1d + C3d * dT;
@@ -65,10 +65,10 @@ double ptrh::MS5607T( USHRT Dta, USHRT Dtb) {
  * @return Pressure in mbar
  */
 double ptrh::MS5607P( USHRT Dpa, USHRT Dpb) {
-  unsigned long D1;
+  uint32_t D1;
   if ( stale++ == 1 )
     nl_error(1, "PTRH[%s] Converting P using stale T", id);
-  D1 = (((unsigned long)Dpb)<<16) + Dpa;
+  D1 = (((uint32_t)Dpb)<<16) + Dpa;
   return((D1*Sens/2097152. - Off)/3276800.);
 }
 

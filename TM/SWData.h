@@ -3,7 +3,7 @@
 #define SWDATA_H_INCLUDED
 
 typedef struct __attribute__((__packed__)) {
-  unsigned short SWStat;
+  uint16_t SWStat;
 } SWData_t;
 extern SWData_t SWData;
 

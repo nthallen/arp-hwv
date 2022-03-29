@@ -58,7 +58,7 @@ open(OF, ">", "${base}_col.tmc") ||
 print OF <<EOF;
 %{
   #include "subbus.h"
-  unsigned short dacsmread_buf[50];
+  uint16_t dacsmread_buf[50];
 
 EOF
 for my $groupp (@group) {

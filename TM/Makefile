@@ -1,5 +1,5 @@
 # Invoking: appgen_module TMbase X Panel=HK:
-# Makefile Generated Tue Mar 29 12:23:03 EDT 2022
+# Makefile Generated Tue Mar 29 13:46:03 EDT 2022
 MNC=HWV
 SPECFILE=HWV.spec
 PCMFILE=HWV.pcm

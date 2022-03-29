@@ -2,8 +2,8 @@
   #include "subbus.h"
   #include "ai_cfg.h"
   void ai_cfg_init(void) {
-    unsigned short addr;
-    unsigned short row, col;
+    uint16_t addr;
+    uint16_t row, col;
     
     /* First the default X1 configuration for everything,
        including the standard MUX channels for the power board */

@@ -4,12 +4,12 @@
   #include "IWG1.h"
   IWG1_data_t IWG1;
 
-  signed short calc_drift(double IWG_T) {
+  int16_t calc_drift(double IWG_T) {
     // static int n = 9;
     double now;
     double dt;
     double dti, dtf;
-    signed short dts;
+    int16_t dts;
     now = dtime();
     dtf = modf((now - IWG_T)/(12*3600) + .5, &dti);
     // if (++n >= 10) {
@@ -18,7 +18,7 @@
     //   n = 0;
     // }
     dt = (dtf - .5) * 12 * 3600;
-    dts = (signed short) floor(dt+.5);
+    dts = (int16_t) floor(dt+.5);
     return dts;
   }
 %}

@@ -1,14 +1,17 @@
+%{
+  #include <stdint.h>
+%}
 &command
   : Set &ao_chan %lf (Volts) * {
       double N = $3 * 6553.6;
-      unsigned short bits;
+      uint16_t bits;
       if (N > 65535) N = 65535;
       if (N < 0) N = 0.;
-      bits = (unsigned short) N;
+      bits = (uint16_t) N;
       sbwr( $2, bits );
     }
   ;
-&ao_chan <unsigned short>
+&ao_chan <uint16_t>
   : Axis A Heat Set Pt { $0 = HtASt_Address; }
   : Axis A RF Set Pt { $0 = RFASt_Address; }
   : Axis B Heat Set Pt { $0 = HtBSt_Address; }

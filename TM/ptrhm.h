@@ -1,11 +1,12 @@
 #ifndef PTRH_H_INCLUDED
 #define PTRH_H_INCLUDED
 
+#include <stdint.h>
 #include "nortlib.h"
 #include "nl_assert.h"
 #include "subbus.h"
 
-typedef unsigned short USHRT;
+typedef uint16_t USHRT;
 class ptrhm {
   public:
     ptrhm( const char *id, USHRT base, USHRT C1, USHRT C2,
@@ -30,7 +31,7 @@ class ptrhm {
     USHRT P[7];
     subbus_mread_req *preq;
     double C1d, C2d, C3d, C4d, C6d;
-    unsigned long C5d;
+    uint32_t C5d;
     double Off, Sens;
     int check_coeff( int i, USHRT C);
     void pack();

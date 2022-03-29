@@ -1,4 +1,4 @@
-SW_Variable: <unsigned short,UINT> SWStat SW Status
+SW_Variable: <uint16_t,UINT> SWStat SW Status
   SWS_TAKEOFF 1 Altitude Takeoff:
     depending on (ON_GROUND) using_swp = 1; break;
   SWS_LAND 4 Altitude Land:

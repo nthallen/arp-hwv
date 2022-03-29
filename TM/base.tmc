@@ -4,19 +4,19 @@ TM typedef double mVOLTS { text "%6.3lf"; }
 TM typedef double AMPS  { text "%6.3lf"; }
 TM typedef double CELCIUS;
 TM typedef double TORR;
-TM typedef unsigned char UCHAR { text "%3u"; }
-TM typedef unsigned short UINT { text "%5u"; }
-TM typedef unsigned long ULONG { text "%8ld"; }
-TM typedef long L20 { text "%8ld"; }
+TM typedef uint8_t UCHAR { text "%3u"; }
+TM typedef uint16_t UINT { text "%5u"; }
+TM typedef uint32_t ULONG { text "%8ld"; }
+TM typedef uint32_t L20 { text "%8lu"; }
 
-TM typedef signed short AI_X1
+TM typedef int16_t AI_X1
   { text "%7.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
   Calibration ( AI_X1, VOLTS ) {
     0, 0,
     32768, 4.096
   }
 
-TM typedef signed short AI_X2
+TM typedef int16_t AI_X2
   { text "%7.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
   Calibration ( AI_X2, VOLTS ) {
     0, 0,
@@ -69,7 +69,7 @@ TM typedef AI_X1 AI_SDPDP { text "%5.2lf"; convert VOLTS; }
     32768, 13.803311
   }
 
-TM typedef unsigned short AO
+TM typedef uint16_t AO
   { text "%6.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
   Calibration ( AO, VOLTS ) {
     0, 0,
@@ -77,14 +77,14 @@ TM typedef unsigned short AO
   }
 
 /* Power Monitor types */
-TM typedef unsigned short PwrMon_I {
+TM typedef uint16_t PwrMon_I {
   text "%5.2lf";
   collect x = sbrwa(x.address);
   convert mVOLTS;
 }
 Calibration (PwrMon_I,mVOLTS) { 0, 0, 16, 0.020 }
 
-TM typedef unsigned short PwrMon_V {
+TM typedef uint16_t PwrMon_V {
   text "%7.3lf";
   collect x = sbrwa(x.address);
   convert VOLTS;
@@ -276,7 +276,7 @@ Status
 
 */
 
-  #define CT24long(x) ((long)((x).low) + (((unsigned long)((x).high))<<16))
+  #define CT24long(x) ((uint32_t)((x).low) + (((uint32_t)((x).high))<<16))
 %}
 TM typedef UINT CT16 { collect x = sbrwa( x.address ); }
 TM typedef CT16 CTstat {
@@ -284,7 +284,7 @@ TM typedef CT16 CTstat {
 }
 
 TM typedef struct {
-  unsigned short low;
+  uint16_t low;
   unsigned char high;
 } CT24 {
   text "%8ld";
@@ -308,7 +308,7 @@ Group Cts (
     Ct0Stat, PMTA_Counts, PMTB_Counts, PMTC_Counts,
     Ct1Stat, UVA1_Counts, UVA2_Counts, UVB1_Counts,
     Ct2Stat, UVB2_Counts, UVC1_Counts, UVC2_Counts ) {
-  unsigned short Cts_Raw[21];
+  uint16_t Cts_Raw[21];
   mread_subbus(Cts_req, &Cts_Raw[0]);
   Ct0Stat = Cts_Raw[0];
   PMTA_Counts.low  = Cts_Raw[1];
@@ -334,7 +334,7 @@ Group Cts (
 }
 
 /* Digital Status Lines */
-TM typedef unsigned short DSWord
+TM typedef uint16_t DSWord
   { text "%5d"; collect x=sbrwa(x.address); }
 TM typedef unsigned char DSByte
   { text "%3d"; collect x=sbrba(x.address); }
@@ -413,7 +413,7 @@ TM 8 Hz SolStat_t SolStB; Collect SolStB = SolStatB;
 TM "Receive" SolStatC 0;
 TM 8 Hz SolStat_t SolStC; Collect SolStC = SolStatC;
 
-TM typedef unsigned short AIStat_i {
+TM typedef uint16_t AIStat_i {
   text "%012b";
   Collect x = sbrw(x.address);
 }
