@@ -1,8 +1,6 @@
-tmcbase = /usr/local/share/huarp/freemem.tmc
+#tmcbase = /usr/local/share/huarp/freemem.tmc
 tmcbase = base.tmc
 tmcbase = idx64.tmc
-#tmcbase = swstat.tmc
-#tmcbase = ptrh.tmc
 tmcbase = ssp.tmc
 tmcbase = qcli.tmc
 tmcbase = waves.tmc
@@ -11,13 +9,13 @@ tmcbase = T10K75KU.tmc
 tmcbase = ptrhm.cc
 tmcbase = vl_temp.tmc
 tmcbase = pwrmon.tmc
-tmcbase = /usr/local/share/huarp/cpu_usage.tmc
-tmcbase = /usr/local/share/huarp/tmdf.tmc
+#tmcbase = /usr/local/share/huarp/cpu_usage.tmc
+#tmcbase = /usr/local/share/huarp/tmdf.tmc
 tmcbase = dacsmread.tmc
 tmcbase = IWG1.tmc
 
-cmdbase = /usr/local/share/huarp/root.cmd
-cmdbase = /usr/local/share/huarp/getcon.cmd
+#cmdbase = /usr/local/share/huarp/root.cmd
+#cmdbase = /usr/local/share/huarp/getcon.cmd
 cmdbase = /usr/local/share/huarp/idx64.cmd
 cmdbase = /usr/local/share/huarp/phrtg.cmd
 cmdbase = idx64drv.cmd 
@@ -26,7 +24,6 @@ cmdbase = qcli.cmd
 cmdbase = ssp.cmd
 cmdbase = ai.cmd ao.cmd
 cmdbase = soldrv.cmd
-#cmdbase = swstat.cmd
 cmdbase = waves.cmd
 cmdbase = fail.cmd
 
@@ -37,14 +34,19 @@ colbase = idx64col.tmc
 colbase = sspcol.tmc
 colbase = vl_temp_col.tmc
 colbase = ptrhm_col.cc
-colbase = /usr/local/share/huarp/freemem_col.tmc
+#colbase = /usr/local/share/huarp/freemem_col.tmc
 colbase = /usr/local/share/huarp/DACS_ID.tmc
-colbase = /usr/local/share/huarp/cpu_usage_col.tmc
-colbase = /usr/local/share/huarp/tmdf_col.tmc
+#colbase = /usr/local/share/huarp/cpu_usage_col.tmc
+#colbase = /usr/local/share/huarp/tmdf_col.tmc
 colbase = dacsmread_col.tmc
 colbase = IWG1_col.tmc
 
 swsbase = HWV.sws
+
+genuibase = HWV.genui
+extbase = ptrh_conv.tmc IRVf.tmc 
+
+Module TMbase Panel=HK:
 
 SCRIPT = interact
 SCRIPT = runfile.FF
@@ -67,17 +69,16 @@ TGTDIR = $(TGTNODE)/home/hwv
 HWVcol : -lsubbus
 HWVsrvr : -lsubbus
 
-HWVdisp : /usr/local/share/huarp/flttime.tmc qclibits.tmc sspflags.tmc \
+HWVdisp : qclibits.tmc sspflags.tmc \
   idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl \
   /usr/local/share/oui/cic.oui IWG1.tbl
 
-lydisp : /usr/local/share/huarp/flttime.tmc digio.tmc \
+lydisp : digio.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   lyalpha.tbl
-lyamrudpext : /usr/local/share/huarp/flttime.tmc \
-  HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
+lyamrudpext : HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   LyAmr/UDP.cc UDP.tmc -lsocket
 
 HWValgo : ptrh_conv.tmc IRVf.tmc HWV.tma HWV.sws
@@ -90,7 +91,7 @@ A.sft : A.sol
 B.sft : B.sol
 C.sft : C.sol
 
-hwvengext : ptrh_conv.tmc IRVf.tmc hwveng.cdf
+# hwvengext : ptrh_conv.tmc IRVf.tmc hwveng.cdf
 hwvrawext : ptrh_conv.tmc hwvraw.cdf
 hwvext : hwv.cdf
 hhhext : hhh.cdf
@@ -103,8 +104,8 @@ CXXFLAGS=-g
 CPPFLAGS+=-I ../IWG1
 address.h : HWVcol.cc
 HWVsrvr.o : address.h
-hwveng.cdf : genui.txt
-	genui -d ../eng -c genui.txt
+#hwveng.cdf : genui.txt
+#	genui -d ../eng -c genui.txt
 waves.cmd waves.out waves.tmc waves.m : waves.qcli
 	qclicomp -o waves.out -c waves.cmd -d waves.tmc \
 	  -v waves.log -m waves.m waves.qcli || \

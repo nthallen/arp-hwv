@@ -262,9 +262,9 @@ ROWS 18
   1 DACS_T2C HK:DACS T
   1 DACS_RHC HK:DACS RH
   1 DACS_PTRHS HK:DACS Status %.0lf
-  1 CPU_Pct  HK:DACS CPU
-  1 Disk     HK:DACS CPU 
-  1 freemem  HK:DACS Memory
+  #1 CPU_Pct  HK:DACS CPU
+  #1 Disk     HK:DACS CPU 
+  #1 freemem  HK:DACS Memory
   1 vl_bdT   HK:DACS T
   1 vl_cpuT  HK:DACS T
 

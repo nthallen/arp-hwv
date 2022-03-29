@@ -419,4 +419,4 @@ TM typedef unsigned short AIStat_i {
 }
 
 TM 1 Hz AIStat_i AIStat; Address AIStat 0xE00;
-TM 1 Hz freemem_t freemem;
+/* TM 1 Hz freemem_t freemem; */

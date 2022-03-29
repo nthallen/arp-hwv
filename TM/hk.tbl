@@ -27,9 +27,11 @@ DataSys {
     {
       CPU: (CPU_Pct,3) %;
       Disk: (Disk,5) %;
+      Mem:  (freemem,7) MB;
     }; |; {
       CPU_T: (vl_cpuT,4) C;
       Brd_T: (vl_bdT,4) C;
+      SysTD: (SysTDrift,7) sec;
     }
   };
   >{FreeMem: (freemem,7) MB}<
