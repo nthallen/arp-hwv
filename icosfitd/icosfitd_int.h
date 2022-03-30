@@ -16,6 +16,9 @@ class results {
   public:
     results(const char *param_list);
     ~results();
+    void reset();
+    void init(uint32_t scannum, ICOS_Float P, ICOS_Float T);
+    void update_TM();
     uint32_t scannum;
     ICOS_Float P;
     ICOS_Float T;
@@ -23,6 +26,26 @@ class results {
     result_status Status;
     int *ValIdxs;
     int n_Vals;
+    /**
+     * True when final data has not been copied to icosfitd
+     */
+    bool pending;
+    /**
+     * False if data can be overwritten before being copied
+     * Applies to pretty much anything that isn't a fit result.
+     */
+    bool final;
+    /**
+     * @return the currently active results object
+     */
+    static results *active();
+    /**
+     * return the next available results object or 0
+     */
+    static results *newres();
+    static void toggle();
+    static bool res_toggle;
+    static results res[2];
 };
 
 class icos_pipe : public Ser_Sel {
@@ -35,9 +58,15 @@ class icos_pipe : public Ser_Sel {
     void output(const char *line);
     int setup_pipe();
     int open_pipe();
+    /**
+     * It is a fatal error to call this on the output pipe.
+     * @return The number of columns specified with the -P option
+     */
+    int n_results();
     Timeout *GetTimeout();
     int logfd();
     void cleanup();
+    void set_result(results *r);
     bool is_ready;
   protected:
     int protocol_input();
@@ -59,6 +88,7 @@ class icos_cmd : public Ser_Sel {
     int protocol_input();
     int check_queue();
   private:
+    int submit();
     bool not_uint32(uint32_t &output_val);
     fitd *fit;
     char *PTparams;
@@ -67,6 +97,12 @@ class icos_cmd : public Ser_Sel {
     uint32_t fitting_scannum;
     float P, T;
     FILE *ifp;
+};
+
+class icos_TM : public TM_Selectee {
+  public:
+    icos_TM(const char *name, void *data, unsigned short size);
+    int ProcessData(int flag);
 };
 
 class fitd {
@@ -106,7 +142,7 @@ class fitd {
     icos_pipe PTE;
     icos_pipe SUM;
     icos_cmd CMD;
-    TM_Selectee *TM;
+    icos_TM *TM;
     ICOSfile ICOSf;
     uint32_t fitting_scannum;
     icosfitd_status icosfit_status;

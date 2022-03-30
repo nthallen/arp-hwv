@@ -62,7 +62,8 @@ icos_pipe::icos_pipe(bool input, int bufsize,
       in_the_loop(false),
       path(path),
       logfp(0),
-      fit(fit)
+      fit(fit),
+      res(0)
 {
   if (logfile) {
     logfp = fopen(logfile, "a");
@@ -78,8 +79,8 @@ icos_pipe::icos_pipe(bool input, int bufsize,
     buf = (unsigned char *)new_memory(bufsize);
     this->bufsize = bufsize;
   }
-  if (is_input)
-    res = new results(column_list);
+  // if (is_input)
+  //   res = new results(column_list);
   flags = 0;
 }
 
@@ -90,7 +91,7 @@ icos_pipe::~icos_pipe() {
 int icos_pipe::ProcessData(int flag) {
   if (flag & Selector::Sel_Timeout) {
     TO.Clear();
-    flags &= Selector::Sel_Timeout;
+    flags &= ~Selector::Sel_Timeout;
     if (is_ready) {
       msg(MSG_ERROR, "Unexpected timeout when ready");
       flags &= ~Selector::Sel_Timeout;
@@ -172,6 +173,11 @@ int icos_pipe::ProcessData(int flag) {
 
 int icos_pipe::protocol_input() {
   char *nl = strchr((char *)buf, '\n');
+  if (!res) {
+    report_err("Unexpected input before results initialized");
+    consume(nc);
+    return;
+  }
   if (nl) {
     unsigned int ncl = nl+1-(char*)buf;
     nl_assert(ncl <= nc);
@@ -182,7 +188,6 @@ int icos_pipe::protocol_input() {
       fflush(logfp);
     }
     buf[ncl] = savec;
-    res->Status = res_OK;
     int scannum;
     float P, T, val;
     if (not_int(scannum) ||
@@ -191,7 +196,7 @@ int icos_pipe::protocol_input() {
         not_whitespace() ||
         not_float(T)) {
       report_err("Format error in ICOSsum.dat");
-      res->Status = res_synerr;
+      res->Status = res_Syntax;
     } else {
       res->scannum = scannum;
       res->P = P;
@@ -200,7 +205,7 @@ int icos_pipe::protocol_input() {
       for (int cur_col = 4; cp < ncl && buf[cp] != '\n'; ++cur_col) {
         if (not_whitespace() || not_float(val)) {
           report_err("Expected float");
-          res->Status = res_synerr;
+          res->Status = res_Syntax;
           break;
         }
         if (cur_col == res->ValIdxs[res_num]) {
@@ -210,13 +215,14 @@ int icos_pipe::protocol_input() {
       }
       if (res_num < res->n_Vals) {
         report_err("Reached end of line without finding all results");
-        res->Status = res_synerr;
+        res->Status = res_Syntax;
       }
+      res->Status = res_Fit;
     }
     consume(nc);
     if (fit && fit->process_results(res))
       return 1;
-    if (res->Status == res_OK)
+    if (res->Status == res_Fit)
       report_ok();
   }
   return 0;
@@ -240,6 +246,14 @@ void icos_pipe::output(const char *line) {
 void icos_pipe::cleanup() {
   close();
   unlink(path);
+}
+
+void icos_pipe::set_result(results *r) {
+  if (! is_input) {
+    msg(3, "icos_pipe::set_result() illegal for output");
+  } else {
+    res = r;
+  }
 }
 
 int icos_pipe::setup_pipe() {
@@ -288,6 +302,13 @@ int icos_pipe::open_pipe() {
   return 0;
 }
 
+int icos_pipe::n_results() {
+  if (!is_input || !res) {
+    msg(3, "icos_pipe::n_results() illegal on output pipe");
+  }
+  return res->n_Vals;
+}
+
 void icos_pipe::close() {
   if (fd >= 0) {
     ::close(fd);
@@ -314,6 +335,18 @@ int icos_pipe::not_whitespace() {
   return 0;
 }
 
+icos_TM::icos_TM(const char *name, void *data, unsigned short size)
+    : TM_Selectee(name, data, size) {}
+
+int icos_TM::ProcessData(int flag) {
+  Col_send(TMid);
+  results *r = results::active();
+  if (r->pending && r->final)
+    r->pending = false;
+  Stor->set_gflag(0);
+  return 0;
+}
+
 fitd::fitd()
   : 
     PTE(false, 80, "PTE.fifo", "PTE.log", this),
@@ -326,7 +359,10 @@ fitd::fitd()
     icosfit_pid(0)
 {
   if (!command_file) {
-    TM = new TM_Selectee("icosfitd", &icosfitd, sizeof(icosfitd));
+    int TMsize = sizeof(icosfitd) -
+      (MAX_ICOSFITD_RESULT_VALS - SUM.n_results())
+        * sizeof(ICOS_Float);
+    TM = new icos_TM("icosfitd", &icosfitd, TMsize);
     S.add_child(TM);
   }
   
@@ -337,18 +373,19 @@ fitd::fitd()
 
 fitd::~fitd() {}
 
-int fitd::scan_data(uint32_t scannum, float P, float T,
-      const char *PTparams) {
+int fitd::scan_data(results *r, const char *PTparams) {
   if (icosfitd.Status == IFS_Gone &&
-      launch_icosfit(scannum)) {
+      launch_icosfit(r->scannum)) {
     return 1;
   }
   if (icosfitd.Status == IFS_Ready && PTE.is_ready) {
+    r->Status = res_Fitting;
+    SUM.set_result(r);
     fitting_scannum = scannum;
     char PTEline[256];
     // assumes there is a newline in PTparams
     snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
-      P, T, PTparams);
+      r->P, r->T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
     return 0;
@@ -358,17 +395,20 @@ int fitd::scan_data(uint32_t scannum, float P, float T,
 
 int fitd::process_results(results *res) {
   switch (res->Status) {
-    case res_OK:
+    case res_Fit:
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
       return CMD.check_queue();
-    case res_synerr:
+    case res_Syntax:
       msg(3, "Syntax error response from icosfit");
       break;
-    case res_eof:
-      msg(3, "icosfit died");
+    case res_EOF:
+      break;
+    default:
+      msg(2, "Unexpected result status %d", res->Status);
       break;
   }
+  res->final = true;
   return 0;
 }
 
@@ -381,6 +421,9 @@ int fitd::recover() {
   PTE.cleanup();
   SUM.cleanup();
   icosfitd.Status = icosfit_status = IFS_Gone;
+  results *res = results::active();
+  res->Status = res_EOF;
+  res->final = true;
   return CMD.check_queue();
 }
 
@@ -514,7 +557,7 @@ icos_cmd::icos_cmd(fitd *fit)
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
   }
-  flags |= Selector::gflag(1);
+  flags |= Selector::gflag(0) | Selector::gflag(1);
   fit->add_child(this);
 }
 
@@ -534,6 +577,17 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 }
 
 int icos_cmd::ProcessData(int flag) {
+  if (flag & Selector::gflag(0)) {
+    results *r = results::active();
+    if (r->final && !r->pending) {
+      results r2 = results::inactive();
+      if (r2->pending) {
+        results::toggle();
+        r2->update_TM();
+        if (submit()) return 1;
+      }
+    }
+  }
   if (flag & Selector::gflag(1)) {
     msg(-2, "icos_cmd: gflag(1)");
     if (fit->recover())
@@ -560,14 +614,7 @@ int icos_cmd::protocol_input() {
       return 0;
     }
     msg(-2, "icos_cmd: S %u %u\n", cur_scannum, fitting_scannum);
-    if (cur_scannum != fitting_scannum &&
-        icosfitd.Status != IFS_Fitting) {
-      if (fit->scan_data(cur_scannum, P, T, PTparams)) {
-        rv = 1;
-      } else if (icosfitd.Status == IFS_Fitting) {
-        fitting_scannum = cur_scannum;
-      }
-    }
+    rv = submit();
     consume(nc);
     report_ok();
     return rv;
@@ -648,6 +695,23 @@ int icos_cmd::check_queue() {
     }
   }
   return rc;
+}
+
+int icos_cmd::submit() {
+  int rv = 0;
+  if (cur_scannum != fitting_scannum &&
+      icosfitd.Status != IFS_Fitting) {
+    results *r = newres();
+    if (r) {
+      r->init(cur_scannum, P, T);
+      if (fit->scan_data(r, PTparams)) {
+        rv = 1;
+      } else if (icosfitd.Status == IFS_Fitting) {
+        fitting_scannum = cur_scannum;
+      }
+    }
+  }
+  return rv;
 }
 
 icosfitd_t icosfitd;
