@@ -176,7 +176,7 @@ int icos_pipe::protocol_input() {
   if (!res) {
     report_err("Unexpected input before results initialized");
     consume(nc);
-    return;
+    return 0;
   }
   if (nl) {
     unsigned int ncl = nl+1-(char*)buf;
@@ -381,7 +381,7 @@ int fitd::scan_data(results *r, const char *PTparams) {
   if (icosfitd.Status == IFS_Ready && PTE.is_ready) {
     r->Status = res_Fitting;
     SUM.set_result(r);
-    fitting_scannum = scannum;
+    fitting_scannum = r->scannum;
     char PTEline[256];
     // assumes there is a newline in PTparams
     snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
@@ -580,7 +580,7 @@ int icos_cmd::ProcessData(int flag) {
   if (flag & Selector::gflag(0)) {
     results *r = results::active();
     if (r->final && !r->pending) {
-      results r2 = results::inactive();
+      results *r2 = results::inactive();
       if (r2->pending) {
         results::toggle();
         r2->update_TM();
@@ -694,7 +694,7 @@ int icos_cmd::submit() {
   int rv = 0;
   if (cur_scannum != fitting_scannum &&
       icosfitd.Status != IFS_Fitting) {
-    results *r = newres();
+    results *r = results::newres();
     if (r) {
       r->init(cur_scannum, P, T);
       if (fit->scan_data(r, PTparams)) {
@@ -716,6 +716,7 @@ int main(int argc, char **argv) {
   if (!icosfit_file_out)
     icosfit_file_out = "icosfit.RT";
 
+  results::setup(column_list);
   { fitd fit;
     nl_error(0, "Starting: v1.0");
     if (!fit.check_queue())

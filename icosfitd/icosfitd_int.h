@@ -14,18 +14,15 @@ class icos_cmd;
 
 class results {
   public:
-    results(const char *param_list);
-    ~results();
+    results();
     void reset();
     void init(uint32_t scannum, ICOS_Float P, ICOS_Float T);
     void update_TM();
     uint32_t scannum;
     ICOS_Float P;
     ICOS_Float T;
-    ICOS_Float *Vals;
+    ICOS_Float Vals[MAX_ICOSFITD_RESULT_VALS];
     result_status Status;
-    int *ValIdxs;
-    int n_Vals;
     /**
      * True when final data has not been copied to icosfitd
      */
@@ -35,15 +32,23 @@ class results {
      * Applies to pretty much anything that isn't a fit result.
      */
     bool final;
+    static void setup(const char *param_list);
     /**
      * @return the currently active results object
      */
     static results *active();
     /**
+     * @return the currently inactive results object
+     */
+    static results *inactive();
+    /**
      * return the next available results object or 0
      */
     static results *newres();
     static void toggle();
+    static int ValIdxs[MAX_ICOSFITD_RESULT_VALS];
+    static int n_Vals;
+  private:
     static bool res_toggle;
     static results res[2];
 };
@@ -114,13 +119,10 @@ class fitd {
     inline int check_queue() { return CMD.check_queue(); }
     inline void kill_icosfit() { PTE.output("GACK!\n"); }
     /**
-     * @param scannum The current scan number
-     * @param P Cell pressure in torr
-     * @param T Cell temperature in Kelvin
+     * @param r results object
      * @return non-zero to exit the event_loop
      */
-    int scan_data(uint32_t scannum, float P, float T,
-      const char *PTparams);
+    int scan_data(results *r, const char *PTparams);
     int process_results(results *res);
     int PTE_ready();
     int recover();
