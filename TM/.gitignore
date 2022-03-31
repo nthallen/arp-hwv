@@ -1,3 +1,5 @@
+icosfitd.tbl
+icosfitd_conv.tmc
 waves.cmd
 waves.out
 waves.tmc
@@ -114,6 +116,7 @@ hktblnc.tmc.dep
 labtblnc.tmc.dep
 IWG1tblnc.tmc.dep
 *.err
+Makefile
 HWVcol
 HWVsrvr
 HWVdisp

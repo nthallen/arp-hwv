@@ -17,9 +17,6 @@ TM typedef icos_float icos_nu_F0_t { text "%8.4f"; }
 TM typedef icos_float icos_ppm_t { text "%6.2f"; }
 TM typedef uint8_t icos_status_t { text "%3u"; }
 
-S.C = 2.685e19 * (S.P / 760.) ./ (S.T / 273.15);
-S.Chi = S.Nfit ./ S.C;
-
 TM 1 Hz icos_scan_t icos_scan;
 TM 1 Hz icos_float icos_P, icos_T;
 TM 1 Hz icos_nu_F0_t icos_nu_F0;

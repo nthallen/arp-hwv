@@ -7,7 +7,10 @@ mode (default) {
   genuibase = icosfitd.genui
   cmdbase = icosfitd.cmd
   - : icosfitd.tbl:icosfitd.tbl.in
-  DISTRIB = @MODDIR@/../icosfitd
+  - : icosfitd_conv.tmc:icosfitd_conv.tmc.in
+  DISTRIB = @MODDIR@/../icosfitd @MODDIR@/icosfit.RT.in
+  IDISTRIB = @MODDIR@/sbase.5p1e.ptb
+  OBJ = icosfitd.tbl icosfitd_conv.tmc
   CPPFLAGS = -I @MODDIR@/..
 }
 

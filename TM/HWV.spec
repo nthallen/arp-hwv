@@ -61,6 +61,7 @@ DISTRIB = ../IWG1/IWG1
 SRC = ptrhm.h
 SRC = dacsmread.txt
 
+IGNORE = Makefile
 OBJ = waves.cmd waves.out waves.tmc waves.m waves.log
 OBJ = address.h
 OBJ = dacsmread.tmc dacsmread_col.tmc
@@ -70,7 +71,7 @@ TGTDIR = $(TGTNODE)/home/hwv
 HWVcol : -lsubbus
 HWVsrvr : -lsubbus
 
-HWVdisp : qclibits.tmc sspflags.tmc \
+HWVdisp : qclibits.tmc sspflags.tmc icosfitd_conv.tmc \
   idx64flag.tmc digio.tmc ptrh_conv.tmc pwrmon_conv.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   SSPrtg.tmc HWV.tbl lyalpha.tbl hk.tbl lab.tbl \
@@ -78,7 +79,7 @@ HWVdisp : qclibits.tmc sspflags.tmc \
 
 lydisp : digio.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
-  lyalpha.tbl
+  icosfitd_conv.tmc lyalpha.tbl
 lyamrudpext : HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   LyAmr/UDP.cc UDP.tmc -lsocket
 

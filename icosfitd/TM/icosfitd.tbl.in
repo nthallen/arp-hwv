@@ -4,8 +4,8 @@ icosfitd {
   H2O:   (icos_ppm,6)   ppm;
   P:     (icos_P,6)     torr;
   T:     (icos_T,6)     K;
-  nu_F0: (icos_nu_F0,8) cm-1;
-  { (fixfloat,8) (icosd_fit_status,7);
+  nu_F0: (icos_nu_F0,8) "cm-1";
+  { (icosd_fixflt,8) (icosd_fit_status,7);
     (icosd_status,7) (icos_stale,3)
   }
 }

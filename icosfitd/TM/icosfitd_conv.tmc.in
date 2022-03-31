@@ -1,5 +1,7 @@
 /* icosfitd_conv.tmc */
 %{
+  #include "icosfitd.h"
+
   const char *FitStatus_text(uint8_t x) {
     switch (x) {
       case res_None:    return "   None";
