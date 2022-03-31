@@ -366,9 +366,13 @@ fitd::fitd()
     S.add_child(TM);
   }
   
-  pthread_getschedparam(pthread_self(), 0, &spawn_sched_param);
-  msg(-2, "my_priority = %d", spawn_sched_param.sched_priority);
+  int policy;
+  pthread_getschedparam(pthread_self(), &policy, &spawn_sched_param);
+  msg(-2, "policy is %d, my_priority = %d", policy, spawn_sched_param.sched_priority);
   --spawn_sched_param.sched_priority;
+  if (pthread_setschedparam(pthread_self(), policy, &spawn_sched_param))
+    msg(2, "Error %d setting priority: %s",
+      errno, strerror(errno));
 }
 
 fitd::~fitd() {}
