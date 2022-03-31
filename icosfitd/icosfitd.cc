@@ -79,8 +79,6 @@ icos_pipe::icos_pipe(bool input, int bufsize,
     buf = (unsigned char *)new_memory(bufsize);
     this->bufsize = bufsize;
   }
-  // if (is_input)
-  //   res = new results(column_list);
   flags = 0;
 }
 
@@ -368,9 +366,11 @@ fitd::fitd()
   
   int policy;
   pthread_getschedparam(pthread_self(), &policy, &spawn_sched_param);
-  msg(-2, "policy is %d, my_priority = %d", policy, spawn_sched_param.sched_priority);
+  msg(-2, "policy is %d, my_priority = %d", policy,
+          spawn_sched_param.sched_priority);
   --spawn_sched_param.sched_priority;
-  if (pthread_setschedparam(pthread_self(), policy, &spawn_sched_param))
+  if (pthread_setschedparam(pthread_self(), policy,
+                            &spawn_sched_param))
     msg(2, "Error %d setting priority: %s",
       errno, strerror(errno));
 }
@@ -387,7 +387,7 @@ int fitd::scan_data(results *r, const char *PTparams) {
     SUM.set_result(r);
     fitting_scannum = r->scannum;
     char PTEline[256];
-    // assumes there is a newline in PTparams
+    // assumes newline has been removed from PTparams
     snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
       r->P, r->T, PTparams);
     PTE.output(PTEline);
@@ -499,7 +499,6 @@ int fitd::spawn_icosfit() {
   pid_t pid;
   const char *argv[3];
   posix_spawn_file_actions_t fact;
-  posix_spawnattr_t attr;
   argv[0] = "/usr/local/bin/icosfit";
   argv[1] = icosfit_file_out;
   argv[2] = 0;
@@ -525,21 +524,13 @@ int fitd::spawn_icosfit() {
       errno, strerror(errno));
   }
 
-  if (posix_spawnattr_init(&attr) ||
-      posix_spawnattr_setschedparam(&attr, &spawn_sched_param)) {
-    msg(3, "spawnattr error %d: %s", errno, strerror(errno));
-  }
-  
-  if (posix_spawn(&pid, argv[0], &fact, &attr, (char*const*)argv, 0) < 0) {
+  if (posix_spawn(&pid, argv[0], &fact, 0, (char*const*)argv, 0) < 0) {
     msg(2, "spawn returned error %d: %s", errno, strerror(errno));
     rv = 0;
   }
 
   if (posix_spawn_file_actions_destroy(&fact))
     msg(2, "posix_spawn_file_actions_destroy returned err %d: %s",
-      errno, strerror(errno));
-  if (posix_spawnattr_destroy(&attr))
-    msg(2, "posix_spawnattr_destroy returned err %d: %s",
       errno, strerror(errno));
   return rv;
 }
