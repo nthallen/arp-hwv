@@ -669,17 +669,10 @@ int icos_cmd::protocol_input() {
 int icos_cmd::check_queue() {
   // Read commands from the input file a line at a time
   // Stop once a scan has been sent to fitd
+  if (!ifp) return 0;
+  if (submit()) return 1;
   int rc = 0;
-  if (!ifp) return rc;
-  if (cur_scannum != fitting_scannum &&
-      icosfitd.Status != IFS_Fitting) {
-    msg(-2, "check_queue: resending scan %u", cur_scannum);
-    if (fit->scan_data(cur_scannum, P, T, PTparams)) {
-      rc = 1;
-    } else if (icosfitd.Status == IFS_Fitting) {
-      fitting_scannum = cur_scannum;
-    }
-  } else {
+  if (cur_scannum == fitting_scannum) {
     while (icosfitd.Status != IFS_Fitting) {
       if (fgets((char*)buf, bufsize, ifp)) {
         nc = strlen((const char*)buf);
