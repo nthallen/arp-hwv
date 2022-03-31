@@ -1,3 +1,5 @@
+Input "icosfitd.tbl";
+
 Det {
   HBox { +-; Title: Detectors; -+ };
   HBox {
@@ -33,7 +35,7 @@ SD {
       SFB1T: (SFB1T,6) C;
       SFB2T: (SFB2T,6) C;
       SFB3T: (SFB3T,6) C;
-    }; |; {
+      -;
       SDPDP: (SDPDP,5) V;
       SD_LP: (SD_LP,5) Torr;
       SD_HP: (SD_HP,5) Torr;
@@ -44,7 +46,7 @@ SD {
 
 {
   HBox {
-    [Det]; |; [SD]
+    [Det]; |; [SD]; |; [icosfitd]
   };
   -;
   > { Time: (flttime,9) MFCtr: (MFCtr,5) };

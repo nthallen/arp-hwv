@@ -1,0 +1,20 @@
+Moduledef icosfitd {
+}
+
+mode (default) {
+  tmcbase = icosfitd.tmc
+  colbase = icosfitd_col.tmc
+  genuibase = icosfitd.genui
+  cmdbase = icosfitd.cmd
+  - : icosfitd.tbl:icosfitd.tbl.in
+  DISTRIB = @MODDIR@/../icosfitd
+  CPPFLAGS = -I @MODDIR@/..
+}
+
+%%
+.PHONY : clean-icosfitd @MODDIR@/../icosfitd
+@MODDIR@/../icosfitd :
+	$(MAKE) --directory=@MODDIR@/..
+clean-dist : clean-icosfitd
+clean-icosfitd :
+	$(MAKE) --directory=@MODDIR@/.. clean

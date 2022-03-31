@@ -1,0 +1,4 @@
+/* icosfitd_col.tmc */
+#define N_ICOSFITD_RESULT_VALS 3
+#include "icosfitd.h"
+icosfitd_t icosfitd;

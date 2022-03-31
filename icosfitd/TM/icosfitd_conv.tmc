@@ -1,0 +1,43 @@
+/* icosfitd_conv.tmc */
+%{
+  const char *FitStatus_text(uint8_t x) {
+    switch (x) {
+      case res_None:    return "   None";
+      case res_Queued:  return " Queued";
+      case res_Fitting: return "Fitting";
+      case res_Fit:     return "    Fit";
+      case res_Syntax:  return " Syntax";
+      case res_EOF:     return "    EOF";
+      default:          return "*******";
+    }
+  }
+
+  const char *ICOSdStatus_text(uint8_t x) {
+    switch (x) {
+      case IFS_Gone:    return "   Gone";
+      case IFS_Standby: return "Standby";
+      case IFS_Ready:   return "  Ready";
+      case IFS_Fitting: return "Fitting";
+      default: return "*******";
+    }
+  }
+  
+  const char *ICOSd_fixfloat_text(uint8_t x) {
+    switch (x) {
+      case 0:  return "Floating";
+      case 1:  return "   Fixed";
+      default: return "********";
+    }
+  }
+%}
+TM typedef uint8_t icosd_fit_status_t { text "%7u" FitStatus_text(); }
+icosd_fit_status_t icosd_fit_status; Invalidate icosd_fit_status;
+{ icosd_fit_status = icos_status & 7; Validate icosd_fit_status; }
+
+TM typedef uint8_t icosd_status_t { text "%7u" ICOSdStatus_text(); }
+icosd_status_t icosd_status; Invalidate icosd_status;
+{ icosd_status = (icos_status>>3)&3; Validate icosd_status; }
+
+TM typedef uint8_t icosd_fixflt_t { text "%8u" ICOSd_fixfloat_text(); }
+icosd_fixflt_t icosd_fixflt; Invalidate icosd_fixflt;
+{ icosd_fixflt = (icos_status >> 5) & 1; Validate icosd_fixflt; }

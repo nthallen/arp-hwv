@@ -1,0 +1,45 @@
+/* icosfitd.tmc
+  These definitions are interdependent on the command line
+  arguments for the icosfitd driver.
+  
+  icosfitd -I $TMBASE/icosfit.RT.in # icosfit config input
+    -L # log ICOSsum.fifo data to ICOSsum.log
+    -S SSP # Where the scan files are to be found
+    -l 240:840 # Look for lines between samples 240 and 840
+    -P #16,18,29 # Report columns
+       Vals[0] #16 Line 1 Floating
+       Vals[1] #18 nu_F0 Value
+       Vals[2] #29 N[H2O] Value
+*/
+TM typedef uint32_t icos_scan_t { text "%7u"; }
+TM typedef float icos_float { text "%6.1f"; }
+TM typedef icos_float icos_nu_F0_t { text "%8.4f"; }
+TM typedef icos_float icos_ppm_t { text "%6.2f"; }
+TM typedef uint8_t icos_status_t { text "%3u"; }
+
+S.C = 2.685e19 * (S.P / 760.) ./ (S.T / 273.15);
+S.Chi = S.Nfit ./ S.C;
+
+TM 1 Hz icos_scan_t icos_scan;
+TM 1 Hz icos_float icos_P, icos_T;
+TM 1 Hz icos_nu_F0_t icos_nu_F0;
+TM 1 Hz icos_ppm_t icos_ppm;
+TM 1 Hz icos_status_t icos_status;
+TM 1 Hz icos_status_t icos_stale;
+TM "Receive" icosfitd 1;
+
+Group ICOSd (icos_scan, icos_P, icos_T, icos_ppm,
+             icos_status, icos_stale) {
+  double M;
+  icos_scan = icosfitd.FitScanNum;
+  icos_P = icosfitd.P;
+  icos_T = icosfitd.T;
+  icos_nu_F0 = icosfitd.Vals[1];
+  M = 2.685e19 * (icos_P / 760.) / (icos_T / 273.15);
+  icos_ppm = 1e6 * icosfitd.Vals[2] / M;
+  icos_status =
+    (icosfitd.FitStatus & 7) +
+    ((icosfitd.Status & 3) << 3) +
+    ((icosfitd.Vals[0] ? 1 : 0) << 5);
+  icos_stale = icosfitd_obj->stale(255);
+}
