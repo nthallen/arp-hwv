@@ -39,7 +39,7 @@ State icosd_fit {
     ++icosd_n_sum;
   }
   { if (SSP_num > icosd_scan1 && icosd_n_sum > 0) {
-      icosd_P_avg = (icosd_P_sum/icosd_n_sum + 0.0086).*248.7302;
+      icosd_P_avg = (icosd_P_sum/icosd_n_sum + 0.0086)*248.7302;
       icosd_T_avg = 273.15 + icosd_T_sum/(2*icosd_n_sum);
       icosd_P_sum = 0;
       icosd_T_sum = 0;
