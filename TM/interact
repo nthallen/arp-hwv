@@ -21,7 +21,7 @@
   Launch - sspdrv -b1 -I10.0.0.1 -hSSP -N `mlf_find SSP`
   Launch - qclidacsd -h QCLI -d0
   Launch - IWG1
-  Launch - lyamrudpext
+# Launch - lyamrudpext
   Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L -S SSP \
               -l240:840 -P16,17,18,29
   Launch - HWValgo -v
