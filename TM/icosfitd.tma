@@ -1,0 +1,54 @@
+%{
+  /* icosfitd.tma */
+  #include "sspdrv.h"
+%}
+Partition
+
+%{
+  uint32_t icosd_scan0;
+  uint32_t icosd_scan1;
+  float icosd_P_sum;
+  float icosd_T_sum;
+  int icosd_n_sum;
+  float icosd_P_avg;
+  float icosd_T_avg;
+%}
+
+State icosd_init {
+  +10 Hold until (icos_stale == 0);
+      > icosfit PTE params 100 -23.82514 21.25962 2.833602 -1.957848 0.0698654 0 0.0689779 0 10
+      Validate icosd_restart;
+}
+
+State icosd_restart {
+      { icosd_scan0 = SSP_num;
+        icosd_P_sum = 0.;
+        icosd_T_sum = 0.;
+        icosd_n_sum = 0;
+      }
+   +2 Hold until (QCLI_Wave == 1 && SSP_Status == SSP_STATUS_TRIG);
+      Validate icosd_fit;
+}
+
+State icosd_fit {
+  { if (SSP_Status != SSP_STATUS_TRIG)
+      Validate icosd_restart;
+  }
+  { icosd_P_sum += convert(HHH1P);
+    icosd_T_sum += convert(HHH1T) + convert(HHH2T);
+    ++icosd_n_sum;
+  }
+  { if (SSP_num > icosd_scan1 && icosd_n_sum > 0) {
+      icosd_P_avg = (icosd_P_sum/icosd_n_sum + 0.0086).*248.7302;
+      icosd_T_avg = 273.15 + icosd_T_sum/(2*icosd_n_sum);
+      icosd_P_sum = 0;
+      icosd_T_sum = 0;
+      icosd_n_sum = 0;
+      icosd_scan1 = SSP_num;
+      if (SSP_num > icosd_scan0 + 4) {
+        ci_sendfcmd(2, "icosfit Scan %lu %.3f %.3f\n",
+          SSP_num, icosd_P_avg, icosd_T_avg);
+      }
+    }
+  }
+}

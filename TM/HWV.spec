@@ -83,7 +83,7 @@ lydisp : digio.tmc \
 lyamrudpext : HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   LyAmr/UDP.cc UDP.tmc -lsocket
 
-HWValgo : ptrh_conv.tmc IRVf.tmc HWV.tma HWV.sws
+HWValgo : ptrh_conv.tmc IRVf.tmc HWV.tma HWV.sws icosfitd.tma
 HWVcalalgo : ptrh_conv.tmc IRVf.tmc HWVcal.tma HWV.sws
 
 doit : HWV.doit
