@@ -34,9 +34,21 @@ int results::n_results() {
 
 results *results::newres() {
   results *r = active();
-  if (!r->pending) return r;
+  if (!r->pending ||
+      (!r->final && r->Status != res_Fitting))
+    return r;
+  int32_t active_scan = r->scannum;
+  bool active_final = r->final;
+  int active_status = r->Status;
   r = inactive();
-  if (!r->pending) return r;
+  if (!r->pending ||
+      (!r->final && r->Status != res_Fitting))
+    return r;
+  msg(-2, "No res: (%ld,%s,%d) (%ld,%s,%d)",
+   active_scan, active_final ? "true" : "false",
+   active_status,
+   r->scannum, r->final ? "true" : "false",
+   r->Status);
   return 0;
 }
 
@@ -117,6 +129,6 @@ void results::update_TM() {
     for (int i = 0; i < n_Vals; ++i) {
       icosfitd.Vals[i] = Vals[i];
     }
-    icosfitd.Status = Status;
+    icosfitd.FitStatus = Status;
   }
 }

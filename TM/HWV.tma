@@ -546,6 +546,7 @@ Partition
 #---------------------------------------------------------------
 # Partition 11: Analog Input Monitoring
 #---------------------------------------------------------------
+State AI_Watch_Disabled {}
 %{
   AI_T30K Last_LFB_T = 0;
   static int LFB_T_static_count = 0;
@@ -596,28 +597,57 @@ State Calibrate_Init {
 
 State Calibrate {
  +2    > Set Lab Flow Bubbler Set Pt 0
+ +2    > Soldrv A select mode 0
  +2    > Set Lab Flow Air Set Pt 0
- +2:00 > Set Lab Flow Air Set Pt 0.6
- +7:00 > Set Lab Flow Bubbler Set Pt 1
- +3:30 > Set Lab Flow Bubbler Set Pt 2 
- +3:30 > Set Lab Flow Bubbler Set Pt 3
- +3:30 > Set Lab Flow Bubbler Set Pt 4.5
- +7:00 > Set Lab Flow Bubbler Set Pt 3
- +3:30 > Set Lab Flow Bubbler Set Pt 2
- +3:30 > Set Lab Flow Bubbler Set Pt 1
- +3:30 > Set Lab Flow Bubbler Set Pt 0
- +3:30 > Set Lab Flow Air Set Pt 0 
- +3:30 > Set Lab Flow Air Set Pt 0.8
- +3:30 > Set Lab Flow Bubbler Set Pt 1
- +3:30 > Set Lab Flow Bubbler Set Pt 2 
- +3:30 > Set Lab Flow Bubbler Set Pt 3
- +3:30 > Set Lab Flow Bubbler Set Pt 4.5
- +7:00 > Set Lab Flow Bubbler Set Pt 3
- +3:30 > Set Lab Flow Bubbler Set Pt 2
- +3:30 > Set Lab Flow Bubbler Set Pt 1
- +3:30 > Set Lab Flow Bubbler Set Pt 0
- +3:30 > Set Lab Flow Air Set Pt 0 
- +2:00 > Set Lab Flow Air Set Pt 0.2
+ +2:30 > Set Lab Flow Air Set Pt 3.0
+ +2    > Soldrv A select mode 3 
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.5
+ +2:30 > Set Lab Flow Bubbler Set Pt 1 
+ +2:30 > Set Lab Flow Bubbler Set Pt 1.5
+ +2:30 > Set Lab Flow Bubbler Set Pt 2.5
+ +5:00 > Set Lab Flow Bubbler Set Pt 1.5
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.5
+ +2:30 > Set Lab Flow Bubbler Set Pt 0
+ +2:30 > Soldrv A select mode 0
+ +2    > Set Lab Flow Air Set Pt 0 
+ +2:30 > Set Lab Flow Air Set Pt 2.0
+ +2    > Soldrv A select mode 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.2
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.4 
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.6
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +5:00 > Set Lab Flow Bubbler Set Pt 0.6
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.4
+ +2:30 > Set Lab Flow Bubbler Set Pt 0.2
+ +2:30 > Set Lab Flow Bubbler Set Pt 0
+ +2:30 > Soldrv A select mode 0
+ +2    > Set Lab Flow Air Set Pt 0 
+ +2:30 > Set Lab Flow Air Set Pt 3.0 
+ +2    > Soldrv A select mode 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 2 
+ +2:30 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 4.5
+ +5:00 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 2
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 0
+ +2:30 > Soldrv A select mode 0
+ +2    > Set Lab Flow Air Set Pt 0 
+ +2:30 > Set Lab Flow Air Set Pt 1.0
+ +2    > Soldrv A select mode 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 2 
+ +2:30 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 4.5
+ +5:00 > Set Lab Flow Bubbler Set Pt 3
+ +2:30 > Set Lab Flow Bubbler Set Pt 2
+ +2:30 > Set Lab Flow Bubbler Set Pt 1
+ +2:30 > Set Lab Flow Bubbler Set Pt 0
+ +2:30 > Soldrv A select mode 0
+ +2    > Set Lab Flow Air Set Pt 0 
+ +5:00 > Set Lab Flow Air Set Pt 0.2
 }
 
 State PCalibrate_Start {
@@ -701,4 +731,5 @@ State PCalibrate_Start {
 }
 
 State Calibrate_Stop {}
+
 

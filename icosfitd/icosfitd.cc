@@ -381,6 +381,7 @@ void fitd::add_child(Selectee *P) {
 }
 
 int fitd::scan_data(results *r, const char *PTparams) {
+  msg(-2, "scan_data(%ld)", r->scannum);
   if (icosfitd.Status == IFS_Gone &&
       launch_icosfit(r->scannum)) {
     return 1;
@@ -396,6 +397,9 @@ int fitd::scan_data(results *r, const char *PTparams) {
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
     return 0;
+  } else {
+    msg(-2, "Did not send scan %ld: Status=%d, PTE %s",
+      r->scannum, icosfitd.Status, PTE.is_ready ? "ready" : "not ready");
   }
   return 0;
 }
@@ -405,6 +409,7 @@ int fitd::process_results(results *res) {
     case res_Fit:
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
+      res->final = true;
       return CMD.check_queue();
     case res_Syntax:
       msg(3, "Syntax error response from icosfit");
