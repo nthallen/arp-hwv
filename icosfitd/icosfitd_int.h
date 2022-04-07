@@ -110,7 +110,8 @@ class fitd {
   public:
     fitd();
     ~fitd();
-    inline void add_child(Selectee *P) { S.add_child(P); }
+    void add_child(Selectee *P);
+      // { S.add_child(P); }
     inline void event_loop() { S.event_loop(); }
     inline int check_queue() { return CMD.check_queue(); }
     inline void kill_icosfit() { PTE.output("GACK!\n"); }

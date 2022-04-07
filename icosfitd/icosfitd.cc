@@ -255,6 +255,7 @@ void icos_pipe::set_result(results *r) {
 }
 
 int icos_pipe::setup_pipe() {
+  msg(-2, "icos_pipe::setup_pipe(%s)", is_input ? "input" : "output");
   cleanup();
   if (mkfifo(path, 0664) != 0) {
     msg(MSG_ERROR, "%s: mkfifo error %d: %s",
@@ -327,9 +328,12 @@ int icos_pipe::not_whitespace() {
 }
 
 icos_TM::icos_TM(const char *name, void *data, unsigned short size)
-    : TM_Selectee(name, data, size) {}
+    : TM_Selectee(name, data, size) {
+  msg(-2, "icos_TM() fd = %d, flags = %d", fd, flags);
+}
 
 int icos_TM::ProcessData(int flag) {
+  msg(-3, "icos_TM::ProcessData(%d)", flag);
   Col_send(TMid);
   results *r = results::active();
   if (r->pending && r->final)
@@ -353,8 +357,9 @@ fitd::fitd()
     int TMsize = sizeof(icosfitd) -
       (MAX_ICOSFITD_RESULT_VALS - results::n_results())
         * sizeof(ICOS_Float);
-    TM = new icos_TM("icosfitd", &icosfitd, TMsize);
-    S.add_child(TM);
+    msg(-2, "TMsize = %d", TMsize);
+    // TM = new icos_TM("icosfitd", &icosfitd, TMsize);
+    // add_child(TM);
   }
   
   int policy;
@@ -369,6 +374,11 @@ fitd::fitd()
 }
 
 fitd::~fitd() {}
+
+void fitd::add_child(Selectee *P) {
+  msg(-2, "add_child()");
+  S.add_child(P);
+}
 
 int fitd::scan_data(results *r, const char *PTparams) {
   if (icosfitd.Status == IFS_Gone &&
@@ -544,6 +554,8 @@ icos_cmd::icos_cmd(fitd *fit)
     fd = fileno(ifp);
   } else {
     init(tm_dev_name("cmd/icosfitd"), O_RDONLY, 300);
+    msg(-2, "icos_cmd returned from init(). fd = %d, flags = %d",
+      fd, flags);
   }
   flags |= Selector::gflag(0) | Selector::gflag(1);
   fit->add_child(this);
@@ -565,6 +577,7 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 }
 
 int icos_cmd::ProcessData(int flag) {
+  msg(-2, "icos_cmd::ProcessData(%d)", flag);
   if (flag & Selector::gflag(0)) {
     results *r = results::active();
     if (r->final && !r->pending) {
@@ -709,6 +722,7 @@ int main(int argc, char **argv) {
     nl_error(0, "Starting: v1.0");
     if (!fit.check_queue())
       fit.event_loop();
+    msg(-2, "Exited from event_loop()");
   }
   nl_error(0, "Terminating");
 }

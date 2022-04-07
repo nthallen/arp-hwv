@@ -4,7 +4,7 @@ Moduledef icosfitd {
 mode (default) {
   tmcbase = icosfitd.tmc
   colbase = icosfitd_col.tmc
-  genuibase = icosfitd.genui
+  genuibase = icosfitd.genui:icosfitd.genui.in
   cmdbase = icosfitd.cmd
   - : icosfitd.tbl:icosfitd.tbl.in
   - : icosfitd_conv.tmc:icosfitd_conv.tmc.in
