@@ -358,8 +358,8 @@ fitd::fitd()
       (MAX_ICOSFITD_RESULT_VALS - results::n_results())
         * sizeof(ICOS_Float);
     msg(-2, "TMsize = %d", TMsize);
-    // TM = new icos_TM("icosfitd", &icosfitd, TMsize);
-    // add_child(TM);
+    TM = new icos_TM("icosfitd", &icosfitd, TMsize);
+    add_child(TM);
   }
   
   int policy;
@@ -544,7 +544,8 @@ icos_cmd::icos_cmd(fitd *fit)
       PTparams(0),
       PTparams_len(0),
       cur_scannum(0),
-      fitting_scannum(0)
+      fitting_scannum(0),
+      ifp(0)
 {
   if (command_file) {
     ifp = fopen(command_file, "r");
@@ -641,7 +642,7 @@ int icos_cmd::protocol_input() {
         PTparams[PT_len] = '\0';
         msg(-2, "icos_cmd: PT params: %s\n",PTparams);
         report_ok();
-        consume(++cp);
+        consume(++endp);
         return 0;
       }
     }

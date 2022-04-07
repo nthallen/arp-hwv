@@ -39,4 +39,5 @@ Group ICOSd (icos_scan, icos_P, icos_T, icos_ppm,
     ((icosfitd.Status & 3) << 3) +
     ((icosfitd.Vals[0] ? 1 : 0) << 5);
   icos_stale = icosfitd_obj->stale(255);
+  icosfitd_obj->synch();
 }
