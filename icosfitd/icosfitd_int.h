@@ -46,6 +46,7 @@ class results {
      */
     static results *newres();
     static void toggle();
+    static int n_results();
     static int ValIdxs[MAX_ICOSFITD_RESULT_VALS];
     static int n_Vals;
   private:
@@ -63,11 +64,6 @@ class icos_pipe : public Ser_Sel {
     void output(const char *line);
     int setup_pipe();
     int open_pipe();
-    /**
-     * It is a fatal error to call this on the output pipe.
-     * @return The number of columns specified with the -P option
-     */
-    int n_results();
     Timeout *GetTimeout();
     int logfd();
     void cleanup();

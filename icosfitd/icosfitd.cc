@@ -300,13 +300,6 @@ int icos_pipe::open_pipe() {
   return 0;
 }
 
-int icos_pipe::n_results() {
-  if (!is_input || !res) {
-    msg(3, "icos_pipe::n_results() illegal on output pipe");
-  }
-  return res->n_Vals;
-}
-
 void icos_pipe::close() {
   if (fd >= 0) {
     ::close(fd);
@@ -358,7 +351,7 @@ fitd::fitd()
 {
   if (!command_file) {
     int TMsize = sizeof(icosfitd) -
-      (MAX_ICOSFITD_RESULT_VALS - SUM.n_results())
+      (MAX_ICOSFITD_RESULT_VALS - results::n_results())
         * sizeof(ICOS_Float);
     TM = new icos_TM("icosfitd", &icosfitd, TMsize);
     S.add_child(TM);

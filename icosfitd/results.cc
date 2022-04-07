@@ -6,7 +6,7 @@
 
 bool results::res_toggle = false;
 results results::res[2];
-int results::n_Vals;
+int results::n_Vals = -1;
 int results::ValIdxs[MAX_ICOSFITD_RESULT_VALS];
 
 results *results::active() {
@@ -21,6 +21,13 @@ void results::toggle() {
   results *r = active();
   r->reset();
   res_toggle = !res_toggle;
+}
+
+int results::n_results() {
+  if (n_Vals < 0) {
+    msg(3, "results::n_results() must follow setup()");
+  }
+  return n_Vals;
 }
 
 results *results::newres() {
