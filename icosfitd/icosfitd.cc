@@ -196,6 +196,8 @@ int icos_pipe::protocol_input() {
       report_err("Format error in ICOSsum.dat");
       res->Status = res_Syntax;
     } else {
+      if (scannum != res->scannum)
+        msg(1, "Result expected scannum %ld, received %ld", res->scannum, scannum);
       res->scannum = scannum;
       res->P = P;
       res->T = T;
@@ -409,8 +411,7 @@ int fitd::process_results(results *res) {
     case res_Fit:
       msg(-2, "%u: Successfully fit", res->scannum);
       icosfitd.Status = icosfit_status = IFS_Ready;
-      res->final = true;
-      return CMD.check_queue();
+      break;
     case res_Syntax:
       msg(3, "Syntax error response from icosfit");
       break;
@@ -421,7 +422,8 @@ int fitd::process_results(results *res) {
       break;
   }
   res->final = true;
-  return 0;
+  res->update_TM();
+  return CMD.check_queue();
 }
 
 int fitd::PTE_ready() {
@@ -435,8 +437,7 @@ int fitd::recover() {
   icosfitd.Status = icosfit_status = IFS_Gone;
   results *res = results::active();
   res->Status = res_EOF;
-  res->final = true;
-  return CMD.check_queue();
+  return process_results(res);
 }
 
 int fitd::launch_icosfit(uint32_t scannum) {
