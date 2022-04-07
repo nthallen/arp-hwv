@@ -7,7 +7,7 @@ TM typedef double TORR;
 TM typedef uint8_t UCHAR { text "%3u"; }
 TM typedef uint16_t UINT { text "%5u"; }
 TM typedef uint32_t ULONG { text "%8ld"; }
-TM typedef uint32_t L20 { text "%8lu"; }
+TM typedef int32_t L20 { text "%8lu"; }
 
 TM typedef int16_t AI_X1
   { text "%7.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
