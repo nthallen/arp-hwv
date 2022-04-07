@@ -196,9 +196,9 @@ int icos_pipe::protocol_input() {
       report_err("Format error in ICOSsum.dat");
       res->Status = res_Syntax;
     } else {
-      if (scannum != res->scannum)
+      if ((uint32_t)scannum != res->scannum)
         msg(1, "Result expected scannum %ld, received %ld", res->scannum, scannum);
-      res->scannum = scannum;
+      res->scannum = (uint32_t)scannum;
       res->P = P;
       res->T = T;
       int res_num = 0;
