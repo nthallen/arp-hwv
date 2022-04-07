@@ -578,14 +578,12 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 }
 
 int icos_cmd::ProcessData(int flag) {
-  msg(-2, "icos_cmd::ProcessData(%d)", flag);
   if (flag & Selector::gflag(0)) {
     results *r = results::active();
     if (r->final && !r->pending) {
       results *r2 = results::inactive();
       if (r2->pending) {
         results::toggle();
-        r2->update_TM();
         if (submit()) return 1;
       }
     }
@@ -704,6 +702,8 @@ int icos_cmd::submit() {
       } else if (icosfitd.Status == IFS_Fitting) {
         fitting_scannum = cur_scannum;
       }
+    } else {
+      msg(-2, "No results for scan %ld", cur_scannum);
     }
   }
   return rv;

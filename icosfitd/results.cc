@@ -19,8 +19,10 @@ results *results::inactive() {
 
 void results::toggle() {
   results *r = active();
-  r->reset();
+  r->pending = false;
   res_toggle = !res_toggle;
+  r = active();
+  r->update_TM();
 }
 
 int results::n_results() {
@@ -82,8 +84,15 @@ void results::setup(const char *param_list) {
 }
 
 void results::reset() {
-  init(0, 0., 0.);
+  scannum = 0;
+  P = 0;
+  T = 0;
+  for (int i = 0; i < n_Vals; ++i) {
+    Vals[i] = 0.;
+  }
   Status = res_None;
+  pending = false;
+  final = false;
 }
 
 void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
@@ -94,18 +103,20 @@ void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
     Vals[i] = 0.;
   }
   Status = res_Queued;
-  pending = false;
+  pending = true;
   final = false;
+  update_TM();
 }
 
 void results::update_TM() {
   // This should only be called on the active results
-  icosfitd.FitScanNum = scannum;
-  icosfitd.P = P;
-  icosfitd.T = T;
-  for (int i = 0; i < n_Vals; ++i) {
-    icosfitd.Vals[i] = Vals[i];
+  if (this == active()) {
+    icosfitd.FitScanNum = scannum;
+    icosfitd.P = P;
+    icosfitd.T = T;
+    for (int i = 0; i < n_Vals; ++i) {
+      icosfitd.Vals[i] = Vals[i];
+    }
+    icosfitd.Status = Status;
   }
-  icosfitd.Status = Status;
-  pending = true;
 }
