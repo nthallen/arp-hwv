@@ -1,4 +1,4 @@
-Moduledef icosfitd {
+Moduledef icosfitd [ Panel= ] {
 }
 
 mode (default) {
@@ -6,8 +6,8 @@ mode (default) {
   colbase = icosfitd_col.tmc
   genuibase = icosfitd.genui:icosfitd.genui.in
   cmdbase = icosfitd.cmd
+  extbase = icosfitd_conv.tmc:icosfitd_conv.tmc.in
   - : icosfitd.tbl:icosfitd.tbl.in
-  - : icosfitd_conv.tmc:icosfitd_conv.tmc.in
   DISTRIB = @MODDIR@/../icosfitd @MODDIR@/icosfit.RT.in
   IDISTRIB = @MODDIR@/sbase.5p1e.ptb
   OBJ = icosfitd.tbl icosfitd_conv.tmc

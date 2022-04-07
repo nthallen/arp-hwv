@@ -1,0 +1,10 @@
+# icosfitd.genui
+ 1 icos_scan HHH:icosfitd scan
+ 1 icos_P HHH:icosfitd P
+ 1 icos_T HHH:icosfitd T
+ 1 icos_nu_F0 HHH:icosfitd nu_F0
+ 1 icos_ppm HHH:icosfitd ppm
+ 1 icosd_fixflt HHH:icosfitd fixflt
+ 1 icosd_fit_status HHH:icosfitd status
+ 1 icosd_status HHH:icosfitd status
+ 1 icos_stale HHH:icosfitd status
