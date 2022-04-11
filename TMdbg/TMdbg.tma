@@ -1,6 +1,7 @@
 %{
   /* icosfitd.tma */
   #include "SPT.h"
+  #define SPTidx(x,y) SPT[x].y
 %}
 
 %{
@@ -25,7 +26,7 @@ State icosd_init {
 }
 
 State icosd_restart {
-      { icosd_scan0 = SPT[icosd_index].ScanNum;
+      { icosd_scan0 = SPTidx(icosd_index,ScanNum);
         icosd_P_sum = 0.;
         icosd_T_sum = 0.;
         icosd_n_sum = 0;
@@ -40,9 +41,9 @@ State icosd_fit {
 # { if (SSP_Status != SSP_STATUS_TRIG)
 #     Validate icosd_restart;
 # }
-  { icosd_P_sum += SPT[icosd_index].CellP;
-    icosd_T_sum += SPT[icosd_index].Tavg;
-    icosd_scan   = SPT[icosd_index].ScanNum;
+  { icosd_P_sum += SPTidx(icosd_index,CellP);
+    icosd_T_sum += SPTidx(icosd_index,Tavg);
+    icosd_scan   = SPTidx(icosd_index,ScanNum);
     ++icosd_n_sum;
     if (icosd_scan > icosd_scan1 && icosd_n_sum > 0) {
       icosd_P_avg = icosd_P_sum/icosd_n_sum;
@@ -53,7 +54,7 @@ State icosd_fit {
       icosd_scan1 = icosd_scan;
       if (icosd_scan > icosd_scan0 + 4) {
         ci_sendfcmd(2, "icosfit Scan %lu %.3f %.3f\n",
-          SSP_num, icosd_P_avg, icosd_T_avg);
+          icosd_scan, icosd_P_avg, icosd_T_avg);
       }
     } else if (icosd_scan < 0)
       Validate icosd_shutdown;

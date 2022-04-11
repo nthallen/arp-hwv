@@ -10,6 +10,12 @@ TMdbgdispnc.cc
 TMdbgdispncoui.c
 TMdbgdispncoui.o
 TMdbgdispnc.o
+TMdbgalgoa.tmc
+TMdbgalgo.cc
+TMdbgalgooui.c
+TMdbgalgooui.o
+TMdbgalgo.o
+SPT.o
 doit.dep
 TMdbgcmd.cc
 TMdbgcmd.dat
@@ -40,6 +46,7 @@ TMdbgtblnc.tmc.dep
 Makefile
 TMdbgdisp
 TMdbgdispnc
+TMdbgalgo
 doit
 TMdbgclt
 TMdbgcltnc
