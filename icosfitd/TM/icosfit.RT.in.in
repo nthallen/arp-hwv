@@ -1,0 +1,41 @@
+# Configuration for 210802.2F region R1 line set .5p1e
+# Verbosity & 1 => V_CURVES output verbose files with fit curves for each scan
+# Verbosity & 2 => V_INFO include info[1:9] in output
+# Verbosity & 4 => V_CHKJAC check Jacobian and report in standard output file
+# Verbosity & 8 => V_ITERATIONS output verbose files with fit curves for each iteration
+# Verbosity & 0x10 16 => V_DERIVATIVES Include analytic derivatives in verbose output files
+# Verbosity & 0x20 32 => V_SCALE Include dscl with parameters in output files
+# Verbosity & 0x40 64 => V_CHKDER Estimate derivatives via finite differences and include in fit curves files
+# Verbosity & 0x80 128 => V_VOIGT Output X and K values for each voigt line in verbose(1) fits
+QCLI_Wave = 2; # Waveform HHH_10Hz
+ScanNumRange = [ 1, 1000000 ];
+SignalRegion = [ 126, 1025 ];
+BackgroundRegion = [ 5, 26 ];
+SampleRate = 1000000 Hz;
+Threshold = 1e-06;
+# Fix Doppler;
+# Fix Lorentz;
+nu0 = 7181;
+Lines = {
+  1 1 7181.155657 1.500E-20 0.0997 136.7617 0.76 -0.011960 455521, Group H2O, Position=%d, Fix Doppler, Fix Lorentz;
+};
+
+LineMargin = 0.05 cm-1;
+LineMarginMultiplier = 8;
+epsilon2 = 1e-4;
+MirrorLoss = 0.0 ppm;
+CavityLength = 10.920;
+CavityFixedLength = 0.000;
+N_Passes = 96;
+EtalonFSR = 0.027000 cm-1;
+Binary;
+ICOSdir = @RAW@;
+BaselineFile = sbase.5p1e.ptb;
+OutputDir = ./;
+PTEFile = PTE.fifo;
+OutputFile = ICOSsum.fifo;
+LogFile = ICOSfit.log;
+NoTee;
+Verbosity = 2;
+MaxEnsembleDriftPerScan = 5e-3 cm-1;
+MaxIterations = 20;

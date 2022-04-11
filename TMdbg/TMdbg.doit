@@ -1,0 +1,4 @@
+display TMdbgdisp 
+client TMdbgclt
+memo
+batchfile interact

@@ -1,0 +1,6 @@
+Input "TMbase.tbl";
+Input "icosfitd.tbl";
+
+{ HBox { [icosfitd]; |; [TMbaseB] };
+  -;
+}

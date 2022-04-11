@@ -1,0 +1,14 @@
+# Startup script for TMdbg
+  Launch memo memo -o $Experiment.log
+  Launch TM/DCo TMbfr
+
+  memo=/dev/huarp/$Experiment/memo
+
+  Launch DG/cmd TMdbgcol
+  Launch cmd/server TMdbgsrvr
+  Launch - tmdf
+  Launch - lgr -N `mlf_find LOG`
+# Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L -S SSP \
+#             -l240:840 -P16,17,18,29 -vv
+# Launch - TMdbgalgo -v
+

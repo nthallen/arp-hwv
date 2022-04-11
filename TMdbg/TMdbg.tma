@@ -1,0 +1,66 @@
+%{
+  /* icosfitd.tma */
+  #include "SPT.h"
+%}
+
+%{
+  uint32_t icosd_scan;
+  uint32_t icosd_scan0;
+  uint32_t icosd_scan1;
+  float icosd_P_sum;
+  float icosd_T_sum;
+  int icosd_n_sum;
+  float icosd_P_avg;
+  float icosd_T_avg;
+  int icosd_index;
+%}
+
+State icosd_init {
+      { icosd_index = 0;
+        icosd_scan1 = 0;
+      }
+  +10 Hold until (icos_stale == 0);
+      > icosfit PTE params 100 -23.82514 21.25962 2.833602 -1.957848 0.0698654 0 0.0689779 0 10
+      Validate icosd_restart;
+}
+
+State icosd_restart {
+      { icosd_scan0 = SPT[icosd_index].ScanNum;
+        icosd_P_sum = 0.;
+        icosd_T_sum = 0.;
+        icosd_n_sum = 0;
+        if (icosd_scan0 < 0) Validate icosd_shutdown;
+        ++icosd_index;
+      }
+   +2 Hold until (icosd_scan0 > 0);
+      Validate icosd_fit;
+}
+
+State icosd_fit {
+# { if (SSP_Status != SSP_STATUS_TRIG)
+#     Validate icosd_restart;
+# }
+  { icosd_P_sum += SPT[icosd_index].CellP;
+    icosd_T_sum += SPT[icosd_index].Tavg;
+    icosd_scan   = SPT[icosd_index].ScanNum;
+    ++icosd_n_sum;
+    if (icosd_scan > icosd_scan1 && icosd_n_sum > 0) {
+      icosd_P_avg = icosd_P_sum/icosd_n_sum;
+      icosd_T_avg = icosd_T_sum/icosd_n_sum;
+      icosd_P_sum = 0;
+      icosd_T_sum = 0;
+      icosd_n_sum = 0;
+      icosd_scan1 = icosd_scan;
+      if (icosd_scan > icosd_scan0 + 4) {
+        ci_sendfcmd(2, "icosfit Scan %lu %.3f %.3f\n",
+          SSP_num, icosd_P_avg, icosd_T_avg);
+      }
+    } else if (icosd_scan < 0)
+      Validate icosd_shutdown;
+  }
+}
+
+State icosd_shutdown {
+  +5 > quit
+}
+

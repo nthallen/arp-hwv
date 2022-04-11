@@ -1,0 +1,4 @@
+HEADER icosfitd TM dbg
+MNEMONIC TMdbg
+HOMEDIR TMDBG_Data_Dir
+ROWS 18

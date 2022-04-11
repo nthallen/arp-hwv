@@ -1,0 +1,30 @@
+TMbase_data {
+  CPU:    (CPU_Pct,3)  %;
+  RAM:    (freemem,7) MB;
+  Disk:   (Disk,5)     %;
+#  SWStat: (SWStat,3);
+#    Fail:   (Fail,2);
+  TDrift: (SysTDrift,7) sec;
+}
+
+TMbase_times {
+  HBox {
+    HGlue 0+1;
+    {
+      (flttime,9);
+      MFCtr: (MFCtr,5);
+    }
+  }
+}
+
+TMbase {
+  [TMbase_data];
+  VGlue 0+1;
+  [TMbase_times]
+}
+
+TMbaseB {
+  HBox{ +-; Title: "System"; -+ };
+  [TMbase]
+}
+
