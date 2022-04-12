@@ -2,7 +2,7 @@ tmcbase = base.tmc
 genuibase = TMdbg.genui
 
 Module TMbase
-Module icosfitd RAW=/home/hwv/raw/flight/210802.2/SSP.average1
+Module icosfitd RAW=/home/hwv/raw/junk/220408.1/SSP
 
 SCRIPT = interact
 

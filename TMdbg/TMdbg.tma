@@ -1,6 +1,7 @@
 %{
   /* icosfitd.tma */
   #include "SPT.h"
+  #include "msg.h"
   #define SPTidx(x,y) SPT[x].y
 %}
 
@@ -20,31 +21,35 @@ State icosd_init {
       { icosd_index = 0;
         icosd_scan1 = 0;
       }
+      > Telemetry Start
   +10 Hold until (icos_stale == 0);
       > icosfit PTE params 100 -23.82514 21.25962 2.833602 -1.957848 0.0698654 0 0.0689779 0 10
       Validate icosd_restart;
 }
 
 State icosd_restart {
-      { icosd_scan0 = SPTidx(icosd_index,ScanNum);
+      depending on (1 Hz) {
+        icosd_scan0 = SPTidx(icosd_index,ScanNum);
         icosd_P_sum = 0.;
         icosd_T_sum = 0.;
         icosd_n_sum = 0;
         if (icosd_scan0 < 0) Validate icosd_shutdown;
         ++icosd_index;
+        if (icosd_scan0 > 0) Validate icosd_fit;
+        msg(0, "icosd_scan0 = %d idx = %d", icosd_scan0, icosd_index);
       }
-   +2 Hold until (icosd_scan0 > 0);
-      Validate icosd_fit;
 }
 
 State icosd_fit {
 # { if (SSP_Status != SSP_STATUS_TRIG)
 #     Validate icosd_restart;
 # }
-  { icosd_P_sum += SPTidx(icosd_index,CellP);
+  depending on (1 Hz) {
+    icosd_P_sum += SPTidx(icosd_index,CellP);
     icosd_T_sum += SPTidx(icosd_index,Tavg);
     icosd_scan   = SPTidx(icosd_index,ScanNum);
     ++icosd_n_sum;
+    ++icosd_index;
     if (icosd_scan > icosd_scan1 && icosd_n_sum > 0) {
       icosd_P_avg = icosd_P_sum/icosd_n_sum;
       icosd_T_avg = icosd_T_sum/icosd_n_sum;

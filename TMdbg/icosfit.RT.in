@@ -29,7 +29,7 @@ CavityFixedLength = 0.000;
 N_Passes = 96;
 EtalonFSR = 0.027000 cm-1;
 Binary;
-ICOSdir = /home/hwv/raw/flight/210802.2/SSP.average1;
+ICOSdir = /home/hwv/raw/junk/220408.1/SSP;
 BaselineFile = sbase.5p1e.ptb;
 OutputDir = ./;
 PTEFile = PTE.fifo;
