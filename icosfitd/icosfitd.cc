@@ -337,9 +337,7 @@ icos_TM::icos_TM(const char *name, void *data, unsigned short size)
 int icos_TM::ProcessData(int flag) {
   msg(-3, "icos_TM::ProcessData(%d)", flag);
   Col_send(TMid);
-  results *r = results::active();
-  if (r->pending && r->final)
-    r->pending = false;
+  results::posted();
   Stor->set_gflag(0);
   return 0;
 }
@@ -421,8 +419,7 @@ int fitd::process_results(results *res) {
       msg(2, "Unexpected result status %d", res->Status);
       break;
   }
-  res->final = true;
-  res->update_TM();
+  res->finalize();
   return CMD.check_queue();
 }
 
@@ -435,9 +432,14 @@ int fitd::recover() {
   PTE.cleanup();
   SUM.cleanup();
   icosfitd.Status = icosfit_status = IFS_Gone;
-  results *res = results::active();
-  res->Status = res_EOF;
-  return process_results(res);
+  results *res = results::active;
+  if (res) {
+    res->Status = res_EOF;
+    return process_results(res);
+  } else {
+    msg(2, "fitd::recover() but !active");
+    return 0;
+  }
 }
 
 int fitd::launch_icosfit(uint32_t scannum) {
@@ -585,14 +587,16 @@ bool icos_cmd::not_uint32(uint32_t &output_val) {
 
 int icos_cmd::ProcessData(int flag) {
   if (flag & Selector::gflag(0)) {
-    results *r = results::active();
-    if (r->final && !r->pending) {
-      results *r2 = results::inactive();
-      if (r2->pending) {
-        results::toggle();
-        if (submit()) return 1;
-      }
-    }
+    if (!results::active && submit())
+      return 1;
+    // results *r = results::active();
+    // if (r->final && !r->pending) {
+      // results *r2 = results::inactive();
+      // if (r2->pending) {
+        // results::toggle();
+        // if (submit()) return 1;
+      // }
+    // }
   }
   if (flag & Selector::gflag(1)) {
     msg(-2, "icos_cmd: gflag(1)");

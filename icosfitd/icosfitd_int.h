@@ -18,34 +18,32 @@ class results {
     void reset();
     void init(uint32_t scannum, ICOS_Float P, ICOS_Float T);
     void update_TM();
+    void finalize();
     uint32_t scannum;
     ICOS_Float P;
     ICOS_Float T;
     ICOS_Float Vals[MAX_ICOSFITD_RESULT_VALS];
     result_status Status;
-    /**
-     * True when final data has not been copied to icosfitd
-     */
-    bool pending;
-    /**
-     * False if data can be overwritten before being copied
-     * Applies to pretty much anything that isn't a fit result.
-     */
-    bool final;
+    enum {res_inactive, res_active, res_pending} state;
+    results *next;
+
     static void setup(const char *param_list);
     /**
-     * @return the currently active results object
+     * Where results are currently being stored
      */
-    static results *active();
+    static results *active;
     /**
-     * @return the currently inactive results object
+     * Where results are currently being reported
      */
-    static results *inactive();
+    static results *pending;
     /**
      * return the next available results object or 0
      */
     static results *newres();
-    static void toggle();
+    /**
+     * Called when TM data is written to collection
+     */
+    static void posted();
     static int n_results();
     static int ValIdxs[MAX_ICOSFITD_RESULT_VALS];
     static int n_Vals;

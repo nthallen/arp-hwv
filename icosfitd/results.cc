@@ -4,26 +4,11 @@
 #include "icosfitd_int.h"
 #include "msg.h"
 
-bool results::res_toggle = false;
 results results::res[2];
+results *results::active;
+results *results::pending;
 int results::n_Vals = -1;
 int results::ValIdxs[MAX_ICOSFITD_RESULT_VALS];
-
-results *results::active() {
-  return res_toggle ? &res[1] : &res[0];
-}
-
-results *results::inactive() {
-  return res_toggle ? &res[0] : &res[1];
-}
-
-void results::toggle() {
-  results *r = active();
-  r->pending = false;
-  res_toggle = !res_toggle;
-  r = active();
-  r->update_TM();
-}
 
 int results::n_results() {
   if (n_Vals < 0) {
@@ -33,28 +18,31 @@ int results::n_results() {
 }
 
 results *results::newres() {
-  results *r = active();
-  if (!r->pending ||
-      (!r->final && r->Status != res_Fitting))
-    return r;
-  int32_t active_scan = r->scannum;
-  bool active_final = r->final;
-  int active_status = r->Status;
-  r = inactive();
-  if (!r->pending ||
-      (!r->final && r->Status != res_Fitting))
-    return r;
-  msg(-2, "No res: (%ld,%s,%d) (%ld,%s,%d)",
-   active_scan, active_final ? "true" : "false",
-   active_status,
-   r->scannum, r->final ? "true" : "false",
-   r->Status);
-  return 0;
+  results *rv = 0;
+  if (active)
+    msg(3, "results::newres() called while active");
+  if (pending) {
+    if (pending->next->state == res_inactive)
+      rv = pending->next;
+  } else {
+    if (res[0].state != res_inactive || res[1].state != res_inactive)
+      msg(3, "One or more results not inactive despite !pending && !active");
+    rv = &res[0];
+  }
+  return rv;
+}
+
+void results::posted() {
+  if (pending && pending->state == res_pending) {
+    pending->state = res_inactive;
+    pending = (pending->next->state != res_inactive) ?
+      pending->next : 0;
+  }
 }
 
 results::results()
   : scannum(0), P(0), T(0), Status(res_None),
-    pending(false), final(false) {
+    state(res_inactive), next(0) {
   for (int i = 0; i < MAX_ICOSFITD_RESULT_VALS; ++i) {
     Vals[i] = 0;
   }
@@ -91,6 +79,8 @@ void results::setup(const char *param_list) {
     if (*s) ++s;
     ++idx;
   }
+  res[0].next = &res[1];
+  res[1].next = &res[0];
   res[0].reset();
   res[1].reset();
 }
@@ -103,11 +93,12 @@ void results::reset() {
     Vals[i] = 0.;
   }
   Status = res_None;
-  pending = false;
-  final = false;
+  state = res_inactive;
 }
 
 void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
+  if (state != res_inactive || !active)
+    msg(3, "results::init() while !inactive || active");
   this->scannum = scannum;
   this->P = P;
   this->T = T;
@@ -115,14 +106,17 @@ void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
     Vals[i] = 0.;
   }
   Status = res_Queued;
-  pending = true;
-  final = false;
-  update_TM();
+  state = res_active;
+  active = this;
+  if (!pending) {
+    pending = this;
+    update_TM(); // only updates pending
+  }
 }
 
 void results::update_TM() {
-  // This should only be called on the active results
-  if (this == active()) {
+  // This could be a static function and only update the pending object
+  if (this == pending) {
     icosfitd.FitScanNum = scannum;
     icosfitd.P = P;
     icosfitd.T = T;
@@ -131,4 +125,13 @@ void results::update_TM() {
     }
     icosfitd.FitStatus = Status;
   }
+}
+
+void results::finalize() {
+  if (state != res_active || this != active)
+    msg(3, "results::finalize() when !active");
+  state = res_pending;
+  active = 0;
+  if (!pending) pending = this;
+  update_TM();
 }
