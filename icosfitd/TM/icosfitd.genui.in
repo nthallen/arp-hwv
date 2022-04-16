@@ -4,7 +4,7 @@
  1 icos_T @Panel@icosfitd T
  1 icos_nu_F0 @Panel@icosfitd nu_F0
  1 icos_ppm @Panel@icosfitd ppm
- 1 icosd_fixflt @Panel@icosfitd fixflt
+ 1 icosd_fixflt @Panel@icosfitd fixflt %.0lf
  1 icosd_fit_status @Panel@icosfitd status %.0lf
  1 icosd_status @Panel@icosfitd status %.0lf
  1 icos_stale @Panel@icosfitd status
