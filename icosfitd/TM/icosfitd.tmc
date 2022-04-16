@@ -13,8 +13,8 @@
 */
 TM typedef uint32_t icos_scan_t { text "%7u"; }
 TM typedef float icos_float { text "%6.1f"; }
-TM typedef icos_float icos_nu_F0_t { text "%8.4f"; }
-TM typedef icos_float icos_ppm_t { text "%6.2f"; }
+TM typedef icos_float icos_nu_F0_t { text "%8.5f"; }
+TM typedef icos_float icos_ppm_t { text "%8.2f"; }
 TM typedef uint8_t icos_status_t { text "%3u"; }
 
 TM 1 Hz icos_scan_t icos_scan;

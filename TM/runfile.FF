@@ -22,6 +22,7 @@
   Launch - qclidacsd -h QCLI -d0
   Launch - IWG1
   Launch - lyamrudpext
+  Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L -S SSP \
+              -l240:840 -P16,18,29
   Launch - HWValgo -v
   ntpq -p
-
