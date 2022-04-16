@@ -10,6 +10,6 @@
   Launch - lgr -N `mlf_find LOG`
   Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L \
               -S /home/hwv/raw/junk/220408.1/SSP \
-              -l240:840 -P16,17,18,29 -vv
+              -l240:840 -P16,18,29 -vv
   Launch - TMdbgalgo -v
 

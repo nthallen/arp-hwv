@@ -19,15 +19,15 @@ int results::n_results() {
 
 results *results::newres() {
   results *rv = 0;
-  if (active)
-    msg(3, "results::newres() called while active");
-  if (pending) {
-    if (pending->next->state == res_inactive)
-      rv = pending->next;
-  } else {
-    if (res[0].state != res_inactive || res[1].state != res_inactive)
-      msg(3, "One or more results not inactive despite !pending && !active");
-    rv = &res[0];
+  if (!active) {
+    if (pending) {
+      if (pending->next->state == res_inactive)
+        rv = pending->next;
+    } else {
+      if (res[0].state != res_inactive || res[1].state != res_inactive)
+        msg(3, "One or more results not inactive despite !pending && !active");
+      rv = &res[0];
+    }
   }
   return rv;
 }
@@ -35,8 +35,12 @@ results *results::newres() {
 void results::posted() {
   if (pending && pending->state == res_pending) {
     pending->state = res_inactive;
-    pending = (pending->next->state != res_inactive) ?
-      pending->next : 0;
+    if (pending->next->state != res_inactive) {
+      pending = pending->next;
+      pending->update_TM();
+    } else {
+      pending = 0;
+    }
   }
 }
 
@@ -89,7 +93,7 @@ void results::reset() {
   scannum = 0;
   P = 0;
   T = 0;
-  for (int i = 0; i < n_Vals; ++i) {
+  for (int i = 0; i < MAX_ICOSFITD_RESULT_VALS; ++i) {
     Vals[i] = 0.;
   }
   Status = res_None;
@@ -97,7 +101,7 @@ void results::reset() {
 }
 
 void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
-  if (state != res_inactive || !active)
+  if (state != res_inactive || active)
     msg(3, "results::init() while !inactive || active");
   this->scannum = scannum;
   this->P = P;
@@ -117,6 +121,8 @@ void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
 void results::update_TM() {
   // This could be a static function and only update the pending object
   if (this == pending) {
+    msg(-2, "update_TM() %d, %d, nVals=%d %g %g %g %g %g",
+      scannum, Status, n_Vals, Vals[0], Vals[1], Vals[2], Vals[3], Vals[4]);
     icosfitd.FitScanNum = scannum;
     icosfitd.P = P;
     icosfitd.T = T;
@@ -124,10 +130,13 @@ void results::update_TM() {
       icosfitd.Vals[i] = Vals[i];
     }
     icosfitd.FitStatus = Status;
+  } else {
+    msg(-2, "update_TM(not) %d, %d", scannum, Status);
   }
 }
 
 void results::finalize() {
+  msg(-2, "finalize() %d, %d", scannum, Status);
   if (state != res_active || this != active)
     msg(3, "results::finalize() when !active");
   state = res_pending;

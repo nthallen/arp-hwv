@@ -396,6 +396,7 @@ int fitd::scan_data(results *r, const char *PTparams) {
       r->P, r->T, PTparams);
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
+    r->update_TM();
     return 0;
   } else {
     msg(-2, "Did not send scan %ld: Status=%d, PTE %s",
@@ -679,8 +680,11 @@ int icos_cmd::protocol_input() {
 int icos_cmd::check_queue() {
   // Read commands from the input file a line at a time
   // Stop once a scan has been sent to fitd
-  if (!ifp) return 0;
+  if (results::active && results::active->state == res_Queued) {
+    return fit->scan_data(results::active, PTparams);
+  }
   if (submit()) return 1;
+  if (!ifp) return 0;
   int rc = 0;
   if (cur_scannum == fitting_scannum) {
     while (icosfitd.Status != IFS_Fitting) {
