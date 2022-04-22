@@ -189,8 +189,6 @@ int icos_pipe::protocol_input() {
     buf[ncl] = savec;
     int first, scannum;
     float P, T, val;
-    if (max_coadd &&
-        
     if ((max_coadd &&
           (not_int(first) ||
            not_whitespace())) ||

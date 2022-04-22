@@ -48,7 +48,7 @@ class results {
     /**
      * @return true if scan data is queued but not yet submitted to icosfit
      */
-    static intline bool queued() {
+    static inline bool queued() {
       return active && active->state == res_Queued;
     }
     static int n_results();
