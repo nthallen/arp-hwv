@@ -47,7 +47,7 @@ genuibase = HWV.genui
 extbase = ptrh_conv.tmc IRVf.tmc 
 
 Module TMbase Panel=HK:
-Module icosfitd Panel=HHH:
+Module icosfitd Panel=HHH: COADD=coadd
 
 SCRIPT = interact
 SCRIPT = runfile.FF

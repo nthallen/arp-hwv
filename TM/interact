@@ -23,7 +23,7 @@
   Launch - IWG1
 # Launch - lyamrudpext
   Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L -S SSP \
-              -l240:840 -P16,18,29
+              -l240:840 -P17,19,30 -C 10
   Launch - HWValgo -v
   ntpq -p
 
