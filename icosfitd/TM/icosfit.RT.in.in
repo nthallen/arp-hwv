@@ -32,7 +32,7 @@ Binary;
 ICOSdir = @RAW@;
 BaselineFile = sbase.5p1e.ptb;
 OutputDir = ./;
-PTEFile = PTE.fifo;
+PTEFile = PTE.fifo @COADD@;
 OutputFile = ICOSsum.fifo;
 LogFile = ICOSfit.log;
 NoTee;

@@ -1,4 +1,5 @@
 # Startup script for TMdbg
+MAX_COADD=10
   Launch memo memo -o $Experiment.log
   Launch TM/DCo TMbfr
 
@@ -8,8 +9,14 @@
   Launch cmd/server TMdbgsrvr
   Launch - tmdf
   Launch - lgr -N `mlf_find LOG`
+if [ -n $MAX_COADD ]; then
+  Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L \
+              -S /home/hwv/raw/junk/220408.1/SSP \
+              -l240:840 -P17,19,30 -C $MAX_COADD -vv
+else
   Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L \
               -S /home/hwv/raw/junk/220408.1/SSP \
               -l240:840 -P16,18,29 -vv
+fi
   Launch - TMdbgalgo -v
 

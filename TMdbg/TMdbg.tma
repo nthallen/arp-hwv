@@ -28,7 +28,7 @@ State icosd_init {
 }
 
 State icosd_restart {
-      depending on (1 Hz) {
+      depending on (10 Hz) {
         icosd_scan0 = SPTidx(icosd_index,ScanNum);
         icosd_P_sum = 0.;
         icosd_T_sum = 0.;
@@ -44,7 +44,7 @@ State icosd_fit {
 # { if (SSP_Status != SSP_STATUS_TRIG)
 #     Validate icosd_restart;
 # }
-  depending on (1 Hz) {
+  depending on (10 Hz) {
     icosd_P_sum += SPTidx(icosd_index,CellP);
     icosd_T_sum += SPTidx(icosd_index,Tavg);
     icosd_scan   = SPTidx(icosd_index,ScanNum);

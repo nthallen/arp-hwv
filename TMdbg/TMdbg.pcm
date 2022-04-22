@@ -1,31 +1,31 @@
 
 --------Frame Statistics-----------
-Major Frame: 1 minor frames, 1 Hz
-Minor Frame: 35 bytes, 1 Hz
+Major Frame: 10 minor frames, 1 Hz
+Minor Frame: 8 bytes, 10 Hz
 Effective Frame Dimensions:
-  1 Rows 35 Columns
-  1 rows/sec
-  280 bits/sec
-  Data:  248 bits/sec  89 %
-  Synch: 32 bits/sec  11 %
-  Empty: 0 bits/sec  0 %
+  10 Rows 8 Columns
+  10 rows/sec
+  640 bits/sec
+  Data:  248 bits/sec  39 %
+  Synch: 320 bits/sec  50 %
+  Empty: 72 bits/sec  11 %
 -------End of Frame Statistics-----
 
 
 --------PCM Definition-------------
-1/1 Hz 2 bytes Datum MFCtr (1,0,0,2)
-1/1 Hz 18 bytes Group ICOSd (1,0,2,18)
-1/1 Hz 1 bytes Member icos_stale (1,0,2,1)
-1/1 Hz 1 bytes Member icos_status (1,0,3,1)
-1/1 Hz 4 bytes Member icos_ppm (1,0,4,4)
-1/1 Hz 4 bytes Member icos_T (1,0,8,4)
-1/1 Hz 4 bytes Member icos_P (1,0,12,4)
-1/1 Hz 4 bytes Member icos_scan (1,0,16,4)
-1/1 Hz 4 bytes Datum icos_nu_F0 (1,0,20,4)
-1/1 Hz 4 bytes Datum SysTDrift (1,0,24,4)
-1/1 Hz 2 bytes Datum Disk (1,0,28,2)
-1/1 Hz 2 bytes Datum freemem (1,0,30,2)
-1/1 Hz 1 bytes Datum CPU_Pct (1,0,32,1)
-1/1 Hz 2 bytes Datum Synch (1,0,33,2)
+10/1 Hz 2 bytes Datum MFCtr (1,0,0,2)
+10/1 Hz 2 bytes Datum Synch (1,0,6,2)
+1/1 Hz 18 bytes Group ICOSd (10,0,2,4) (10,1,2,4) (10,2,2,4) (10,3,2,4) (10,4,2,2)
+1/1 Hz 1 bytes Member icos_stale (10,0,2,1)
+1/1 Hz 1 bytes Member icos_status (10,0,3,1)
+1/1 Hz 4 bytes Member icos_ppm (10,0,4,2) (10,1,2,2)
+1/1 Hz 4 bytes Member icos_T (10,1,4,2) (10,2,2,2)
+1/1 Hz 4 bytes Member icos_P (10,2,4,2) (10,3,2,2)
+1/1 Hz 4 bytes Member icos_scan (10,3,4,2) (10,4,2,2)
+1/1 Hz 2 bytes Datum Disk (10,4,4,2)
+1/1 Hz 4 bytes Datum icos_nu_F0 (10,5,2,4)
+1/1 Hz 4 bytes Datum SysTDrift (10,6,2,4)
+1/1 Hz 2 bytes Datum freemem (10,7,2,2)
+1/1 Hz 1 bytes Datum CPU_Pct (10,7,4,1)
 -------End of PCM Definition-------
 

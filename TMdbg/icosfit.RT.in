@@ -32,7 +32,7 @@ Binary;
 ICOSdir = /home/hwv/raw/junk/220408.1/SSP;
 BaselineFile = sbase.5p1e.ptb;
 OutputDir = ./;
-PTEFile = PTE.fifo;
+PTEFile = PTE.fifo coadd;
 OutputFile = ICOSsum.fifo;
 LogFile = ICOSfit.log;
 NoTee;

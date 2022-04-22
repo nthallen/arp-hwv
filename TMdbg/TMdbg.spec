@@ -2,7 +2,7 @@ tmcbase = base.tmc
 genuibase = TMdbg.genui
 
 Module TMbase
-Module icosfitd RAW=/home/hwv/raw/junk/220408.1/SSP
+Module icosfitd RAW=/home/hwv/raw/junk/220408.1/SSP COADD=coadd
 
 SCRIPT = interact
 
