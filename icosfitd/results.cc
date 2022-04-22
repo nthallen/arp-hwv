@@ -118,6 +118,15 @@ void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
   }
 }
 
+void results::reinit(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
+  if (state != res_Queued || this != active)
+    msg(3, "results::reinit() while !Queued || active");
+  this->scannum = scannum;
+  this->P = P;
+  this->T = T;
+  update_TM(); // only updates if pending
+}
+
 void results::update_TM() {
   // This could be a static function and only update the pending object
   if (this == pending) {

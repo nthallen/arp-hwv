@@ -32,6 +32,7 @@ int line_search[2] = {400, 650};
 const char *scan_ibase = "SSP";
 const char *column_list;
 const char *command_file;
+int max_coadd = 0;
 
 void set_icosfit_file(bool is_output, const char *path) {
   if (is_output) {
@@ -186,9 +187,14 @@ int icos_pipe::protocol_input() {
       fflush(logfp);
     }
     buf[ncl] = savec;
-    int scannum;
+    int first, scannum;
     float P, T, val;
-    if (not_int(scannum) ||
+    if (max_coadd &&
+        
+    if ((max_coadd &&
+          (not_int(first) ||
+           not_whitespace())) ||
+        not_int(scannum) ||
         not_whitespace() ||
         not_float(P) ||
         not_whitespace() ||
@@ -202,7 +208,8 @@ int icos_pipe::protocol_input() {
       res->P = P;
       res->T = T;
       int res_num = 0;
-      for (int cur_col = 4; cp < ncl && buf[cp] != '\n'; ++cur_col) {
+      int cur_col = 4 + (max_coadd ? 1 : 0);
+      for (; cp < ncl && buf[cp] != '\n'; ++cur_col) {
         if (not_whitespace() || not_float(val)) {
           report_err("Expected float");
           res->Status = res_Syntax;
@@ -295,8 +302,8 @@ int icos_pipe::open_pipe() {
     msg(-2, "output pipe: open and ready");
     is_ready = true;
     flags = Selector::Sel_Write;
-    if (fit && fit->check_queue())
-      return 1;
+    // if (fit && fit->check_queue())
+    //   return 1;
   } else {
     flags = Selector::Sel_Read;
   }
@@ -350,6 +357,7 @@ fitd::fitd()
     TM(0),
     ICOSf(scan_ibase),
     fitting_scannum(0),
+    next_scannum(0),
     icosfit_status(IFS_Gone),
     icosfit_pid(0)
 {
@@ -392,8 +400,18 @@ int fitd::scan_data(results *r, const char *PTparams) {
     fitting_scannum = r->scannum;
     char PTEline[256];
     // assumes newline has been removed from PTparams
-    snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
-      r->P, r->T, PTparams);
+    if (max_coadd) {
+      uint32_t first = r->scannum - max_coadd + 1;
+      if (next_scannum) {
+        if (next_scannum > first) first = next_scannum;
+      } else first = r->scannum;
+      snprintf(PTEline, 256, "%u %u %.2f %.1f %s\n", first, fitting_scannum,
+        r->P, r->T, PTparams);
+      next_scannum = fitting_scannum+1;
+    } else {
+      snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
+        r->P, r->T, PTparams);
+    }
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
     r->update_TM();
@@ -590,14 +608,6 @@ int icos_cmd::ProcessData(int flag) {
   if (flag & Selector::gflag(0)) {
     if (!results::active && submit())
       return 1;
-    // results *r = results::active();
-    // if (r->final && !r->pending) {
-      // results *r2 = results::inactive();
-      // if (r2->pending) {
-        // results::toggle();
-        // if (submit()) return 1;
-      // }
-    // }
   }
   if (flag & Selector::gflag(1)) {
     msg(-2, "icos_cmd: gflag(1)");
@@ -680,7 +690,7 @@ int icos_cmd::protocol_input() {
 int icos_cmd::check_queue() {
   // Read commands from the input file a line at a time
   // Stop once a scan has been sent to fitd
-  if (results::active && results::active->state == res_Queued) {
+  if (results::queued()) {
     return fit->scan_data(results::active, PTparams);
   }
   if (submit()) return 1;
@@ -706,18 +716,21 @@ int icos_cmd::check_queue() {
 
 int icos_cmd::submit() {
   int rv = 0;
-  if (cur_scannum != fitting_scannum &&
-      icosfitd.Status != IFS_Fitting) {
-    results *r = results::newres();
-    if (r) {
-      r->init(cur_scannum, P, T);
-      if (fit->scan_data(r, PTparams)) {
-        rv = 1;
-      } else if (icosfitd.Status == IFS_Fitting) {
-        fitting_scannum = cur_scannum;
+  if (cur_scannum != fitting_scannum) {
+    if (icosfitd.Status != IFS_Fitting) {
+      results *r = results::newres();
+      if (r) {
+        r->init(cur_scannum, P, T);
+        if (fit->scan_data(r, PTparams)) {
+          rv = 1;
+        } else if (icosfitd.Status == IFS_Fitting) {
+          fitting_scannum = cur_scannum;
+        }
+      } else {
+        msg(-2, "No results for scan %ld", cur_scannum);
       }
-    } else {
-      msg(-2, "No results for scan %ld", cur_scannum);
+    } else if (results::queued()) {
+      results::active->reinit(cur_scannum, P, T);
     }
   }
   return rv;

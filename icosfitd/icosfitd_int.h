@@ -17,6 +17,7 @@ class results {
     results();
     void reset();
     void init(uint32_t scannum, ICOS_Float P, ICOS_Float T);
+    void reinit(uint32_t scannum, ICOS_Float P, ICOS_Float T);
     void update_TM();
     void finalize();
     uint32_t scannum;
@@ -44,6 +45,12 @@ class results {
      * Called when TM data is written to collection
      */
     static void posted();
+    /**
+     * @return true if scan data is queued but not yet submitted to icosfit
+     */
+    static intline bool queued() {
+      return active && active->state == res_Queued;
+    }
     static int n_results();
     static int ValIdxs[MAX_ICOSFITD_RESULT_VALS];
     static int n_Vals;
@@ -142,6 +149,7 @@ class fitd {
     icos_TM *TM;
     ICOSfile ICOSf;
     uint32_t fitting_scannum;
+    uint32_t next_scannum;
     icosfitd_status icosfit_status;
     int icosfit_pid;
     struct sched_param spawn_sched_param;
@@ -159,6 +167,7 @@ extern bool log_icossum;
 extern const char *scan_ibase;
 extern const char *column_list;
 extern const char *command_file;
+extern int max_coadd;
 extern FILE *memo_fp, *file_fp;
 
 #endif

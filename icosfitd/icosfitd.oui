@@ -4,7 +4,7 @@
 <include> <stdlib.h>
 <include> "icosfitd_int.h"
 
-<opts> "LI:O:R:S:l:P:"
+<opts> "LI:O:R:S:l:P:C:"
 <sort>
 	-I <filename> : Input icosfit configuration file
 	-O <filename> : Output icosfit configuration file (icosfit.RT)
@@ -13,6 +13,7 @@
 	-S <base> : Scan base directory (SSP)
 	-l <from>:<to> : Sample range for line search
 	-P <col_list> : Specify columns from ICOSsum.dat to send to telemetry
+  -C <NC> : Coadd up to NC scans
 <unsort>
 Data sent to telemetry always includes scan number, pressure and temperature.
 The -P option specifies what additional columns should be saved and forwarded.
@@ -27,6 +28,7 @@ with no spaces.
   case 'l': set_line_search(optarg); break;
   case 'P': column_list = optarg; break;
   case 'R': command_file = optarg; break;
+  case 'C': max_coadd = atoi(optarg); break;
 
 <package> msghdr_init
 <init>
