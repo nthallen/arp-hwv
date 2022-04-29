@@ -12,7 +12,7 @@ MAX_COADD=10
 if [ -n $MAX_COADD ]; then
   Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L \
               -S /home/hwv/raw/junk/220408.1/SSP \
-              -l240:840 -P17,19,30 -C $MAX_COADD -vv
+              -l240:840 -P17,19,30 -C $MAX_COADD
 else
   Launch - icosfitd -I $TMBINDIR/icosfit.RT.in -L \
               -S /home/hwv/raw/junk/220408.1/SSP \

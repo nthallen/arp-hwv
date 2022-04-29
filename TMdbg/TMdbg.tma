@@ -61,12 +61,12 @@ State icosd_fit {
         ci_sendfcmd(2, "icosfit Scan %lu %.3f %.3f\n",
           icosd_scan, icosd_P_avg, icosd_T_avg);
       }
-    } else if (icosd_scan < 0)
+    } else if (icosd_scan == 0)
       Validate icosd_shutdown;
   }
 }
 
 State icosd_shutdown {
-  +5 > quit
+  +10 > quit
 }
 
