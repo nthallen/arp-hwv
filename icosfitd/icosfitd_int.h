@@ -100,7 +100,7 @@ class icos_cmd : public Ser_Sel {
     char *PTparams;
     int PTparams_len;
     uint32_t cur_scannum;
-    uint32_t fitting_scannum;
+    //uint32_t fitting_scannum;
     float P, T;
     FILE *ifp;
 };

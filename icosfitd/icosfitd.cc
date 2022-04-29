@@ -569,7 +569,7 @@ icos_cmd::icos_cmd(fitd *fit)
       PTparams(0),
       PTparams_len(0),
       cur_scannum(0),
-      fitting_scannum(0),
+      // fitting_scannum(0),
       ifp(0)
 {
   if (command_file) {
@@ -632,7 +632,7 @@ int icos_cmd::protocol_input() {
       consume(nc);
       return 0;
     }
-    msg(-2, "icos_cmd: S %u %u\n", cur_scannum, fitting_scannum);
+    msg(-2, "icos_cmd: S %u\n", cur_scannum);
     rv = submit();
     consume(nc);
     report_ok();
@@ -694,7 +694,7 @@ int icos_cmd::check_queue() {
   if (submit()) return 1;
   if (!ifp) return 0;
   int rc = 0;
-  if (cur_scannum == fitting_scannum) {
+  if (!results::active) {
     while (icosfitd.Status != IFS_Fitting) {
       if (fgets((char*)buf, bufsize, ifp)) {
         nc = strlen((const char*)buf);
@@ -714,23 +714,39 @@ int icos_cmd::check_queue() {
 
 int icos_cmd::submit() {
   int rv = 0;
-  if (cur_scannum != fitting_scannum) {
-    if (icosfitd.Status != IFS_Fitting) {
-      results *r = results::newres();
-      if (r) {
-        r->init(cur_scannum, P, T);
-        if (fit->scan_data(r, PTparams)) {
-          rv = 1;
-        } else if (icosfitd.Status == IFS_Fitting) {
-          fitting_scannum = cur_scannum;
-        }
-      } else {
-        msg(-2, "No results for scan %ld", cur_scannum);
-      }
-    } else if (results::queued()) {
-      results::active->reinit(cur_scannum, P, T);
+  results *r = 0;
+  if (results::queued()) {
+    r = results::active;
+    r->reinit(cur_scannum, P, T);
+  } else {
+    r = results::newres();
+    if (r) {
+      r->init(cur_scannum, P, T);
+    } else {
+      msg(-2, "No results for scan %ld", cur_scannum);
     }
   }
+  if (r && r->Status == res_Queued && fit->scan_data(r, PTparams)) {
+    rv = 1;
+  }
+  
+  // if (cur_scannum != fitting_scannum) {
+    // if (icosfitd.Status != IFS_Fitting) {
+      // results *r = results::newres();
+      // if (r) {
+        // r->init(cur_scannum, P, T);
+        // if (fit->scan_data(r, PTparams)) {
+          // rv = 1;
+        // } else if (icosfitd.Status == IFS_Fitting) {
+          // fitting_scannum = cur_scannum;
+        // }
+      // } else {
+        // msg(-2, "No results for scan %ld", cur_scannum);
+      // }
+    // } else if (results::queued()) {
+      // results::active->reinit(cur_scannum, P, T);
+    // }
+  // }
   return rv;
 }
 
