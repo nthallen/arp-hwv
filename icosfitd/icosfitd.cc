@@ -388,6 +388,8 @@ void fitd::add_child(Selectee *P) {
 
 int fitd::scan_data(results *r, const char *PTparams) {
   msg(-2, "scan_data(%ld)", r->scannum);
+  if (r->scannum < next_scannum)
+    return 0;
   if (icosfitd.Status == IFS_Gone &&
       launch_icosfit(r->scannum)) {
     return 1;
@@ -405,11 +407,11 @@ int fitd::scan_data(results *r, const char *PTparams) {
       } else first = r->scannum;
       snprintf(PTEline, 256, "%u %u %.2f %.1f %s\n", first, fitting_scannum,
         r->P, r->T, PTparams);
-      next_scannum = fitting_scannum+1;
     } else {
       snprintf(PTEline, 256, "%u %.2f %.1f %s\n", fitting_scannum,
         r->P, r->T, PTparams);
     }
+    next_scannum = fitting_scannum+1;
     PTE.output(PTEline);
     icosfitd.Status = icosfit_status = IFS_Fitting;
     r->update_TM();
@@ -569,7 +571,7 @@ icos_cmd::icos_cmd(fitd *fit)
       PTparams(0),
       PTparams_len(0),
       cur_scannum(0),
-      // fitting_scannum(0),
+      prev_scannum(0),
       ifp(0)
 {
   if (command_file) {
@@ -715,6 +717,8 @@ int icos_cmd::check_queue() {
 int icos_cmd::submit() {
   int rv = 0;
   results *r = 0;
+  if (cur_scannum <= prev_scannum)
+    return rv;
   if (results::queued()) {
     r = results::active;
     r->reinit(cur_scannum, P, T);
@@ -729,6 +733,7 @@ int icos_cmd::submit() {
   if (r && r->Status == res_Queued && fit->scan_data(r, PTparams)) {
     rv = 1;
   }
+  prev_scannum = cur_scannum;
   
   // if (cur_scannum != fitting_scannum) {
     // if (icosfitd.Status != IFS_Fitting) {

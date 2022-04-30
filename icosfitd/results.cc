@@ -40,6 +40,7 @@ void results::posted() {
       pending->update_TM();
     } else {
       pending = 0;
+      icosfitd.FitStatus = res_None;
     }
   }
 }
@@ -119,7 +120,7 @@ void results::init(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
 }
 
 void results::reinit(uint32_t scannum, ICOS_Float P, ICOS_Float T) {
-  if (state != res_Queued || this != active)
+  if (Status != res_Queued || state != res_active || this != active)
     msg(3, "results::reinit() while !Queued || active");
   this->scannum = scannum;
   this->P = P;

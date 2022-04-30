@@ -16,6 +16,7 @@ icosfitd : $(OBJ)
 	usemsg icosfitd icosfitdoui.cc
 icosfitdoui.cc : icosfitd.oui
 	oui -o icosfitdoui.cc icosfitd.oui
+icosfitd.o : icosfitd.cc icosfitd.h icosfitd_int.h
 
 clean :
 	rm -f *.o icosfitdoui.cc icosfitd

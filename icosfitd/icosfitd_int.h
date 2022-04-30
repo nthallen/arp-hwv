@@ -49,7 +49,7 @@ class results {
      * @return true if scan data is queued but not yet submitted to icosfit
      */
     static inline bool queued() {
-      return active && active->state == res_Queued;
+      return active && (active->Status == res_Queued);
     }
     static int n_results();
     static int ValIdxs[MAX_ICOSFITD_RESULT_VALS];
@@ -100,7 +100,7 @@ class icos_cmd : public Ser_Sel {
     char *PTparams;
     int PTparams_len;
     uint32_t cur_scannum;
-    //uint32_t fitting_scannum;
+    uint32_t prev_scannum;
     float P, T;
     FILE *ifp;
 };
