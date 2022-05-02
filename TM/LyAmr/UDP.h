@@ -16,7 +16,7 @@ class UDPbcast {
   public:
     UDPbcast(const char *broadcast_ip, const char *broadcast_port);
     ~UDPbcast();
-    int Broadcast(double utc, unsigned short status, double mr = 0.);
+    int Broadcast(double utc, unsigned short status, double mr, double mr2);
     const char *ISO8601(double utc);
     bool ok();
   private:

@@ -44,7 +44,7 @@ colbase = IWG1_col.tmc
 swsbase = HWV.sws
 
 genuibase = HWV.genui
-extbase = ptrh_conv.tmc IRVf.tmc 
+extbase = ptrh_conv.tmc IRVf.tmc icosfitd_conv.tmc
 
 Module TMbase Panel=HK:
 Module icosfitd Panel=HHH: COADD=coadd
@@ -80,8 +80,8 @@ HWVdisp : qclibits.tmc sspflags.tmc icosfitd_conv.tmc \
 lydisp : digio.tmc \
   HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
   icosfitd_conv.tmc lyalpha.tbl
-lyamrudpext : HWVmr2.tmc LyAmr/LyAmrSample.cc LyAmr/Circular.cc LyAmr/LyAmrAvg.cc \
-  LyAmr/UDP.cc UDP.tmc -lsocket
+lyamrudpext : HWVmr2.tmc icosfitd_conv.tmc LyAmr/LyAmrSample.cc \
+  LyAmr/Circular.cc LyAmr/LyAmrAvg.cc LyAmr/UDP.cc UDP.tmc -lsocket
 
 HWValgo : ptrh_conv.tmc IRVf.tmc HWV.tma HWV.sws icosfitd.tma
 HWVcalalgo : ptrh_conv.tmc IRVf.tmc HWVcal.tma HWV.sws

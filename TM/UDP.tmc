@@ -19,9 +19,10 @@ depending on (h2o_lya_ppm) {
 
 
 depending on (1 Hz) {
-  unsigned short udpstat = STATUS_Operating;
+  unsigned short udpstat;
+  udpstat = STATUS_Operating;
   if (icos_stale == 0 && icosd_fit_status == res_Fit) {
-    cur_h20_hhh_ppm = icos_ppm;
+    cur_h2o_hhh_ppm = icos_ppm;
     hhh_stale = 0;
   } else {
     cur_h2o_hhh_ppm = -99999.;
@@ -38,9 +39,6 @@ depending on (1 Hz) {
   } else if (lya_stale == 0) {
     UDP.Broadcast(dtime(), STATUS_Ready | STATUS_Operating, cur_h2o_lya_ppm);
     lya_stale = 1;
-  } else {
-    /* UDP.Broadcast(dtime(),
-      STATUS_Ready | STATUS_Operating | STATUS_Calibrating); */
   }
   */
 }
