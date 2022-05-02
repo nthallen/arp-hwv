@@ -56,14 +56,28 @@ bool UDPbcast::ok() { return ok_status; }
 /**
  * @return non-zero on error
  */
-int UDPbcast::Broadcast(double utc, unsigned short status, double mr) {
+int UDPbcast::Broadcast(double utc, unsigned short status, double mr, double HHHmr) {
   char buf[80];
+  char lyabuf[80];
+  char hhhbuf[80];
   int msglen;
-  if (status == (STATUS_Ready | STATUS_Operating)) {
-    msglen = snprintf(buf, 80, "HWV,%s,%d,%.2lf\r\n", ISO8601(utc), status, mr);
+  if (mr > -100) {
+    snprintf(lyabuf, 80, "%.2lf", mr);
   } else {
-    msglen = snprintf(buf, 80, "HWV,%s,%d,\r\n", ISO8601(utc), status);
+    lyabuf[0] = '\0';
   }
+  if (HHHmr > -100) {
+    snprintf(hhhbuf, 80, "%.2lf", HHHmr);
+  } else {
+    hhhbuf[0] = '\0';
+  }
+  msglen = snprintf(buf, 80, "HWV,%s,%d,%s,%s\r\n",
+    ISO8601(utc), status, lyabuf, hhhbuf);
+  // if (status == (STATUS_Ready | STATUS_Operating)) {
+  //   msglen = snprintf(buf, 80, "HWV,%s,%d,%.2lf\r\n", ISO8601(utc), status, mr);
+  // } else {
+  //   msglen = snprintf(buf, 80, "HWV,%s,%d,\r\n", ISO8601(utc), status);
+  // }
   if (msglen >= 80) {
     if (!ov_status) {
       nl_error(2, "UDP Broadcast buffer overflow");
