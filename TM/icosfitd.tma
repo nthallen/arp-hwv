@@ -26,7 +26,8 @@ State icosd_restart {
         icosd_T_sum = 0.;
         icosd_n_sum = 0;
       }
-   +2 Hold until (QCLI_Wave == 1 && SSP_Status == SSP_STATUS_TRIG);
+   +2 Hold until ((QCLI_Wave == 1 || QCLI_Wave == 2) &&
+                  SSP_Status == SSP_STATUS_TRIG);
       Validate icosd_fit;
 }
 
