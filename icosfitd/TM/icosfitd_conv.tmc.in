@@ -43,3 +43,10 @@ icosd_status_t icosd_status; Invalidate icosd_status;
 TM typedef uint8_t icosd_fixflt_t { text "%8u" ICOSd_fixfloat_text(); }
 icosd_fixflt_t icosd_fixflt; Invalidate icosd_fixflt;
 { icosd_fixflt = (icos_status >> 5) & 1; Validate icosd_fixflt; }
+
+icos_ppm_t icos_ppm_latest; Invalidate icos_ppm_latest;
+{ if (icosd_fit_status == res_Fit) {
+    icos_ppm_latest = icos_ppm;
+    Validate icos_ppm_latest;
+  }
+}

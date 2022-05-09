@@ -12,6 +12,8 @@ ci_sendfcmd(2, "PhRTG Datum LFB2P %lu %s\n", itime(), text(LFB2P));
 ci_sendfcmd(2, "PhRTG Datum LFT_P %.3lf %s\n", dtime(), text(LFT_P));
 ci_sendfcmd(2, "PhRTG Datum h2o_lya_ppm %.3lf %s\n", dtime(),
     text(h2o_lya_ppm));
+ci_sendfcmd(2, "PhRTG Datum h2o_hhh_ppm %.3lf %s\n", dtime(),
+    text(icos_ppm_latest));
 ci_sendfcmd(2, "PhRTG Datum A_IRV %lu %s %.4lf\n", itime(), text(A_IRV),
     convert(HtASt));
 ci_sendfcmd(2, "PhRTG Datum A_RF %lu %s %.4lf %.4lf\n", itime(),
