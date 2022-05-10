@@ -1,0 +1,14 @@
+ModuleDef Uplink {
+  Provides uplink_rcvr
+}
+
+mode (default) {
+  DISTRIB = @MODDIR@/../uplink_rcvr
+  %%
+.PHONY : @MODDIR@/../uplink_rcvr clean-Uplink
+@MODDIR@/../uplink_rcvr :
+	$(MAKE) --directory=@MODDIR@/..
+clean-dist : clean-Uplink
+clean-Uplink :
+	$(MAKE) --directory=@MODDIR@/.. clean
+}

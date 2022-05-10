@@ -48,6 +48,7 @@ extbase = ptrh_conv.tmc IRVf.tmc icosfitd_conv.tmc
 
 Module TMbase Panel=HK:
 Module icosfitd Panel=HHH: COADD=coadd
+Module Uplink
 
 SCRIPT = interact
 SCRIPT = runfile.FF

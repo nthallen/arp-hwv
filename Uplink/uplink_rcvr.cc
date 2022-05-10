@@ -89,7 +89,7 @@ int UplinkRcvrUDP::ProcessData(int flag) {
   } else {
     if (sws_value >= 0 && sws_value < 256) {
       report_ok();
-      ci_sendfcmd(0, "SWStat Set %d\n", sws_value);
+      ci_sendfcmd(0, "SW Status Set %d\n", sws_value);
     } else {
       report_err("Uplink SWS value out of range: %d", sws_value);
     }
