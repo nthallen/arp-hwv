@@ -1,0 +1,18 @@
+<package> uplink_rcvr
+<include> "uplink_rcvr.h"
+<include> msg
+<follow> msg
+<include> cic
+
+<opts> "P:"
+<sort>
+	-P <port> UDP uplink port (26130)
+
+<switch>
+  case 'P':
+    UDP_uplink_port = atoi(optarg);
+    break;
+
+<package> msghdr_default
+<var>
+  char *msg_hdr_default = "Uplink";
