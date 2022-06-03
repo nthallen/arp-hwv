@@ -71,8 +71,6 @@ for run in $*; do
       [ -d $RAW_Dir ] || mkdir $RAW_Dir
       [ -d $RAW_Dir/$run$flt ] || mkdir $RAW_Dir/$run$flt
       if [ $Copy_CSV = yes ]; then
-        [ $Matlab = yes -a ! -f startup.m ] &&
-          nl_error "startup.m is missing: copy from HWV eng or select nomatlab"
         do_scp $gse:$HomeDir/anal/$run/*.csv $RAW_Dir/$run$flt
         [ $Matlab = yes ] && echo "$RAW_Dir/$run$flt" >>runs.dat
       fi
@@ -86,7 +84,7 @@ for run in $*; do
   esac
 done
 
-[ -f runs.dat ] && matlab
+[ -f runs.dat ] && matlab -sd `cygpath -w $PWD` -r HWV_startup
 for run in $*; do
   case $run in
     -f) :;;
