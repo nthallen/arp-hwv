@@ -193,18 +193,18 @@ ROWS 18
   1 SSP_T_HtSink HHH:SSP T
   1 SWStat HK:General SWStat
   1 IOSwS  HK:General IOSwS %.0lf
-  1 N0:AIStat:0 HK:General AIStat
-  1 N1:AIStat:1 HK:General AIStat
-  1 N0S:AIStat:2 HK:General AIStat
-  1 N1S:AIStat:3 HK:General AIStat
-  1 B4:AIStat:4 HK:General AIStat
-  1 B5:AIStat:5 HK:General AIStat
-  1 B6:AIStat:6 HK:General AIStat
-  1 B7:AIStat:7 HK:General AIStat
-  1 B8:AIStat:8 HK:General AIStat
-  1 B9:AIStat:9 HK:General AIStat
-  1 B10:AIStat:10 HK:General AIStat
-  1 B11:AIStat:11 HK:General AIStat
+  1 N0:AIStat:0 HK:General AIStat %.0lf
+  1 N1:AIStat:1 HK:General AIStat %.0lf
+  1 N0S:AIStat:2 HK:General AIStat %.0lf
+  1 N1S:AIStat:3 HK:General AIStat %.0lf
+  1 B4:AIStat:4 HK:General AIStat %.0lf
+  1 B5:AIStat:5 HK:General AIStat %.0lf
+  1 B6:AIStat:6 HK:General AIStat %.0lf
+  1 B7:AIStat:7 HK:General AIStat %.0lf
+  1 B8:AIStat:8 HK:General AIStat %.0lf
+  1 B9:AIStat:9 HK:General AIStat %.0lf
+  1 B10:AIStat:10 HK:General AIStat %.0lf
+  1 B11:AIStat:11 HK:General AIStat %.0lf
 
   1 TVPos HK:Throttle Pot
   4 C:TVStat:7 HK:Throttle Bits

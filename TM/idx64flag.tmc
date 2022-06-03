@@ -54,7 +54,7 @@ IxKillStat TVKill; invalidate TVKill; { TVKill = (TVStat >> 4) & 0xF; Validate T
 	"S/Al"
   };
 %}
-TM typedef unsigned short IndxrFlag {
+TM typedef uint16_t IndxrFlag {
   text "%4d" IdxFlgTxt[];
 }
 

@@ -1,9 +1,9 @@
-TM typedef unsigned short IndxrPos {
+TM typedef uint16_t IndxrPos {
   text "%5d";
   collect x = sbrwa(x.address);
 }
 TM typedef unsigned char IndxrStat {
-  text "%08b";
+  text "%3u";
   collect x = sbrba(x.address);
 }
 TM 4 Hz IndxrPos  TVStep;  Address TVStep 0xA0C;
