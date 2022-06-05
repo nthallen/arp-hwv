@@ -1,45 +1,57 @@
 function [Tout,ScanNum] = DCOTSS_HHH_time_correction
   % [Tout,ScanNum] = DCOTSS_time_correction
   % Determines appropriate time values for each ICOS scan number
-  %%
-  % Need a continuous range of ssp values
-  [wvs,ranges] = waves_used;
-  wvi = find([wvs.ISICOS]);
-  ranges = ranges(wvi).ranges;
-  if size(ranges,1) > 1
-    warning('More than one range for waveform %s', wvs(wvi).Name);
-  end
-  ssp = (ranges(1):ranges(2))';
-  TS = scantime(ssp);
-  N = 10; % Hz
-  T = round(TS*N); %time2d
-  %%
-  % Look at IWG1 correction
   H1 = ne_load('hwveng_1','HWV_Data_Dir');
-  T1 = H1.Thwveng_1*N;
-  V = T1 >= T(1) & T1 <= T(end);
-  T1V = T1(V);
-  if isfield(H1,'TDrift')
-    TDrift = H1.TDrift - H1.IWG1_Stale;
-    TDrift = TDrift(V);
-    TDfit = simple_fit(T1V-T1V(1),TDrift);
+  T1 = H1.Thwveng_1;
+  xi = (1:length(T1))';
+  V = xi < 0; % all false
+  if isfield(H1,'TDrift') && isfield(H1,'IWG1_Stale')
+    V = xi>1 & H1.IWG1_Stale == 0;
+  end
+  if any(V)
+    T1V = T1(V);
+    TDrift = H1.TDrift(V);
+    TDfitV = simple_fit(T1V-T1V(1),TDrift);
+    TDfit = interp1(T1V,TDfitV,T1,'linear','extrap');
+    % T1D = T1 - TDfit;
   else
     fprintf(1,'No TDrift in %s\n',getrun);
-    TDfit = zeros(size(T1V));
+    TDfit = zeros(size(T1));
+    % T1D = T1;
   end
-  
-  Tfit = simple_fit(ssp,(T-T(1))-ssp);
-  T2 = ssp+T(1)+Tfit;
-  TDfit2 = interp1(T1V,TDfit,T2);
+  %%
+  [~,ranges] = waves_used;
+  rngs = {ranges.ranges};
+  rngs = sort(vertcat(rngs{:}));
+  for i = size(rngs,1):-1:1
+    fprintf(1,'%d - %d\n', rngs(i,1),rngs(i,2));
+    [T,SN] = TC_region(rngs(i,1), rngs(i,2), T1, TDfit);
+    res(i) = struct('T',T,'SN',SN);
+  end
+  Tout = {res.T};
+  Tout = vertcat(Tout{:});
+  ScanNum = {res.SN};
+  ScanNum = vertcat(ScanNum{:});
+end
+  %%
+function [Tout,ScanNum] = TC_region(scan_start, scan_end, T1, TDfit)
+  ssp = (scan_start:scan_end)';
+  TS = scantime(ssp);
+  N = round(1/mean(diff(TS)));
+  T = round(TS*N); %time2d
+  %%
+  Tfit = simple_fit(ssp,(T-T(1))-(ssp-ssp(1)));
+  T2 = ssp-ssp(1)+T(1)+Tfit;
+  TDfit2 = interp1(T1*N,TDfit,T2);
   T2a = T2-TDfit2;
   T3 = round(T2a);
   figure;
-  T0 = T(1)-time2d(T(1));
-  h = plot(ssp,T-T0-ssp,ssp,T2-T0-ssp,ssp,T2a-T0-ssp,ssp,T3-T0-ssp);
+  delta = -T(1)-ssp+ssp(1);
+  h = plot(ssp,(T+delta)/N,ssp,(T2+delta)/N,ssp,(T2a+delta)/N,ssp,(T3+delta)/N);
   h(4).LineWidth = 3;
   title(sprintf('Time correction: %s', getrun));
   xlabel('Scan Number');
-  ylabel('T-Scan Number');
+  ylabel(sprintf('T-Scan Number/%d sec',N));
   legend('scantime()','linear','IWG1','corrected','Location','SouthEast');
 %%
   Nidx = find(diff(T3)<=0);
