@@ -1,3 +1,39 @@
+This file includes general notes that experimenters and developers might need
+to refer to to refamiliarize themselves with how the instrument operates and
+the code is organized.
+
+Mixing Ratio Calculations
+  Lyman Alpha
+    The code for Lyman Alpha H2O mixing ratio calculation starts with
+    H2Omr2.tmc and references suppport functions in the LyAmr subdirectory.
+    H2Omr2.tmc includes a number of calibration constant definitions that
+    may need to be adjusted. There are options within this file for
+    selecting different source variables for pressure and temperature
+    by way of software status commands prefixed with 'SW Status LyA Use'.
+    Needless to say, the calibration constants relative to the different
+    input variables should be periodically reviewed and/or calibrated.
+    
+    The lyamrext extraction produces lyamreng.csv, which reports the
+    mixing ratio along with P, T and M that were used in the calculation
+    for comparison to independently derived values.
+    
+  HHH
+    HHH used icosfit, driven by icosfitd, to calculate mixing ratio.
+    The code for that is mostly contained under the driver directory
+    in /home/hwv/src/icosfitd/TM. icosfit.RT.in.in defines all the
+    important icosfit parameters to be used in the fit.
+    
+    src/TM/icosfitd.tma contains the code to define the P and T for
+    the fit, and should be reviewed and modified whenever these are
+    calibrated.
+    
+    The actual P and T used is written to PTE.log and also reported in
+    ICOSsum.log along with the fit results.
+  
+Realtime Transmission
+  UDP.tmc is where the status packet definition is found.
+    
+
 Data Handling Procedures
   In order to optimize extraction of data from the flight computer,
   we will try copying directly to an external hard drive in order to
