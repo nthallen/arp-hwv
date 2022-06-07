@@ -16,7 +16,7 @@ Partition
 
 State icosd_init {
   +10 Hold until (icos_stale == 0);
-      > icosfit PTE params 100 -23.82514 21.25962 2.833602 -1.957848 0.0698654 0 0.0689779 0 10
+      > icosfit PTE params 100 4.9654410 21.31688 2.816160 -1.955823 0.06934562 0 0.0689779 0
       Validate icosd_restart;
 }
 
