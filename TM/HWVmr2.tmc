@@ -95,7 +95,7 @@ switch (SWStat) {
         H2Oc = dPMTa * XAir * 10000. * Kcal / dUVA1;
         H2Oc = Iterate(H2Oc);
          /* 11% reduction based on comparison to HHH: */
-        h2o_lya_ppm = 0.89 * 1e6 * H2Oc / h2o_lya_M;
+        h2o_lya_ppm = 0.75 * 1e6 * H2Oc / h2o_lya_M;
         validate h2o_lya_ppm;
       }
     }
