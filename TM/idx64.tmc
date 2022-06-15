@@ -1,4 +1,4 @@
-TM typedef uint16_t IndxrPos {
+TM typedef unsigned short IndxrPos {
   text "%5d";
   collect x = sbrwa(x.address);
 }
